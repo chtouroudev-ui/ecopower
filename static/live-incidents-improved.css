@@ -1,0 +1,349 @@
+/* Centre Qualité Live - Styles Améliorés Incidents RC29.4 FIX1 */
+
+/* Barre de filtres */
+.live-incidents-filters-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.live-incidents-filters-bar input,
+.live-incidents-filters-bar select,
+.live-incidents-filters-bar button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: white;
+  font-family: inherit;
+}
+
+.live-incidents-filters-bar input:hover,
+.live-incidents-filters-bar select:hover {
+  border-color: #9ca3af;
+}
+
+.live-incidents-filters-bar input:focus,
+.live-incidents-filters-bar select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.live-incidents-filters-bar .button {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.live-incidents-filters-bar .button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* Badge de statut */
+.incident-status-badge {
+  display: inline-block;
+  font-size: 0.85em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* Tableau incidents */
+.live-incident-history-table-improved {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.live-incident-history-table-improved th {
+  padding: 0.75rem;
+  text-align: left;
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #d1d5db;
+  white-space: nowrap;
+}
+
+.live-incident-history-table-improved td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+.live-incident-history-table-improved tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.live-incident-history-table-improved small {
+  display: block;
+  color: #9ca3af;
+  font-size: 0.75em;
+  margin-top: 0.25rem;
+}
+
+.live-incident-history-table-improved input[type="checkbox"] {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Formulaire création incident */
+.lq-incident-form {
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.lq-incident-form .lq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lq-incident-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.lq-incident-form label small {
+  font-size: 0.75em;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.lq-incident-form input,
+.lq-incident-form select,
+.lq-incident-form textarea {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: white;
+}
+
+.lq-incident-form input:focus,
+.lq-incident-form select:focus,
+.lq-incident-form textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.lq-incident-form textarea {
+  resize: vertical;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Barre d'actions */
+.lq-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.lq-actions .button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lq-actions .button:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.form-result {
+  font-size: 0.85em;
+  color: #059669;
+  font-weight: 500;
+}
+
+.form-result.error {
+  color: #dc2626;
+}
+
+/* État vide */
+.empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 2rem;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+/* Paginateur */
+.sup-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+}
+
+.sup-pager .button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sup-pager .button:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.sup-pager .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .live-incidents-filters-bar {
+    flex-direction: column;
+  }
+
+  .live-incidents-filters-bar input,
+  .live-incidents-filters-bar select {
+    width: 100%;
+  }
+
+  .lq-incident-form .lq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .live-incident-history-table-improved {
+    font-size: 0.75em;
+  }
+
+  .live-incident-history-table-improved th,
+  .live-incident-history-table-improved td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .live-incident-history-table-improved small {
+    margin-top: 0.125rem;
+  }
+
+  .sup-pager {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .live-incidents-filters-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .live-incident-history-table-improved {
+    font-size: 0.7em;
+  }
+
+  .live-incident-history-table-improved th,
+  .live-incident-history-table-improved td {
+    padding: 0.375rem 0.25rem;
+  }
+
+  .lq-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .lq-actions button {
+    width: 100%;
+  }
+}
+
+/* Animation de rechargement */
+@keyframes incident-loading {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.incident-loading {
+  animation: incident-loading 1.5s infinite;
+}
+
+/* Détails collapse */
+details.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: white;
+}
+
+details.card summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+details.card summary:hover {
+  background: #f9fafb;
+}
+
+details.card summary small {
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 0.5rem;
+}
+
+details.card[open] summary {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Utilitaires */
+.hidden {
+  display: none;
+}
+
+.muted {
+  color: #9ca3af;
+}
+
+.text-small {
+  font-size: 0.875rem;
+}
+
+.text-mono {
+  font-family: 'Monaco', 'Courier New', monospace;
+}
