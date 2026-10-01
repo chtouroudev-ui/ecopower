@@ -1,0 +1,146 @@
+{
+  "backend": "SQLite isolé, données synthétiques",
+  "calls": 60000,
+  "agents": 50,
+  "days": 30,
+  "repetitions_per_run": 5,
+  "runs": 3,
+  "measurements": {
+    "quality_agents": {
+      "median_of_run_medians_seconds": 0.0751,
+      "runs_seconds": [
+        0.0751,
+        0.0739,
+        0.0764
+      ],
+      "sql_statements": 29
+    },
+    "quality_service": {
+      "median_of_run_medians_seconds": 0.4787,
+      "runs_seconds": [
+        0.5162,
+        0.4536,
+        0.4787
+      ],
+      "sql_statements": 24
+    },
+    "distribution": {
+      "median_of_run_medians_seconds": 0.267,
+      "runs_seconds": [
+        0.267,
+        0.2552,
+        0.2758
+      ],
+      "sql_statements": 16
+    },
+    "support": {
+      "median_of_run_medians_seconds": 0.0849,
+      "runs_seconds": [
+        0.0931,
+        0.0817,
+        0.0849
+      ],
+      "sql_statements": "instrumented_at_runtime"
+    },
+    "calls": {
+      "median_of_run_medians_seconds": 0.0855,
+      "runs_seconds": [
+        0.0855,
+        0.0855,
+        0.0906
+      ],
+      "sql_statements": "instrumented_at_runtime"
+    },
+    "diagnostic": {
+      "median_of_run_medians_seconds": 0.0264,
+      "runs_seconds": [
+        0.0264,
+        0.0268,
+        0.026
+      ],
+      "sql_statements": "instrumented_at_runtime"
+    },
+    "teams_files_priorities_cold": {
+      "median_of_run_medians_seconds": 0.0083,
+      "runs_seconds": [
+        0.0083,
+        0.0081,
+        0.0086
+      ],
+      "sql_statements": "instrumented_at_runtime"
+    },
+    "teams_files_priorities_warm": {
+      "median_of_run_medians_seconds": 0.0023,
+      "runs_seconds": [
+        0.0025,
+        0.0022,
+        0.0023
+      ],
+      "sql_statements": "cache_hit"
+    },
+    "groups_status": {
+      "median_of_run_medians_seconds": 0.0014,
+      "runs_seconds": [
+        0.0014,
+        0.0014,
+        0.0015
+      ],
+      "sql_statements": "instrumented_at_runtime"
+    }
+  },
+  "five_concurrent_agent_views_seconds": {
+    "median_seconds": 0.6989,
+    "runs_seconds": [
+      0.6989,
+      0.6226,
+      0.9128
+    ]
+  },
+  "five_mixed_views_seconds": {
+    "median_seconds": 0.5023,
+    "runs_seconds": [
+      0.4988,
+      0.5261,
+      0.5023
+    ]
+  },
+  "five_results_correct": true,
+  "five_mixed_views_ok": true,
+  "baseline_v60_1_single_run": {
+    "backend": "SQLite isolé, données synthétiques",
+    "calls": 60000,
+    "agents": 50,
+    "days": 30,
+    "repetitions": 5,
+    "measurements": {
+      "quality_agents": {
+        "median_seconds": 0.0918,
+        "sql_statements": 29
+      },
+      "quality_service": {
+        "median_seconds": 0.5062,
+        "sql_statements": 24
+      },
+      "distribution": {
+        "median_seconds": 0.2625,
+        "sql_statements": 16
+      },
+      "support": {
+        "median_seconds": 1.0067,
+        "sql_statements": "instrumented_at_runtime"
+      },
+      "calls": {
+        "median_seconds": 1.094,
+        "sql_statements": "instrumented_at_runtime"
+      },
+      "diagnostic": {
+        "median_seconds": 0.4403,
+        "sql_statements": "instrumented_at_runtime"
+      }
+    },
+    "five_concurrent_agent_views_seconds": 0.6201,
+    "five_results_correct": true,
+    "five_mixed_views_seconds": 3.3879,
+    "five_mixed_views_ok": true
+  }
+}

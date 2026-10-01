@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+logs/
+run/
+backups/
+archives/
+test_artifacts/
+INITIAL_ADMIN.txt
+*.db
+*.db-wal
+*.db-shm
+*.har
+*.pem
+*.key
+*.pfx
+*.p12
+# Runtime catalogues: keep only an intentionally sanitized initial template.
+data/quality_last_import.json
+data/quality_priorities.previous.json
