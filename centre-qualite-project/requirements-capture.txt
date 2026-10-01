@@ -1,2 +1,0 @@
-# Optional component for Administration > Collecte live.
-websockets>=14,<18

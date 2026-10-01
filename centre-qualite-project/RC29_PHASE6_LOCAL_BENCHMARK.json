@@ -1,9 +1,0 @@
-{
-  "scenario": "local healthz only",
-  "requests": 50,
-  "concurrency": 5,
-  "median_ms": 2.552,
-  "p95_ms": 13.802,
-  "max_ms": 16.782,
-  "all_200": true
-}

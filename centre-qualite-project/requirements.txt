@@ -1,5 +1,0 @@
-# Runtime versions pinned for the production candidate.
-websockets==16.0
-reportlab==4.4.9
-
-psycopg[binary]>=3.2,<4
