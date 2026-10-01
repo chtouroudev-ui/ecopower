@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nelyio V60.5 RC29.3</title>
+  <link rel="stylesheet" href="/static/style.css?v=V60_5-53d85baeaf2a551b">
+  <link rel="stylesheet" href="/static/supervision.css?v=V60_5-61127808fccdf501">
+  <link rel="stylesheet" href="/static/responsive.css?v=V60_5-2aef893efd092696">
+  <link rel="stylesheet" href="/static/groups.css?v=V60_5-a40cc154229c4a6e">
+  <link rel="stylesheet" href="/static/quality.css?v=V60_5-f63283cd5f0ae503">
+  <link rel="stylesheet" href="/static/collection.css?v=V60_5-FIX5_1-9fb653ed5ad36850">
+  <link rel="stylesheet" href="/static/live-views-improved.css?v=RC29_4-FIX1">
+</head>
+<body>
+  <div id="shell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">TI</div>
+        <div><strong>TECH-IN</strong><small>Nelyio · V60.5 RC29.3</small></div>
+      </div>
+
+      <div class="nav-search" hidden><label for="nav-search-input">Rechercher une page</label><input id="nav-search-input" type="search" placeholder="Rechercher une page..." autocomplete="off"><p id="nav-search-empty" role="status" hidden>Aucune page accessible ne correspond.</p></div>
+      <details class="nav-section" data-nav-section="park" open><summary id="park-nav-label" class="nav-section-toggle" title="Parc informatique" aria-controls="park-nav"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span class="nav-section-title">Parc informatique</span><span class="nav-section-chevron" aria-hidden="true"></span></summary><nav id="park-nav" aria-label="Parc informatique">
+      <a href="#dashboard" data-view="dashboard" data-permission="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span>Vue d'ensemble</span></a>
+      <a href="#inventory" data-view="inventory" data-permission="inventory"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span>Ordinateurs</span></a>
+      <a href="#consumables" data-view="consumables" data-permission="consumables"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10M7.5 5l9 4"/></svg></span><span>Consommables</span></a>
+      <a href="#add" data-view="add" data-permission="inventory" data-write="1"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></span><span>Ajouter un ordinateur</span></a>
+      </nav></details>
+      <details class="nav-section" data-nav-section="live"><summary id="live-nav-label" class="nav-section-toggle" title="LIVE" aria-controls="live-nav"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14M8 8a6 6 0 0 0 0 8M16 8a6 6 0 0 1 0 8"/></svg></span><span class="nav-section-title">LIVE</span><span class="nav-section-chevron" aria-hidden="true"></span></summary><nav id="live-nav" aria-label="LIVE">
+      <a href="#live-supervision" data-view="live-supervision" data-permission="collection"><span>Centre Qualité Live</span></a>
+      <a href="#live-campaigns" data-view="live-campaigns" data-permission="collection"><span>Campagnes à surveiller</span></a>
+      <a href="#live-incidents" data-view="live-incidents" data-permission="collection"><span>Incidents / Alertes</span></a>
+      <a href="#live-search" data-view="live-search" data-permission="calls"><span>Recherche d’appels Live</span></a>
+      </nav></details>
+      <details class="nav-section" data-nav-section="support"><summary id="support-nav-label" class="nav-section-toggle" title="Support technique" aria-controls="support-nav"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h5l3-8 4 16 3-8h5"/></svg></span><span class="nav-section-title">Support technique</span><span class="nav-section-chevron" aria-hidden="true"></span></summary><nav id="support-nav" aria-label="Support technique">
+      <a href="#support" data-view="support" data-permission="support"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h5l3-8 4 16 3-8h5"/></svg></span><span>Diagnostic technique</span></a>
+      <a href="#disconnect-details" data-view="disconnect-details" data-permission="details"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5h13M8 12h13M8 19h13M3 5h.01M3 12h.01M3 19h.01"/></svg></span><span>Détails des coupures</span></a>
+      <a href="#calls" data-view="calls" data-permission="calls"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-4l-5-2-2 3a14 14 0 0 1-7-7l3-2z"/></svg></span><span>Recherche d’appels</span></a>
+      <a href="#details" data-view="details" data-permission="details"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg></span><span>Journal détaillé</span></a>
+      <a href="#analytics" data-view="analytics" data-permission="analytics"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M6 16l5-5 4 3 5-8"/></svg></span><span>Tendances techniques</span></a>
+      <a href="#reports" data-view="reports" data-permission="support"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg></span><span>Rapports</span></a>
+      <a href="#declarations" data-view="declarations" data-permission="declarations"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg></span><span>Déclarations</span></a>
+      </nav></details>
+      <details class="nav-section" data-nav-section="quality"><summary id="quality-nav-label" class="nav-section-toggle" title="Analytiques" aria-controls="quality-nav"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M6 16l5-5 4 3 5-8"/></svg></span><span class="nav-section-title">Analytiques</span><span class="nav-section-chevron" aria-hidden="true"></span></summary><nav id="quality-nav" aria-label="Analytiques">
+      <a href="#analytics-home" data-view="analytics-home" data-permission="quality"><span>Synthèse Analytiques</span></a>
+      <a href="#quality-pilotage" data-view="quality-pilotage" data-permission="quality"><span>Analyse détaillée</span></a>
+      <a href="#quality-activity" data-view="quality-activity" data-permission="quality"><span>Qualité agents</span></a>
+      <a href="#quality-overview" data-view="quality-overview" data-permission="quality"><span>Qualité de service</span></a>
+      <a href="#quality-distributions" data-view="quality-distributions" data-permission="quality"><span>Distributions</span></a>
+      <a href="#suspicious-calls" data-view="suspicious-calls" data-permission="quality"><span>Appels suspects</span></a>
+      <a href="#classification-groups" data-view="classification-groups" data-permission="classification"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 4v2"/></svg></span><span>Groupes et équipes</span></a>
+      <a href="#quality-agents" data-view="quality-agents" data-permission="quality"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg></span><span>Priorités des agents</span></a>
+      <a href="#quality-bases" data-view="quality-bases" data-permission="quality"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4"/></svg></span><span>Priorités des files</span></a>
+      </nav></details>
+      <details class="nav-section" data-nav-section="admin"><summary id="admin-nav-label" class="nav-section-toggle" title="Administration" aria-controls="admin-nav"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.2 2.2M16.2 16.2l2.2 2.2M5.6 18.4l2.2-2.2M16.2 7.8l2.2-2.2"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><span class="nav-section-title">Administration</span><span class="nav-section-chevron" aria-hidden="true"></span></summary><nav id="admin-nav" aria-label="Administration">
+      <a href="#collection" data-view="collection" data-permission="collection"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14M8 8a6 6 0 0 0 0 8M16 8a6 6 0 0 1 0 8"/></svg></span><span>Collecteur Live</span></a>
+      <a href="#live-quality-admin" data-view="live-quality-admin" data-permission="config"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V9M10 18V5M16 18v-7M22 18V3"/><path d="M2 21h22"/></svg></span><span>Signalisation Qualité Live</span></a>
+      <a href="#production-health" data-view="production-health" data-permission="config"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/><path d="M4 4h16v16H4z"/></svg></span><span>Santé de production</span></a>
+      <a href="#config" data-view="config" data-permission="config"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.2 2.2M16.2 16.2l2.2 2.2M5.6 18.4l2.2-2.2M16.2 7.8l2.2-2.2"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><span>Paramètres de l’application</span></a>
+      <a href="#classification" data-view="classification" data-permission="classification"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21V9M12 5V3M20 21v-3M20 14V3M1 10h6M9 5h6M17 14h6"/></svg></span><span>Règles de classement</span></a>
+      <a href="#support-priority" data-view="support-priority" data-permission="classification"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span>Niveaux d’alerte</span></a>
+      <a href="#policies" data-view="policies" data-permission="policies"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg></span><span>Règles d’analyse</span></a>
+      <a href="#users" data-view="users" data-permission="users"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 4v2"/></svg></span><span>Utilisateurs &amp; accès</span></a>
+      <a href="#security" data-view="security" data-permission="security"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7v5c0 5 9 9 9 9s9-4 9-9V7zM8 12l3 3 5-6"/></svg></span><span>Sécurité et audit</span></a>
+      </nav></details>
+      <div class="sidebar-bottom"><nav aria-label="Compte"><a href="#account" data-view="account"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>Mon compte</span></a></nav><button id="logout" class="logout-btn">Déconnexion</button></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">NELYIO · Parc et support</div>
+          <h1 id="page-title">Tableau de bord</h1>
+          <p id="page-sub">Vue synthétique du parc informatique.</p>
+        </div>
+        <div class="top-actions">
+          <span class="runtime-pill"><i></i> Application active</span>
+          <span class="db-pill">Parc & support Nelyio</span>
+          <span id="user-pill" class="user-pill"></span>
+        </div>
+      </header>
+      <div id="app"><div class="loading">Chargement…</div></div>
+    </main>
+  </div>
+
+  <main id="login-screen" class="login-screen hidden">
+    <section class="login-card">
+      <div class="login-brand">
+        <div class="brand-mark large">TI</div>
+        <div><strong>TECH-IN Stock Manager</strong><small>Gestion centralisée du parc informatique</small></div>
+      </div>
+      <div class="login-copy">
+        <h1>Connexion sécurisée</h1>
+        <p>Accédez au parc, aux affectations, à l'historique et aux imports de diagnostic.</p>
+      </div>
+      <form id="login-form" class="login-form">
+        <label>Utilisateur<input name="username" autocomplete="username" required autofocus></label>
+        <label>Mot de passe<input type="password" name="password" autocomplete="current-password" required></label>
+        <button class="button wide" type="submit">Se connecter</button>
+        <p id="login-error" class="form-error"></p>
+      </form>
+      <div class="login-hint"><strong>Premier démarrage :</strong> le compte <code>admin</code> et son mot de passe temporaire sont indiqués dans <code>INITIAL_ADMIN.txt</code>.</div>
+    </section>
+  </main>
+  <script src="/static/supervision.js?v=V60_5-6aa062a409ec7203"></script>
+  <script src="/static/support.js?v=V60_5-532026e8b5f90b47"></script>
+  <script src="/static/priority_admin.js?v=V60_5-4d1d9b34d55fef01"></script>
+  <script src="/static/consumables.js?v=V60_5-8a1f99856d6aaf8f"></script>
+  <script src="/static/policies.js?v=V60_5-4ee8e3365bb4672b"></script>
+  <script src="/static/declarations.js?v=V60_5-c49e5348161e8e90"></script>
+  <script src="/static/groups.js?v=V60_5-9e4f0064a3a8d57b"></script>
+  <script src="/static/pilotage-quality.js?v=V60_5-c398e2b6b76c6c0a"></script>
+  <script src="/static/analytics-home.js?v=V60_5-583dc9cee5a7b1da"></script>
+  <script src="/static/suspicious-calls.js?v=V60_5-4bf4d7e381bf1c66"></script>
+  <script src="/static/live-views.js?v=V60_5-FIX5-3797e0b8055c1c82"></script>
+  <script src="/static/live-views-improvements.js?v=RC29_4-FIX1"></script>
+  <script src="/static/live-quality-admin.js?v=V60_5-FIX4-2bb260ae0af841d6"></script>
+  <script src="/static/quality-activity.js?v=V60_5-0c78ca5aef5a369b"></script>
+  <script src="/static/quality-distributions.js?v=V60_5-fa04082ee59b13b3"></script>
+  <script src="/static/quality-overview.js?v=V60_5-f5bc7ae536ad880e"></script>
+  <script src="/static/quality.js?v=V60_5-9741f0a4a20b7cfb"></script>
+  <script src="/static/collection.js?v=V60_5-FIX5_2-c4c96ab4325e5889"></script>
+  <script src="/static/followup.js?v=V60_5-c9c575fce983cdaa"></script>
+  <script src="/static/production-health.js?v=V60_5-6a2f1780fad0bca5"></script>
+  <script src="/static/app.js?v=V60_5-31c7b000b6497e78"></script>
+  <script src="/static/responsive.js?v=V60_5-7e8198f9aeb4fcf4"></script>
+</body>
+</html>
