@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+.env.local
+doc_extracted.txt
+*.log
