@@ -297,17 +297,29 @@ export const AdminDashboard = () => {
               )}
             </button>
 
-            <div className="pt-4 border-t border-slate-100 text-center">
+            <div className="pt-4 border-t border-slate-100 text-center space-y-2">
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
                   setAdminEmail('admin@ecopower.tn');
                   setAdminPassword('admin123');
+                  setLoginLoading(true);
+                  setLoginError(null);
+                  try {
+                    await login('admin@ecopower.tn', 'admin123');
+                  } catch (err) {
+                    setLoginError(err.message || 'Erreur connexion admin');
+                  } finally {
+                    setLoginLoading(false);
+                  }
                 }}
-                className="text-xs text-blue-600 hover:text-blue-800 font-semibold"
+                className="w-full py-2.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-2xs"
               >
-                ⚡ Remplir les identifiants Admin (admin@ecopower.tn / admin123)
+                <span>⚡ Connexion Immédiate 1-Clic Admin</span>
               </button>
+              <p className="text-[11px] text-slate-400">
+                Compte : <strong>admin@ecopower.tn</strong> / <strong>admin123</strong>
+              </p>
             </div>
           </form>
         </div>

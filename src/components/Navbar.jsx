@@ -31,6 +31,7 @@ export const Navbar = ({ currentTab, setCurrentTab }) => {
     { id: 'shop', label: language === 'ar' ? 'المتجر والباكات' : 'Boutique & Packs', icon: ShoppingBag },
     { id: 'calculator', label: language === 'ar' ? 'حاسبة التوفير' : 'Simulateur', icon: Calculator },
     { id: 'tracking', label: language === 'ar' ? 'تتبع الطلبية' : 'Suivi Commande', icon: Truck },
+    { id: 'admin', label: language === 'ar' ? 'لوحة التحكم' : 'Espace Admin', icon: LayoutDashboard },
     { id: 'references', label: language === 'ar' ? 'مراجعنا' : 'Références', icon: ShieldCheck },
   ];
 

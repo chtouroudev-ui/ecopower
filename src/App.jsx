@@ -16,8 +16,39 @@ import { SavingsCalculator } from './components/SavingsCalculator';
 import { ReferencesCarousel } from './components/ReferencesCarousel';
 import { MessageCircle } from 'lucide-react';
 
+function getTabFromUrl() {
+  if (typeof window === 'undefined') return 'home';
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+  const hash = window.location.hash.replace(/^#+/, '').toLowerCase();
+  const candidate = path || hash;
+  if (['admin', 'particuliers', 'professionnels', 'shop', 'tracking', 'calculator', 'references'].includes(candidate)) {
+    return candidate;
+  }
+  return 'home';
+}
+
 function AppContent() {
-  const [currentTab, setCurrentTab] = useState('home');
+  const [currentTab, setCurrentTabState] = useState(getTabFromUrl);
+
+  const setCurrentTab = (tab) => {
+    setCurrentTabState(tab);
+    const newPath = tab === 'home' ? '/' : `/${tab}`;
+    if (window.location.pathname !== newPath) {
+      window.history.pushState(null, '', newPath);
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentTabState(getTabFromUrl());
+    };
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
