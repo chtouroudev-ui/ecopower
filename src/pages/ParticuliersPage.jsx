@@ -85,7 +85,7 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-skywater-600 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
         <div className="max-w-3xl space-y-4">
-          <span className="px-3.5 py-1 bg-white/10 rounded-full text-emerald-300 text-xs font-bold uppercase tracking-wider border border-white/20">
+          <span className="px-3.5 py-1 bg-white/10 rounded-full text-sky-300 text-xs font-bold uppercase tracking-wider border border-white/20">
             Espace Particuliers &amp; Foyers
           </span>
           <h1 className="text-3xl sm:text-5xl font-black font-serif tracking-tight text-white leading-tight">
@@ -123,31 +123,31 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
           </div>
 
           <div className="pt-2 flex flex-wrap gap-4 text-xs font-bold text-slate-700">
-            <span className="flex items-center gap-1 text-brand-700">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Régulation à 4 ou 5 L/min robinets
+            <span className="flex items-center gap-1 text-blue-700">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Régulation à 4 ou 5 L/min robinets
             </span>
-            <span className="flex items-center gap-1 text-brand-700">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Régulation à 5 ou 7 L/min douches
+            <span className="flex items-center gap-1 text-blue-700">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Régulation à 5 ou 7 L/min douches
             </span>
-            <span className="flex items-center gap-1 text-brand-700">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Garantie 3 ans Hostaform
+            <span className="flex items-center gap-1 text-blue-700">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Garantie 3 ans Hostaform
             </span>
           </div>
         </div>
 
         {/* Gift debitmeter highlight */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-dashed border-emerald-300 rounded-2xl p-6 text-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-md">
+        <div className="lg:col-span-5 bg-gradient-to-br from-blue-50 to-sky-50 border-2 border-dashed border-blue-300 rounded-2xl p-6 text-center space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto shadow-md">
             <Gift className="w-7 h-7" />
           </div>
           <div>
-            <span className="text-[11px] font-black uppercase text-emerald-800 tracking-wider">Cadeau Exclusif EcoPower</span>
-            <h3 className="text-xl font-black text-emerald-950 mt-1">Sac Débit-Mètre Offert</h3>
-            <p className="text-xs text-emerald-800 mt-2 leading-relaxed">
+            <span className="text-[11px] font-black uppercase text-blue-800 tracking-wider">Cadeau Exclusif EcoPower</span>
+            <h3 className="text-xl font-black text-blue-950 mt-1">Sac Débit-Mètre Offert</h3>
+            <p className="text-xs text-blue-800 mt-2 leading-relaxed">
               Un sac débit-mètre gradué vous sera livré <strong>gratuitement</strong> avec chaque Pack Appartement ou Maison. Il vous permet de mesurer votre consommation en 10 secondes sous votre robinet avant et après l'installation !
             </p>
           </div>
-          <div className="p-3 bg-white rounded-xl text-xs font-bold text-emerald-900 border border-emerald-100">
+          <div className="p-3 bg-white rounded-xl text-xs font-bold text-blue-900 border border-blue-100">
             Testez et constatez vos économies en direct chez vous !
           </div>
         </div>
@@ -209,7 +209,7 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
                   </span>
                   {pack.composition.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </div>
                   ))}

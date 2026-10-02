@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { X, CheckCircle, Truck, CreditCard, ShieldCheck, FileCheck, ArrowRight, Loader2 } from 'lucide-react';
 
 const GOVERNORATES = [
@@ -21,6 +22,8 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
     language
   } = useCart();
 
+  const { user, token } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -31,6 +34,18 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
     notes: '',
     paymentMethod: 'cod' // 'cod' or 'card'
   });
+
+  // Pre-fill user data if logged in
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: prev.fullName || user.name || '',
+        phone: prev.phone || user.phone || '',
+        email: prev.email || user.email || '',
+      }));
+    }
+  }, [user, isCheckoutOpen]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrder, setSuccessOrder] = useState(null);
@@ -68,9 +83,14 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
         notes: formData.notes
       };
 
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(orderPayload)
       });
 
@@ -130,14 +150,14 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
 
         {/* Modal Body */}
         {successOrder ? (
-          /* SUCCESS VIEW */
+          /* SUCCESS VIEW - Pure Blue and White */
           <div className="p-6 sm:p-8 text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
+            <div className="w-20 h-20 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
               <CheckCircle className="w-10 h-10 animate-bounce" />
             </div>
 
             <div>
-              <span className="px-3 py-1 bg-brand-100 text-brand-800 rounded-full text-xs font-bold uppercase tracking-wider">
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wider">
                 Numéro de commande : {successOrder.id}
               </span>
               <h4 className="text-2xl font-black text-slate-900 mt-2">Merci pour votre confiance !</h4>
@@ -147,18 +167,18 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
             </div>
 
             {/* Certificate badge */}
-            <div className="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl text-left flex items-start gap-4">
-              <div className="p-3 bg-emerald-600 text-white rounded-xl shrink-0">
+            <div className="p-5 bg-gradient-to-br from-blue-50 to-sky-50 border border-blue-200 rounded-2xl text-left flex items-start gap-4">
+              <div className="p-3 bg-blue-600 text-white rounded-xl shrink-0">
                 <FileCheck className="w-6 h-6" />
               </div>
               <div>
-                <h5 className="font-extrabold text-emerald-950 text-sm">
+                <h5 className="font-extrabold text-blue-950 text-sm">
                   Certificat de Garantie Officiel EcoPower Généré
                 </h5>
-                <p className="text-xs text-emerald-800 mt-1">
+                <p className="text-xs text-blue-800 mt-1">
                   Numéro d'agrément : <strong className="font-mono">{successOrder.certificateSerial}</strong>
                 </p>
-                <p className="text-[11px] text-emerald-700 mt-1">
+                <p className="text-[11px] text-blue-700 mt-1">
                   Chaque article est gravé d'un numéro de série unique garantissant son authenticité et sa garantie constructeur de 3 ans (à vie pour l'Eco-Sac). Le certificat imprimé accompagnera votre colis.
                 </p>
               </div>
@@ -170,12 +190,16 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                 <strong className="text-slate-800">{successOrder.customer?.fullName}</strong>
               </div>
               <div className="flex justify-between">
-                <span>Adresse de livraison :</span>
-                <strong className="text-slate-800">{successOrder.customer?.address}, {successOrder.customer?.governorate}</strong>
+                <span>Téléphone :</span>
+                <strong className="text-slate-800 font-mono">{successOrder.customer?.phone}</strong>
               </div>
               <div className="flex justify-between">
-                <span>Total à régler à la livraison :</span>
-                <strong className="text-brand-800 text-sm font-black">{successOrder.total?.toFixed(3)} DT</strong>
+                <span>Adresse de livraison :</span>
+                <strong className="text-slate-800">{successOrder.customer?.address}, {successOrder.customer?.city || successOrder.customer?.governorate}</strong>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-slate-200 text-sm font-bold text-slate-900">
+                <span>Total à régler à la réception :</span>
+                <strong className="text-blue-700 font-extrabold text-base">{(successOrder.total || total).toFixed(2)} DT</strong>
               </div>
             </div>
 
@@ -184,31 +208,31 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                 setIsCheckoutOpen(false);
                 setSuccessOrder(null);
               }}
-              className="bg-brand-700 hover:bg-brand-800 text-white font-bold py-3 px-8 rounded-xl text-sm transition shadow-md shadow-brand-700/20"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md"
             >
-              Retour à la boutique
+              Fermer et continuer
             </button>
           </div>
         ) : (
           /* FORM VIEW */
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
             {errorMessage && (
-              <div className="p-3 rounded-xl bg-red-50 text-red-700 text-xs font-semibold border border-red-200">
+              <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs font-semibold">
                 {errorMessage}
               </div>
             )}
 
-            {/* Customer Inputs */}
+            {/* Customer Details */}
             <div className="space-y-4">
-              <h4 className="font-bold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-brand-600" />
-                1. Vos coordonnées de livraison
+              <h4 className="font-extrabold text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <Truck className="w-4 h-4 text-blue-600" />
+                1. Vos Coordonnées de Livraison
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Nom et Prénom *
+                    Nom &amp; Prénom <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -216,21 +240,21 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Ex: Mohamed Trabelsi"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Numéro de Téléphone *
+                    Numéro de Téléphone (Tunisie) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="Ex: +216 98 123 456"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition"
+                    placeholder="Ex: 98 123 456 ou 22 345 678"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition font-mono"
                   />
                 </div>
               </div>
@@ -238,12 +262,12 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Gouvernorat *
+                    Gouvernorat <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.governorate}
                     onChange={(e) => setFormData({ ...formData, governorate: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none bg-white transition"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition bg-white"
                   >
                     {GOVERNORATES.map((gov) => (
                       <option key={gov} value={gov}>{gov}</option>
@@ -253,56 +277,56 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Délégation / Cité / Ville
+                    Ville / Délégation
                   </label>
                   <input
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    placeholder="Ex: La Marsa, Ennasr, Sahloul..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition"
+                    placeholder="Ex: Marsa, Ennasr, Hammamet..."
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Adresse exacte (Rue, Numéro, Étage, Repère) *
+                  Adresse complète (Rue, Immeuble, Étage...) <span className="text-red-500">*</span>
                 </label>
-                <textarea
+                <input
+                  type="text"
                   required
-                  rows={2}
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="Ex: 12 Rue des Oliviers, Résidence Jasmin, Bâtiment B, Apt 4"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition"
+                  placeholder="Ex: Résidence Les Roses, Bloc B, Apt 14, Rue Habib Bourguiba"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Email (optionnel, pour recevoir votre facture & certificat)
+                  Email (pour recevoir le certificat PDF)
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="contact@exemple.tn"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
                 />
               </div>
             </div>
 
             {/* Payment Method */}
-            <div className="space-y-3 pt-2">
-              <h4 className="font-bold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <CreditCard className="w-4 h-4 text-brand-600" />
+            <div className="space-y-3 pt-2 border-t border-slate-200">
+              <h4 className="font-extrabold text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-blue-600" />
                 2. Mode de Paiement
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label className={`p-4 rounded-2xl border-2 flex items-start gap-3 cursor-pointer transition ${
-                  formData.paymentMethod === 'cod' ? 'border-brand-600 bg-brand-50/60' : 'border-slate-200 hover:bg-slate-50'
+                  formData.paymentMethod === 'cod' ? 'border-blue-600 bg-blue-50/60' : 'border-slate-200 hover:bg-slate-50'
                 }`}>
                   <input
                     type="radio"
@@ -310,7 +334,7 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                     value="cod"
                     checked={formData.paymentMethod === 'cod'}
                     onChange={() => setFormData({ ...formData, paymentMethod: 'cod' })}
-                    className="mt-1 accent-brand-600"
+                    className="mt-1 accent-blue-600"
                   />
                   <div>
                     <span className="font-extrabold text-sm text-slate-900 block">Paiement à la livraison (Espèces)</span>
@@ -319,7 +343,7 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                 </label>
 
                 <label className={`p-4 rounded-2xl border-2 flex items-start gap-3 cursor-pointer transition ${
-                  formData.paymentMethod === 'card' ? 'border-brand-600 bg-brand-50/60' : 'border-slate-200 hover:bg-slate-50'
+                  formData.paymentMethod === 'card' ? 'border-blue-600 bg-blue-50/60' : 'border-slate-200 hover:bg-slate-50'
                 }`}>
                   <input
                     type="radio"
@@ -327,7 +351,7 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                     value="card"
                     checked={formData.paymentMethod === 'card'}
                     onChange={() => setFormData({ ...formData, paymentMethod: 'card' })}
-                    className="mt-1 accent-brand-600"
+                    className="mt-1 accent-blue-600"
                   />
                   <div>
                     <span className="font-extrabold text-sm text-slate-900 block">Carte Bancaire / ClicToPay</span>
@@ -341,17 +365,17 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2 text-xs">
               <div className="flex justify-between text-slate-600">
                 <span>Sous-total articles ({cart.length}) :</span>
-                <span className="font-bold text-slate-800">{subtotal.toFixed(3)} DT</span>
+                <span className="font-bold text-slate-800">{subtotal.toFixed(2)} DT</span>
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Frais de livraison :</span>
                 <span className="font-bold">
-                  {deliveryFee === 0 ? <span className="text-emerald-600">Gratuit</span> : `${deliveryFee.toFixed(3)} DT`}
+                  {deliveryFee === 0 ? <span className="text-blue-600">Gratuit</span> : `${deliveryFee.toFixed(2)} DT`}
                 </span>
               </div>
               <div className="border-t border-slate-200 pt-2 flex justify-between text-sm font-black text-slate-900">
                 <span>Total Net à Payer :</span>
-                <span className="text-brand-800 text-base">{total.toFixed(3)} DT</span>
+                <span className="text-blue-800 text-base">{total.toFixed(2)} DT</span>
               </div>
             </div>
 
@@ -359,7 +383,7 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-energy-500 to-energy-600 hover:from-energy-600 hover:to-energy-500 text-white font-extrabold py-3.5 px-6 rounded-2xl text-base flex items-center justify-center gap-2 shadow-xl shadow-energy-500/30 transition-all hover:scale-[1.01] active:scale-98 disabled:opacity-70"
+              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold py-3.5 px-6 rounded-2xl text-base flex items-center justify-center gap-2 shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-98 disabled:opacity-70"
             >
               {isSubmitting ? (
                 <>
@@ -368,15 +392,15 @@ export const CheckoutModal = ({ onOrderPlaced }) => {
                 </>
               ) : (
                 <>
-                  <span>Confirmer la commande ({total.toFixed(3)} DT)</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <span>Confirmer la commande ({total.toFixed(2)} DT)</span>
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
 
             <div className="flex items-center justify-center gap-4 text-[11px] text-slate-600">
               <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Garantie 3 ans
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Garantie 3 ans
               </span>
               <span>•</span>
               <span>Satisfait ou Remboursé 14 jours</span>

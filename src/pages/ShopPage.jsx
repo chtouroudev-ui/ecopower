@@ -58,7 +58,7 @@ export const ShopPage = () => {
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-skywater-700 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
-          <span className="px-3 py-1 bg-white/10 rounded-full text-emerald-300 text-xs font-bold uppercase tracking-wider border border-white/20">
+          <span className="px-3 py-1 bg-white/10 rounded-full text-sky-300 text-xs font-bold uppercase tracking-wider border border-white/20">
             Boutique Officielle EcoPower Tunisie
           </span>
           <h1 className="text-3xl sm:text-4xl font-black font-serif tracking-tight text-white mt-2">
@@ -70,7 +70,7 @@ export const ShopPage = () => {
         </div>
 
         <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-xs font-semibold">
-          <Truck className="w-5 h-5 text-emerald-400" />
+          <Truck className="w-5 h-5 text-sky-300" />
           <div>
             <div className="text-white font-bold">Livraison Partout en Tunisie</div>
             <div className="text-slate-300 text-[11px]">Gratuite dès 120 DT d'achat</div>
@@ -205,7 +205,7 @@ export const ShopPage = () => {
                     </span>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    product.stock > 10 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                    product.stock > 10 ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'
                   }`}>
                     {product.stock > 0 ? `En Stock (${product.stock})` : 'Sur Commande'}
                   </span>
@@ -282,7 +282,7 @@ export const ShopPage = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
                     {activeModalProduct.features.map((feat, idx) => (
                       <div key={idx} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                         <span>{feat}</span>
                       </div>
                     ))}

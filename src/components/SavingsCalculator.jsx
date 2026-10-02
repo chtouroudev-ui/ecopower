@@ -161,7 +161,7 @@ export const SavingsCalculator = ({ onSelectPack }) => {
             </div>
 
             <div className="p-3 bg-slate-50 rounded-xl text-xs text-slate-500 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Double effet : Moins de volume d'eau = Rétrogradation automatique vers une tranche tarifaire SONEDE moins chère.</span>
             </div>
           </div>
@@ -171,11 +171,11 @@ export const SavingsCalculator = ({ onSelectPack }) => {
             <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-skywater-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
             <div>
-              <div className="text-xs uppercase tracking-wider text-emerald-300 font-bold mb-1 flex items-center gap-1">
+              <div className="text-xs uppercase tracking-wider text-sky-300 font-bold mb-1 flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5" /> Économie Annuelle Totale Estimée
               </div>
               <div className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                {totalAnnualSavingsDt} <span className="text-xl font-bold text-emerald-400">DT / an</span>
+                {totalAnnualSavingsDt} <span className="text-xl font-bold text-sky-300">DT / an</span>
               </div>
               <p className="text-xs text-slate-300 mt-1">
                 Soit environ <strong>{Math.round(totalAnnualSavingsDt / 12)} DT</strong> de pouvoir d'achat récupéré chaque mois !
@@ -197,9 +197,9 @@ export const SavingsCalculator = ({ onSelectPack }) => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-300 flex items-center gap-1.5">
-                  <TrendingDown className="w-3.5 h-3.5 text-emerald-400" /> Eau préservée :
+                  <TrendingDown className="w-3.5 h-3.5 text-sky-400" /> Eau préservée :
                 </span>
-                <span className="font-bold text-emerald-300 text-sm">~{litresSavedYear.toLocaleString()} Litres</span>
+                <span className="font-bold text-sky-300 text-sm">~{litresSavedYear.toLocaleString()} Litres</span>
               </div>
             </div>
 
@@ -266,9 +266,9 @@ export const SavingsCalculator = ({ onSelectPack }) => {
               />
             </div>
 
-            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 space-y-1">
-              <div className="font-bold text-emerald-950 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Diagnostic d'amortissement gratuit par notre bureau d'études
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl text-xs text-blue-900 space-y-1">
+              <div className="font-bold text-blue-950 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" /> Diagnostic d'amortissement gratuit par notre bureau d'études
               </div>
               <p>Nous réalisons gratuitement un test de débit et un état des lieux point par point de votre hôtel ou clinique.</p>
             </div>
@@ -276,11 +276,11 @@ export const SavingsCalculator = ({ onSelectPack }) => {
 
           <div className="lg:col-span-5 bg-gradient-to-br from-brand-900 to-slate-900 text-white rounded-2xl p-6 shadow-xl flex flex-col justify-between">
             <div>
-              <div className="text-xs uppercase tracking-wider text-emerald-300 font-bold mb-1">
+              <div className="text-xs uppercase tracking-wider text-sky-300 font-bold mb-1">
                 Gains Annuels Établissement
               </div>
               <div className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                {annualSavingsPro.toLocaleString()} <span className="text-xl font-bold text-emerald-400">DT</span>
+                {annualSavingsPro.toLocaleString()} <span className="text-xl font-bold text-sky-300">DT</span>
               </div>
               <p className="text-xs text-slate-300 mt-1">
                 Retour sur investissement estimé en moins de <strong>{roiDays} jours</strong> !
@@ -290,7 +290,7 @@ export const SavingsCalculator = ({ onSelectPack }) => {
             <div className="my-6 space-y-2 border-y border-white/10 py-4 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-300">Normes sanitaires :</span>
-                <span className="font-bold text-emerald-300">Certifié ACS & ISO</span>
+                <span className="font-bold text-sky-300">Certifié ACS & ISO</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300">Garantie matériel :</span>

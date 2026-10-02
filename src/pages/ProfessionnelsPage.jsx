@@ -62,7 +62,7 @@ export const ProfessionnelsPage = () => {
       {/* Hero Header */}
       <div className="bg-gradient-to-br from-slate-900 via-brand-950 to-brand-900 text-white rounded-3xl p-8 sm:p-14 shadow-2xl relative overflow-hidden">
         <div className="max-w-3xl space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/20 text-sky-300 text-xs font-bold uppercase tracking-wider border border-blue-500/30">
             <Building2 className="w-4 h-4" />
             <span>Division Hôtellerie, Santé &amp; Entreprises</span>
           </div>
@@ -73,7 +73,7 @@ export const ProfessionnelsPage = () => {
             Leader en Europe et en Tunisie dans le respect des Normes ISO pour l'Hôtellerie, les Cliniques et l'Agro-Alimentaire. Nos dispositifs Hostaform tiennent des pressions jusqu'à 25 bars et résistent aux chocs chlorés.
           </p>
 
-          <div className="pt-2 flex flex-wrap gap-4 text-xs font-bold text-emerald-400">
+          <div className="pt-2 flex flex-wrap gap-4 text-xs font-bold text-sky-300">
             <span>✅ +60 Hôtels équipés en Tunisie</span>
             <span>•</span>
             <span>✅ +50% des Cliniques Tunisiennes</span>
@@ -97,15 +97,15 @@ export const ProfessionnelsPage = () => {
           </p>
           <ul className="space-y-2 text-xs text-slate-600 pt-2 border-t border-slate-100">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Confort de jet inchangé pour vos clients</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Baisse drastique de la facture gaz pour chauffer l'eau</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Installation en chambre sans interruption de service</span>
             </li>
           </ul>
@@ -113,7 +113,7 @@ export const ProfessionnelsPage = () => {
 
         {/* Cliniques & Hôpitaux */}
         <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
             <Hospital className="w-7 h-7" />
           </div>
           <h3 className="font-extrabold text-xl text-slate-900 font-serif">Santé &amp; Médicalisé</h3>
@@ -122,15 +122,15 @@ export const ProfessionnelsPage = () => {
           </p>
           <ul className="space-y-2 text-xs text-slate-600 pt-2 border-t border-slate-100">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Attestation de Conformité Sanitaire (ACS)</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Matériau Hostaform résistant aux désinfections chlorées</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Audit gratuit point par point des zones de soins</span>
             </li>
           </ul>
@@ -147,15 +147,15 @@ export const ProfessionnelsPage = () => {
           </p>
           <ul className="space-y-2 text-xs text-slate-600 pt-2 border-t border-slate-100">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Cadeau d'entreprise RSE utile et écologique</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Personnalisation complète au logo du partenaire</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Tarifs comités d’entreprise dégressifs</span>
             </li>
           </ul>
@@ -223,17 +223,17 @@ export const ProfessionnelsPage = () => {
         </div>
 
         {submitted ? (
-          <div className="p-8 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-4 animate-in fade-in">
-            <div className="w-16 h-16 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-md">
+          <div className="p-8 bg-blue-50 border border-blue-200 rounded-2xl text-center space-y-4 animate-in fade-in">
+            <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto shadow-md">
               <CheckCircle className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-black text-emerald-950">Demande Transmise avec Succès !</h3>
-            <p className="text-xs sm:text-sm text-emerald-800 max-w-md mx-auto">
+            <h3 className="text-xl font-black text-blue-950">Demande Transmise avec Succès !</h3>
+            <p className="text-xs sm:text-sm text-blue-800 max-w-md mx-auto">
               Notre équipe technico-commerciale a bien reçu votre demande d'audit pour <strong>{formData.company}</strong>. Un ingénieur vous contactera sous 24h ouvrées.
             </p>
             <button
               onClick={() => setSubmitted(false)}
-              className="text-xs font-bold text-emerald-700 underline"
+              className="text-xs font-bold text-blue-700 underline"
             >
               Envoyer une autre demande
             </button>

@@ -8,17 +8,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#edfcf8',
-          100: '#d2f6ec',
-          200: '#a8ecd9',
-          300: '#71dcbf',
-          400: '#3ac2a0',
-          500: '#1ea586',
-          600: '#14846c',
-          700: '#0a6e5c', // Main brand primary
-          800: '#0c584b',
-          900: '#064d40', // Deep brand dark
-          950: '#032a24',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb', // Pure Modern Blue
+          700: '#1d4ed8', // Rich Royal Blue
+          800: '#1e40af', // Deep Navy Blue
+          900: '#1e3a8a',
+          950: '#0f172a',
         },
         skywater: {
           50: '#f0f9ff',
@@ -26,13 +26,15 @@ export default {
           200: '#bae6fd',
           300: '#7dd3fc',
           400: '#38bdf8',
-          500: '#1ca7ec', // Accent cyan water
-          600: '#0284c7',
-          700: '#0369a1',
+          500: '#0284c7', // Azure Water Blue
+          600: '#0369a1',
+          700: '#075985',
+          800: '#0c4a6e',
+          900: '#082f49',
         },
         energy: {
-          500: '#ff6b35', // Warm orange for CTA / energy
-          600: '#e85a28',
+          500: '#0284c7', // Clean Blue accent
+          600: '#0369a1',
         }
       },
       fontFamily: {
@@ -45,4 +47,3 @@ export default {
     require('tailwindcss-animate'),
   ],
 }
-

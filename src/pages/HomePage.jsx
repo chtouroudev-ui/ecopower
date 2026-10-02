@@ -161,7 +161,7 @@ export const HomePage = ({ setCurrentTab }) => {
                   <div className="text-[11px] text-slate-500 font-semibold">Économie gaz STEG</div>
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-black text-emerald-600">3 Ans</div>
+                  <div className="text-xl sm:text-2xl font-black text-blue-600">3 Ans</div>
                   <div className="text-[11px] text-slate-500 font-semibold">Garantie &amp; Certificat</div>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export const HomePage = ({ setCurrentTab }) => {
                     <span className="text-3xl font-black text-brand-900">66.000 DT</span>
                     <span className="text-xs text-slate-500 ml-1">TTC</span>
                   </div>
-                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">
+                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md">
                     Sac Débitmètre Offert
                   </span>
                 </div>
@@ -218,7 +218,7 @@ export const HomePage = ({ setCurrentTab }) => {
                 </button>
 
                 <p className="text-center text-[11px] text-slate-600 mt-3 flex items-center justify-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                   Paiement à la livraison • Satisfait ou remboursé 14 jours
                 </p>
               </div>
@@ -365,7 +365,7 @@ export const HomePage = ({ setCurrentTab }) => {
                 <div className="space-y-2 mb-6 text-xs text-slate-700">
                   {pack.features.map((feat, fidx) => (
                     <div key={fidx} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -434,7 +434,7 @@ export const HomePage = ({ setCurrentTab }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="bg-gradient-to-br from-brand-900 via-brand-800 to-skywater-700 text-white rounded-3xl p-8 sm:p-14 text-center relative overflow-hidden shadow-2xl">
           <div className="relative z-10 max-w-2xl mx-auto space-y-5">
-            <span className="px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 text-xs font-bold uppercase tracking-wider border border-white/20">
+            <span className="px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-sky-300 text-xs font-bold uppercase tracking-wider border border-white/20">
               Livraison 24-48h Partout en Tunisie
             </span>
             <h2 className="text-3xl sm:text-5xl font-black font-serif tracking-tight text-white">

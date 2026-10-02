@@ -98,7 +98,7 @@ export const ReferencesCarousel = () => {
                     : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-300' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-blue-300' : 'text-slate-400'}`} />
                 <span>{cat.label}</span>
               </button>
             );
@@ -107,12 +107,12 @@ export const ReferencesCarousel = () => {
 
         {/* Highlights Banner according to active tab */}
         {activeTab === 'cliniques' && (
-          <div className="mt-6 p-4 bg-emerald-50 rounded-2xl border border-emerald-200/80 max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-semibold text-emerald-900">
-            <span className="font-bold text-emerald-800 flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Cliniques Référentes :
+          <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-200/80 max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-semibold text-blue-900">
+            <span className="font-bold text-blue-800 flex items-center gap-1">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Cliniques Référentes :
             </span>
             {clinicNames.map((name, idx) => (
-              <span key={idx} className="bg-white px-2.5 py-1 rounded-md shadow-2xs border border-emerald-100">
+              <span key={idx} className="bg-white px-2.5 py-1 rounded-md shadow-2xs border border-blue-100">
                 {name}
               </span>
             ))}

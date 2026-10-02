@@ -211,7 +211,7 @@
     "deliveryFee": 8,
     "total": 74,
     "paymentMethod": "cod",
-    "status": "pending",
+    "status": "confirmed",
     "certificateGenerated": false,
     "certificateSerial": null,
     "notes": "Nouvelle commande en attente de vérification."

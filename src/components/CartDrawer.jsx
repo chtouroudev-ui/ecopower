@@ -36,11 +36,11 @@ export const CartDrawer = () => {
           {/* Header */}
           <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-brand-700" />
+              <ShoppingBag className="w-5 h-5 text-blue-700" />
               <h2 className="font-extrabold text-lg text-slate-900">
                 {language === 'ar' ? 'سلة المشتريات' : 'Mon Panier'}
               </h2>
-              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-100 text-brand-800">
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">
                 {cart.length} {cart.length > 1 ? 'articles' : 'article'}
               </span>
             </div>
@@ -53,23 +53,23 @@ export const CartDrawer = () => {
           </div>
 
           {/* Free delivery progress */}
-          <div className="px-5 py-3 bg-brand-50/70 border-b border-brand-100 text-xs">
+          <div className="px-5 py-3 bg-blue-50/70 border-b border-blue-100 text-xs">
             {remainingForFreeDelivery > 0 ? (
               <div>
-                <p className="text-brand-900 font-semibold mb-1.5 flex items-center gap-1.5">
-                  <Truck className="w-4 h-4 text-brand-600" />
-                  Plus que <span className="font-black text-brand-700">{remainingForFreeDelivery} DT</span> pour la livraison offerte !
+                <p className="text-blue-900 font-semibold mb-1.5 flex items-center gap-1.5">
+                  <Truck className="w-4 h-4 text-blue-600" />
+                  Plus que <span className="font-black text-blue-700">{remainingForFreeDelivery.toFixed(2)} DT</span> pour la livraison offerte !
                 </p>
-                <div className="w-full bg-brand-200 h-1.5 rounded-full overflow-hidden">
+                <div className="w-full bg-blue-200 h-1.5 rounded-full overflow-hidden">
                   <div
-                    className="bg-brand-600 h-full rounded-full transition-all duration-500"
+                    className="bg-blue-600 h-full rounded-full transition-all duration-500"
                     style={{ width: `${freeDeliveryPercent}%` }}
                   />
                 </div>
               </div>
             ) : (
-              <p className="text-emerald-700 font-bold flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <p className="text-blue-800 font-bold flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-blue-600" />
                 Félicitations ! Vous bénéficiez de la livraison gratuite sur votre commande 🎉
               </p>
             )}
@@ -88,7 +88,7 @@ export const CartDrawer = () => {
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="bg-brand-700 hover:bg-brand-800 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition"
                 >
                   Découvrir les produits
                 </button>
@@ -105,8 +105,8 @@ export const CartDrawer = () => {
                     <h4 className="font-bold text-sm text-slate-900 truncate">
                       {item.product.name}
                     </h4>
-                    <p className="text-xs text-brand-700 font-bold mt-0.5">
-                      {item.product.price.toFixed(3)} DT
+                    <p className="text-xs text-blue-700 font-bold mt-0.5">
+                      {item.product.price.toFixed(2)} DT
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
@@ -127,7 +127,7 @@ export const CartDrawer = () => {
                         </button>
                       </div>
                       <span className="text-xs font-black text-slate-700 ml-auto">
-                        {(item.product.price * item.quantity).toFixed(3)} DT
+                        {(item.product.price * item.quantity).toFixed(2)} DT
                       </span>
                     </div>
                   </div>
@@ -149,21 +149,21 @@ export const CartDrawer = () => {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-slate-600">
                   <span>Sous-total articles :</span>
-                  <span className="font-semibold text-slate-800">{subtotal.toFixed(3)} DT</span>
+                  <span className="font-semibold text-slate-800">{subtotal.toFixed(2)} DT</span>
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>Frais de livraison (Tunisie) :</span>
                   <span className="font-semibold">
                     {deliveryFee === 0 ? (
-                      <span className="text-emerald-600 font-bold">Gratuit</span>
+                      <span className="text-blue-600 font-bold">Gratuit</span>
                     ) : (
-                      `${deliveryFee.toFixed(3)} DT`
+                      `${deliveryFee.toFixed(2)} DT`
                     )}
                   </span>
                 </div>
                 <div className="border-t border-slate-200 pt-2 flex justify-between text-base font-extrabold text-slate-900">
                   <span>Total à payer :</span>
-                  <span className="text-brand-800 text-lg">{total.toFixed(3)} DT</span>
+                  <span className="text-blue-800 text-lg">{total.toFixed(2)} DT</span>
                 </div>
               </div>
 
@@ -172,7 +172,7 @@ export const CartDrawer = () => {
                   setIsCartOpen(false);
                   setIsCheckoutOpen(true);
                 }}
-                className="w-full bg-gradient-to-r from-energy-500 to-energy-600 hover:from-energy-600 hover:to-energy-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-energy-500/25 transition-all hover:scale-[1.01]"
+                className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01]"
               >
                 <span>Valider la Commande (Paiement à la livraison)</span>
                 <ArrowRight className="w-4 h-4" />
@@ -180,7 +180,7 @@ export const CartDrawer = () => {
 
               <div className="text-center">
                 <p className="text-[11px] text-slate-600 flex items-center justify-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                   Garantie 3 ans &amp; Certificat officiel fourni avec votre colis
                 </p>
               </div>
