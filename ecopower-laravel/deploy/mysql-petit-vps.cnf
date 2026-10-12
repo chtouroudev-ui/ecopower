@@ -1,0 +1,7 @@
+# /etc/mysql/conf.d/ecopower.cnf : MySQL sobre en mémoire pour 2 Go de RAM
+[mysqld]
+innodb_buffer_pool_size = 256M
+innodb_log_buffer_size = 16M
+max_connections = 40
+performance_schema = OFF
+default-time-zone = '+01:00'
