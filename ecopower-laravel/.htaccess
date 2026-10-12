@@ -1,0 +1,13 @@
+# Hébergement cPanel : tout le site est envoyé dans public_html,
+# cette règle redirige les visiteurs vers le dossier public/ de Laravel.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.env|\.git|composer\.(json|lock)|artisan|package(-lock)?\.json)$ - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|deploy|resources|routes|storage|tests|vendor)(/.*)?$ - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
