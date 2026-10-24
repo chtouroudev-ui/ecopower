@@ -1,0 +1,47 @@
+[
+  {
+    "id": "LEAD-203",
+    "date": "2026-10-02T20:51:45.601Z",
+    "company": "Hotel Palmier Sousse",
+    "contactPerson": "Montassir Trabelsi",
+    "role": "Directeur Technique",
+    "phone": "73456789",
+    "email": "direction@hotelpalmier.tn",
+    "type": "hotel",
+    "roomsCount": 120,
+    "currentWaterBillMonthly": "3500",
+    "interest": "Diagnostic et audit gratuit",
+    "status": "new",
+    "notes": "Urgence reduction factures ete"
+  },
+  {
+    "id": "LEAD-201",
+    "date": "2026-10-01T11:20:00.000Z",
+    "company": "Hôtel Thalassa Sousse Resort & Aquapark",
+    "contactPerson": "M. Khaled Mahjoub",
+    "role": "Directeur Technique",
+    "phone": "+216 73 241 500",
+    "email": "technique@thalassa-sousse.com",
+    "type": "hotel",
+    "roomsCount": 280,
+    "currentWaterBillMonthly": "18 500 DT",
+    "interest": "Audit complet et équipement chambres + spa",
+    "status": "in_progress",
+    "notes": "Rendez-vous téléphonique fixé pour devis sur site."
+  },
+  {
+    "id": "LEAD-202",
+    "date": "2026-10-02T15:10:00.000Z",
+    "company": "Clinique Hannibal International",
+    "contactPerson": "Dr. Walid Ghorbel",
+    "role": "Directeur d'Exploitation",
+    "phone": "+216 71 889 000",
+    "email": "w.ghorbel@clinique-hannibal.com",
+    "type": "clinique",
+    "roomsCount": 95,
+    "currentWaterBillMonthly": "9 200 DT",
+    "interest": "Mousseurs Delrin aux normes sanitaires médicales ISO",
+    "status": "new",
+    "notes": "Demande reçue via le formulaire pro."
+  }
+]
