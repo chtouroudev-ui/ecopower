@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { SavingsCalculator } from '../components/SavingsCalculator';
 import { ReferencesCarousel } from '../components/ReferencesCarousel';
 import { 
   Building2, 
@@ -33,10 +34,32 @@ export const ProfessionnelsPage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  // Pré-remplit la demande avec le résultat du simulateur hôtel
+  const applySimulation = (sim) => {
+    if (!sim) return;
+    setFormData((f) => ({
+      ...f,
+      type: 'hotel',
+      roomsCount: f.roomsCount || String(sim.chambres),
+      notes: `Simulation : ${sim.chambres} chambres, occupation ${sim.occupation} %, investissement ${sim.investissement} DT, économie estimée ${sim.economieAn} DT/an, amortissement ${sim.roiJours} jours.${f.notes ? `\n${f.notes}` : ''}`,
+    }));
+  };
+
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('ecopower_simulation');
+      if (stored) applySimulation(JSON.parse(stored));
+    } catch {
+      /* rien à pré-remplir */
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
 
     try {
       const res = await fetch('/api/leads', {
@@ -44,13 +67,15 @@ export const ProfessionnelsPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      if (res.ok) {
-        setSubmitted(true);
-      } else {
-        setSubmitted(true);
+      if (!res.ok) throw new Error();
+      try {
+        sessionStorage.removeItem('ecopower_simulation');
+      } catch {
+        /* ignore */
       }
-    } catch {
       setSubmitted(true);
+    } catch {
+      setSubmitError("Votre demande n'a pas pu être envoyée. Réessayez ou appelez-nous au +216 71 000 000.");
     } finally {
       setIsSubmitting(false);
     }
@@ -209,6 +234,8 @@ export const ProfessionnelsPage = () => {
       <ReferencesCarousel />
 
       {/* B2B Quote & Audit Form (Formulaire pro demandé par Pascal) */}
+      <SavingsCalculator defaultProfile="pro" onRequestAudit={applySimulation} />
+
       <div id="devis-pro" className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sm:p-12 max-w-4xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-8">
           <span className="px-3 py-1 bg-brand-100 text-brand-800 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -372,6 +399,12 @@ export const ProfessionnelsPage = () => {
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none"
               />
             </div>
+
+            {submitError && (
+              <div role="alert" className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-semibold">
+                {submitError}
+              </div>
+            )}
 
             <button
               type="submit"

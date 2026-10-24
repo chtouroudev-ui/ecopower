@@ -131,20 +131,21 @@ export async function initDb() {
     // 4. Seed users if empty
     const [userRows] = await pool.query('SELECT COUNT(*) as count FROM users');
     if (userRows[0].count === 0) {
-      console.log('[ECOPOWER DB] Seeding default users...');
-      const adminPass = await bcrypt.hash('admin123', 10);
-      const clientPass = await bcrypt.hash('client123', 10);
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@ecopower.tn';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      const adminPass = await bcrypt.hash(adminPassword, 10);
+      const clientPass = await bcrypt.hash(process.env.CLIENT_DEFAULT_PASSWORD || 'client123', 10);
 
       await pool.query(
         'INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)',
-        ['Direction EcoPower', 'admin@ecopower.tn', adminPass, 'admin', '+216 98 000 000']
+        ['Direction EcoPower', adminEmail, adminPass, 'admin', '+216 98 000 000']
       );
 
       await pool.query(
         'INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)',
         ['Client Particulier', 'client@ecopower.tn', clientPass, 'client', '+216 22 334 455']
       );
-      console.log('[ECOPOWER DB] Seeded admin (admin@ecopower.tn / admin123) and client user.');
+      console.log(`[ECOPOWER DB] Seeded admin (${adminEmail}) and client user.`);
     }
 
     // 5. Seed products from products.json if empty

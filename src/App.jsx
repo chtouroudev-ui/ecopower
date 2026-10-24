@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { CartProvider } from './context/CartContext';
+import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
-import { AuthModal } from './components/AuthModal';
 import { HomePage } from './pages/HomePage';
 import { ParticuliersPage } from './pages/ParticuliersPage';
 import { ProfessionnelsPage } from './pages/ProfessionnelsPage';
@@ -27,8 +26,14 @@ function getTabFromUrl() {
   return 'home';
 }
 
+function WhatsAppLabel() {
+  const { language } = useCart();
+  return <span className="hidden sm:inline">{language === 'ar' ? 'كلّم مستشار' : 'Conseiller en Ligne'}</span>;
+}
+
 function AppContent() {
   const [currentTab, setCurrentTabState] = useState(getTabFromUrl);
+  const [trackingQuery, setTrackingQuery] = useState('');
 
   const setCurrentTab = (tab) => {
     setCurrentTabState(tab);
@@ -54,6 +59,11 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentTab]);
 
+  // Si on est dans l'espace administration, afficher UNIQUEMENT le dashboard admin indépendant (sans navbar client, ni bannière, ni footer)
+  if (currentTab === 'admin') {
+    return <AdminDashboard onExit={() => setCurrentTab('home')} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-800 font-sans">
       <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} />
@@ -63,7 +73,7 @@ function AppContent() {
         {currentTab === 'particuliers' && <ParticuliersPage setCurrentTab={setCurrentTab} />}
         {currentTab === 'professionnels' && <ProfessionnelsPage setCurrentTab={setCurrentTab} />}
         {currentTab === 'shop' && <ShopPage />}
-        {currentTab === 'tracking' && <OrderTrackingPage />}
+        {currentTab === 'tracking' && <OrderTrackingPage initialQuery={trackingQuery} />}
         {currentTab === 'calculator' && (
           <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="text-center max-w-2xl mx-auto">
@@ -75,7 +85,7 @@ function AppContent() {
                 Simulez vos gains réels en Dinars Tunisiens (DT) selon votre logement ou votre établissement.
               </p>
             </div>
-            <SavingsCalculator onSelectPack={(packId) => setCurrentTab('shop')} />
+            <SavingsCalculator onSelectPack={() => setCurrentTab('shop')} onRequestAudit={() => setCurrentTab('professionnels')} />
           </div>
         )}
         {currentTab === 'references' && (
@@ -83,14 +93,15 @@ function AppContent() {
             <ReferencesCarousel />
           </div>
         )}
-        {currentTab === 'admin' && <AdminDashboard />}
       </main>
 
       <CartDrawer />
-      <CheckoutModal onOrderPlaced={(order) => {
-        console.log('Order confirmed:', order);
-      }} />
-      <AuthModal />
+      <CheckoutModal
+        onTrackOrder={(orderId) => {
+          setTrackingQuery(orderId);
+          setCurrentTab('tracking');
+        }}
+      />
 
       <Footer setCurrentTab={setCurrentTab} />
 
@@ -100,11 +111,11 @@ function AppContent() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contacter EcoPower sur WhatsApp"
-        className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center space-x-2 shadow-xl shadow-blue-500/35 hover:scale-105 transition-all duration-200 no-print border border-white/20 font-bold text-xs"
+        className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center gap-2 shadow-xl shadow-blue-500/35 hover:scale-105 transition-all duration-200 no-print border border-white/20 font-bold text-xs"
         title="Contacter sur WhatsApp"
       >
         <MessageCircle className="w-5 h-5 text-white" />
-        <span className="hidden sm:inline">Conseiller en Ligne</span>
+        <WhatsAppLabel />
       </a>
     </div>
   );

@@ -1,59 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, ArrowRight, FileText, User } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, ArrowRight } from 'lucide-react';
 import { WarrantyCertificateModal } from '../components/WarrantyCertificateModal';
 
-export function OrderTrackingPage() {
-  const { user, isAuthenticated, token, openLogin } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
+export function OrderTrackingPage({ initialQuery = '' }) {
+  const [searchQuery, setSearchQuery] = useState(() => {
+    if (initialQuery) return initialQuery;
+    try {
+      return localStorage.getItem('ecopower_last_order') || '';
+    } catch {
+      return '';
+    }
+  });
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
-  const [userOrders, setUserOrders] = useState([]);
-  const [loadingUserOrders, setLoadingUserOrders] = useState(false);
-
   // Certificate Modal
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-  // Fetch logged in user's orders automatically
-  useEffect(() => {
-    if (isAuthenticated && token) {
-      setLoadingUserOrders(true);
-      fetch('/api/user/orders', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data)) {
-            setUserOrders(data);
-          }
-        })
-        .catch(console.error)
-        .finally(() => setLoadingUserOrders(false));
-    }
-  }, [isAuthenticated, token]);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-
+  const runSearch = async (query) => {
+    if (!query.trim()) return;
     setError(null);
     setLoading(true);
     setResults(null);
-
     try {
-      const res = await fetch(`/api/orders/track/${encodeURIComponent(searchQuery.trim())}`);
-      const data = await res.json();
+      const res = await fetch(`/api/orders/track/${encodeURIComponent(query.trim())}`);
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(data.error || 'Aucune commande trouvée.');
       }
       setResults(data);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof TypeError ? 'Connexion impossible, réessayez dans un instant.' : err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Recherche automatique juste après une commande
+  useEffect(() => {
+    if (initialQuery) runSearch(initialQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    runSearch(searchQuery);
   };
 
   const getStatusBadge = (status) => {
@@ -266,70 +258,6 @@ export function OrderTrackingPage() {
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Logged in User's Orders Section */}
-      {isAuthenticated ? (
-        <div className="pt-8 border-t border-slate-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                <User className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-slate-900">Historique de vos commandes</h2>
-                <p className="text-xs text-slate-500">Connecté en tant que {user?.name} ({user?.email})</p>
-              </div>
-            </div>
-          </div>
-
-          {loadingUserOrders ? (
-            <div className="text-center py-8 text-slate-500 text-sm">Chargement de vos commandes...</div>
-          ) : userOrders.length > 0 ? (
-            <div className="grid gap-4">
-              {userOrders.map((ord) => (
-                <div key={ord.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                  <div>
-                    <div className="flex items-center space-x-3">
-                      <span className="font-extrabold text-blue-700 text-lg">{ord.id}</span>
-                      {getStatusBadge(ord.status)}
-                    </div>
-                    <p className="text-xs text-slate-500 mt-1">
-                      {new Date(ord.date).toLocaleDateString('fr-TN')} • {ord.items.length} article(s) • Livré à {ord.customer.city || ord.customer.governorate}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <span className="font-bold text-slate-900 text-lg font-mono">{ord.total.toFixed(2)} DT</span>
-                    <button
-                      onClick={() => setSelectedOrderId(ord.id)}
-                      className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-colors"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Certificat</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-500 text-sm">
-              Vous n'avez pas encore passé de commande avec ce compte.
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center space-y-3">
-          <h3 className="text-lg font-bold text-blue-900">Vous avez déjà un compte EcoPower ?</h3>
-          <p className="text-xs text-blue-700 max-w-md mx-auto">
-            Connectez-vous pour retrouver automatiquement toutes vos commandes, factures et certificats de garantie sans avoir à taper votre référence.
-          </p>
-          <button
-            onClick={openLogin}
-            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
-          >
-            Se connecter à mon compte
-          </button>
         </div>
       )}
 

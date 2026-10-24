@@ -16,8 +16,65 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'ecopower_secret_jwt_key_2026_tunisie';
 
-app.use(cors());
-app.use(express.json());
+// ── Security Headers ──
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.removeHeader('X-Powered-By');
+  next();
+});
+
+// ── Strict CORS Policy ──
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
+  : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5000'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    return callback(new Error('Non autorisé par la politique CORS'));
+  },
+  credentials: true,
+}));
+
+app.use(express.json({ limit: '1mb' }));
+
+// ── In-Memory Rate Limiter ──
+function createRateLimiter({ windowMs = 15 * 60 * 1000, max = 100, message = 'Trop de requêtes, veuillez réessayer plus tard.' } = {}) {
+  const requests = new Map();
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, data] of requests.entries()) {
+      if (now > data.resetTime) requests.delete(ip);
+    }
+  }, Math.min(windowMs, 60000)).unref();
+
+  return (req, res, next) => {
+    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+    const now = Date.now();
+    let record = requests.get(ip);
+    if (!record || now > record.resetTime) {
+      record = { count: 1, resetTime: now + windowMs };
+      requests.set(ip, record);
+    } else {
+      record.count++;
+    }
+
+    if (record.count > max) {
+      return res.status(429).json({ error: message });
+    }
+    next();
+  };
+}
+
+const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 20, message: 'Trop de tentatives de connexion. Veuillez patienter 15 minutes.' });
+const orderLimiter = createRateLimiter({ windowMs: 10 * 60 * 1000, max: 20, message: 'Trop de requêtes de commande. Veuillez patienter quelques minutes.' });
+const trackingLimiter = createRateLimiter({ windowMs: 5 * 60 * 1000, max: 40, message: 'Trop de recherches de commande. Veuillez patienter.' });
+
 
 // Helper to generate serial numbers
 function generateSerial(productPrefix, index) {
@@ -45,20 +102,6 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// Optional Auth (doesn't reject if not authenticated)
-function optionalAuth(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return next();
-
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (!err) {
-      req.user = decoded;
-    }
-    next();
-  });
-}
-
 function requireAdmin(req, res, next) {
   if (!req.user || req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Accès refusé: privilèges administrateur requis' });
@@ -70,43 +113,8 @@ function requireAdmin(req, res, next) {
 // 1. AUTH API
 // ==========================================
 
-// Register
-app.post('/api/auth/register', async (req, res) => {
-  try {
-    const { name, email, password, phone } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Veuillez renseigner le nom, email et mot de passe.' });
-    }
-
-    const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [email.trim().toLowerCase()]);
-    if (existing.length > 0) {
-      return res.status(409).json({ error: 'Un compte existe déjà avec cette adresse email.' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const [result] = await pool.query(
-      'INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)',
-      [name.trim(), email.trim().toLowerCase(), hashedPassword, 'client', phone || null]
-    );
-
-    const user = {
-      id: result.insertId,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      role: 'client',
-      phone: phone || null,
-    };
-
-    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ message: 'Compte créé avec succès', token, user });
-  } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ error: 'Erreur lors de la création du compte' });
-  }
-});
-
 // Login
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -120,7 +128,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     const dbUser = rows[0];
     const match = await bcrypt.compare(password, dbUser.password);
-    if (!match) {
+    if (!match || dbUser.role !== 'admin') {
       return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
     }
 
@@ -252,8 +260,8 @@ app.post('/api/products', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-// Update product
-app.put('/api/products/:id', async (req, res) => {
+// Update product (admin)
+app.put('/api/products/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -271,6 +279,7 @@ app.put('/api/products/:id', async (req, res) => {
     if (updates.debit !== undefined) { fields.push('debit = ?'); values.push(updates.debit); }
     if (updates.description !== undefined) { fields.push('description = ?'); values.push(updates.description); }
     if (updates.features !== undefined) { fields.push('features = ?'); values.push(JSON.stringify(updates.features)); }
+    if (updates.image !== undefined) { fields.push('image = ?'); values.push(updates.image); }
     if (updates.isFeatured !== undefined) { fields.push('is_featured = ?'); values.push(updates.isFeatured ? 1 : 0); }
 
     if (fields.length === 0) {
@@ -311,8 +320,8 @@ app.delete('/api/products/:id', authenticateToken, requireAdmin, async (req, res
 // 3. ORDERS API
 // ==========================================
 
-// Get all orders (with items)
-app.get('/api/orders', async (req, res) => {
+// Get all orders (admin only)
+app.get('/api/orders', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const [orders] = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
     const [items] = await pool.query('SELECT * FROM order_items');
@@ -359,62 +368,13 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// Get user orders (authenticated)
-app.get('/api/user/orders', authenticateToken, async (req, res) => {
-  try {
-    const userEmail = req.user.email;
-    const userId = req.user.id;
-
-    const [orders] = await pool.query(
-      'SELECT * FROM orders WHERE user_id = ? OR customer_email = ? ORDER BY created_at DESC',
-      [userId, userEmail]
-    );
-
-    const [items] = await pool.query(
-      'SELECT * FROM order_items WHERE order_id IN (?)',
-      [orders.length > 0 ? orders.map(o => o.id) : ['none']]
-    );
-
-    const formattedOrders = orders.map(o => ({
-      id: o.id,
-      date: o.created_at,
-      customer: {
-        fullName: o.customer_name,
-        phone: o.customer_phone,
-        email: o.customer_email || '',
-        address: o.customer_address || '',
-        city: o.customer_city || '',
-        governorate: o.customer_governorate || 'Tunis',
-      },
-      items: items.filter(i => i.order_id === o.id).map(i => ({
-        id: i.id,
-        productId: i.product_id,
-        name: i.name,
-        price: parseFloat(i.price),
-        quantity: i.quantity,
-        serials: typeof i.serials === 'string' ? JSON.parse(i.serials) : (i.serials || []),
-      })),
-      subtotal: parseFloat(o.subtotal),
-      deliveryFee: parseFloat(o.delivery_fee),
-      total: parseFloat(o.total),
-      paymentMethod: o.payment_method,
-      status: o.status,
-      certificateSerial: o.certificate_serial,
-      notes: o.notes,
-    }));
-
-    res.json(formattedOrders);
-  } catch (error) {
-    console.error('User orders error:', error);
-    res.status(500).json({ error: 'Erreur récupération commandes utilisateur' });
-  }
-});
-
-// Public Track Order (by Order ID or Phone number)
-app.get('/api/orders/track/:query', async (req, res) => {
+// Public Track Order (by Order ID or Phone number, rate limited)
+app.get('/api/orders/track/:query', trackingLimiter, async (req, res) => {
   try {
     const { query } = req.params;
-    const cleanQuery = query.trim();
+    let cleanQuery = query.trim().toUpperCase();
+    const digits = cleanQuery.replace(/[^0-9]/g, '').replace(/^216/, '');
+    if (/^[0-9\s+]+$/.test(cleanQuery) && digits.length === 8) cleanQuery = digits;
 
     const [orders] = await pool.query(
       'SELECT * FROM orders WHERE id = ? OR customer_phone = ? ORDER BY created_at DESC LIMIT 5',
@@ -457,22 +417,29 @@ app.get('/api/orders/track/:query', async (req, res) => {
   }
 });
 
-// Create Order (public checkout)
-app.post('/api/orders', optionalAuth, async (req, res) => {
+// Create Order (public checkout, rate limited)
+app.post('/api/orders', orderLimiter, async (req, res) => {
+  const { customer, items, notes = '' } = req.body || {};
+  const phone = String(customer?.phone || '').replace(/[^0-9]/g, '').replace(/^216/, '');
+  if (!customer?.fullName?.trim() || !customer?.address?.trim() || !Array.isArray(items) || !items.length) {
+    return res.status(400).json({ error: 'Veuillez renseigner votre nom, votre adresse et au moins un article.' });
+  }
+  if (!/^[2-9][0-9]{7}$/.test(phone)) {
+    return res.status(400).json({ error: 'Numéro de téléphone invalide (8 chiffres attendus).' });
+  }
+  customer.phone = phone;
+  // Les acheteurs n'ont pas de compte : paiement uniquement à la livraison
+  const paymentMethod = 'cod';
+
   const connection = await pool.getConnection();
   try {
-    const { customer, items, paymentMethod = 'cod', notes = '' } = req.body;
-    if (!customer || !items || !items.length) {
-      connection.release();
-      return res.status(400).json({ error: 'Données de commande incomplètes' });
-    }
-
     await connection.beginTransaction();
 
     // 1. Get current count to generate next ID
-    const [countRows] = await connection.query('SELECT COUNT(*) as count FROM orders');
-    const orderIndex = countRows[0].count + 1;
-    const newOrderId = `ECO-${1000 + orderIndex}`;
+    const [lastRows] = await connection.query(
+      "SELECT MAX(CAST(SUBSTRING(id, 5) AS UNSIGNED)) AS lastNum FROM orders WHERE id LIKE 'ECO-%' FOR UPDATE"
+    );
+    const newOrderId = `ECO-${Math.max(1000, lastRows[0].lastNum || 0) + 1}`;
     const certSerial = `CERT-${new Date().getFullYear()}-${newOrderId}`;
 
     let subtotal = 0;
@@ -482,9 +449,12 @@ app.post('/api/orders', optionalAuth, async (req, res) => {
     for (const item of items) {
       const [prodRows] = await connection.query('SELECT * FROM products WHERE id = ?', [item.productId]);
       const prod = prodRows[0];
+      if (!prod) {
+        throw Object.assign(new Error('Produit indisponible'), { status: 400, publicMessage: `Le produit « ${item.name || item.productId} » n'est plus disponible.` });
+      }
 
-      const price = prod ? parseFloat(prod.price) : parseFloat(item.price || 0);
-      const qty = parseInt(item.quantity, 10) || 1;
+      const price = parseFloat(prod.price);
+      const qty = Math.min(99, Math.max(1, parseInt(item.quantity, 10) || 1));
       subtotal += price * qty;
 
       const serials = [];
@@ -494,24 +464,22 @@ app.post('/api/orders', optionalAuth, async (req, res) => {
 
       enrichedItems.push({
         productId: item.productId,
-        name: prod ? prod.name : (item.name || 'Produit'),
+        name: prod.name,
         price: price,
         quantity: qty,
         serials: serials,
       });
 
       // Deduct stock in DB
-      if (prod) {
-        await connection.query(
-          'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
-          [qty, item.productId]
-        );
-      }
+      await connection.query(
+        'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
+        [qty, item.productId]
+      );
     }
 
     const deliveryFee = subtotal >= 120 ? 0 : 8.0;
     const total = subtotal + deliveryFee;
-    const userId = req.user ? req.user.id : null;
+    const userId = null;
 
     // 3. Insert order
     await connection.query(
@@ -521,8 +489,8 @@ app.post('/api/orders', optionalAuth, async (req, res) => {
       [
         newOrderId,
         userId,
-        customer.fullName || 'Client',
-        customer.phone || '',
+        customer.fullName.trim().slice(0, 150),
+        customer.phone,
         customer.email || null,
         customer.address || '',
         customer.city || '',
@@ -533,7 +501,7 @@ app.post('/api/orders', optionalAuth, async (req, res) => {
         paymentMethod,
         'pending',
         certSerial,
-        notes || 'Commande passée en ligne',
+        String(notes || '').slice(0, 1000),
       ]
     );
 
@@ -575,41 +543,73 @@ app.post('/api/orders', optionalAuth, async (req, res) => {
   } catch (error) {
     await connection.rollback();
     connection.release();
+    if (error.publicMessage) {
+      return res.status(error.status || 400).json({ error: error.publicMessage });
+    }
     console.error('Create order error:', error);
     res.status(500).json({ error: 'Erreur lors de la validation de la commande' });
   }
 });
 
-// Update order status
-app.put('/api/orders/:id/status', async (req, res) => {
+// Update order status (admin)
+const ORDER_STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+
+const handleOrderUpdate = async (req, res) => {
+  const { id } = req.params;
+  const { status, notes } = req.body || {};
+
+  if (status !== undefined && !ORDER_STATUSES.includes(status)) {
+    return res.status(400).json({ error: 'Statut de commande invalide' });
+  }
+  if (status === undefined && notes === undefined) {
+    return res.status(400).json({ error: 'Aucune donnée à mettre à jour' });
+  }
+
+  const connection = await pool.getConnection();
   try {
-    const { id } = req.params;
-    const { status, notes } = req.body;
-
-    const fields = [];
-    const values = [];
-
-    if (status) { fields.push('status = ?'); values.push(status); }
-    if (notes !== undefined) { fields.push('notes = ?'); values.push(notes); }
-
-    if (fields.length === 0) {
-      return res.status(400).json({ error: 'Aucune donnée à mettre à jour' });
-    }
-
-    values.push(id);
-    const [result] = await pool.query(`UPDATE orders SET ${fields.join(', ')} WHERE id = ?`, values);
-
-    if (result.affectedRows === 0) {
+    await connection.beginTransaction();
+    const [[order]] = await connection.query('SELECT status FROM orders WHERE id = ? FOR UPDATE', [id]);
+    if (!order) {
+      await connection.rollback();
+      connection.release();
       return res.status(404).json({ error: 'Commande non trouvée' });
     }
 
-    const [rows] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
-    res.json(rows[0]);
+    // Annulation : remise en stock ; réactivation : stock de nouveau déduit
+    const wasCancelled = order.status === 'cancelled';
+    const willBeCancelled = status ? status === 'cancelled' : wasCancelled;
+    if (wasCancelled !== willBeCancelled) {
+      const [items] = await connection.query('SELECT product_id, quantity FROM order_items WHERE order_id = ?', [id]);
+      for (const item of items) {
+        await connection.query(
+          willBeCancelled
+            ? 'UPDATE products SET stock = stock + ? WHERE id = ?'
+            : 'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
+          [item.quantity, item.product_id]
+        );
+      }
+    }
+
+    const fields = [];
+    const values = [];
+    if (status) { fields.push('status = ?'); values.push(status); }
+    if (notes !== undefined) { fields.push('notes = ?'); values.push(String(notes).slice(0, 2000)); }
+    values.push(id);
+    await connection.query(`UPDATE orders SET ${fields.join(', ')} WHERE id = ?`, values);
+
+    await connection.commit();
+    connection.release();
+    res.json({ id, status: status || order.status, notes });
   } catch (error) {
+    await connection.rollback();
+    connection.release();
     console.error('Update order status error:', error);
     res.status(500).json({ error: 'Erreur mise à jour commande' });
   }
-});
+};
+
+app.put('/api/orders/:id/status', authenticateToken, requireAdmin, handleOrderUpdate);
+app.put('/api/orders/:id', authenticateToken, requireAdmin, handleOrderUpdate);
 
 // ==========================================
 // 4. CERTIFICATE API
@@ -635,9 +635,14 @@ app.get('/api/certificate/:orderId', async (req, res) => {
       customerAddress: `${order.customer_address || ''}, ${order.customer_city || ''} (${order.customer_governorate || ''})`,
       warrantyDuration: '3 ANS (Eco-Sac garanti À VIE)',
       standardConformity: 'Normes Européennes ISO 9001 / ACS Attestation de Conformité Sanitaire / Delrin-Hostaform',
-      testedPressure: 'Tenue jusqu’à 25 Bars - Résistant aux chocs thermiques & chlorés',
+      subtotal: parseFloat(order.subtotal) || 0,
+      deliveryFee: parseFloat(order.delivery_fee) !== undefined ? parseFloat(order.delivery_fee) : 8.0,
+      total: parseFloat(order.total) || 0,
       items: items.map(item => ({
+        id: item.id,
+        productId: item.product_id,
         name: item.name,
+        price: parseFloat(item.price) || 0,
         quantity: item.quantity,
         serials: typeof item.serials === 'string' ? JSON.parse(item.serials) : (item.serials || []),
       })),
@@ -659,7 +664,7 @@ app.get('/api/certificate/:orderId', async (req, res) => {
 // ==========================================
 // 5. B2B LEADS API
 // ==========================================
-app.get('/api/leads', async (req, res) => {
+app.get('/api/leads', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const [leads] = await pool.query('SELECT * FROM leads ORDER BY created_at DESC');
     const formatted = leads.map(l => ({
@@ -684,11 +689,14 @@ app.get('/api/leads', async (req, res) => {
   }
 });
 
-app.post('/api/leads', async (req, res) => {
+app.post('/api/leads', orderLimiter, async (req, res) => {
   try {
-    const leadData = req.body;
-    const [countRows] = await pool.query('SELECT COUNT(*) as count FROM leads');
-    const leadId = `LEAD-${200 + countRows[0].count + 1}`;
+    const leadData = req.body || {};
+    if (!String(leadData.company || '').trim() || String(leadData.phone || '').replace(/[^0-9]/g, '').length < 8) {
+      return res.status(400).json({ error: "Indiquez le nom de l'établissement et un numéro de téléphone valide." });
+    }
+    const [[last]] = await pool.query("SELECT MAX(CAST(SUBSTRING(id, 6) AS UNSIGNED)) AS lastNum FROM leads WHERE id LIKE 'LEAD-%'");
+    const leadId = `LEAD-${Math.max(200, last.lastNum || 0) + 1}`;
 
     await pool.query(
       `INSERT INTO leads (id, company, contact_person, role, phone, email, type, rooms_count, current_water_bill_monthly, interest, status, notes)
@@ -732,7 +740,7 @@ app.post('/api/leads', async (req, res) => {
   }
 });
 
-app.put('/api/leads/:id', async (req, res) => {
+app.put('/api/leads/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, notes } = req.body;
@@ -765,21 +773,71 @@ app.put('/api/leads/:id', async (req, res) => {
 // ==========================================
 // 6. STATS API (Admin KPI)
 // ==========================================
-app.get('/api/stats', async (req, res) => {
+app.get('/api/stats', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const [rev] = await pool.query('SELECT COALESCE(SUM(total), 0) as totalRevenue, COUNT(*) as totalOrders FROM orders');
-    const [pendingOrders] = await pool.query('SELECT COUNT(*) as count FROM orders WHERE status = "pending"');
-    const [leads] = await pool.query('SELECT COUNT(*) as count FROM leads');
-    const [newLeads] = await pool.query('SELECT COUNT(*) as count FROM leads WHERE status = "new"');
-    const [lowStock] = await pool.query('SELECT COUNT(*) as count FROM products WHERE stock <= 10');
+    const valid = "status <> 'cancelled'";
+    const [[rev]] = await pool.query(`SELECT COALESCE(SUM(total), 0) AS revenue, COUNT(*) AS orders, COALESCE(AVG(total), 0) AS avgBasket FROM orders WHERE ${valid}`);
+    const [[all]] = await pool.query('SELECT COUNT(*) AS count FROM orders');
+    const [[month]] = await pool.query(
+      `SELECT COALESCE(SUM(total), 0) AS revenue, COUNT(*) AS orders FROM orders
+       WHERE ${valid} AND created_at >= DATE_FORMAT(CURDATE(), '%Y-%m-01')`
+    );
+    const [[prevMonth]] = await pool.query(
+      `SELECT COALESCE(SUM(total), 0) AS revenue, COUNT(*) AS orders FROM orders
+       WHERE ${valid} AND created_at >= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+         AND created_at < DATE_FORMAT(CURDATE(), '%Y-%m-01')`
+    );
+    const [[toCollect]] = await pool.query(
+      "SELECT COALESCE(SUM(total), 0) AS amount, COUNT(*) AS count FROM orders WHERE status IN ('pending', 'confirmed', 'shipped')"
+    );
+    const [byStatus] = await pool.query('SELECT status, COUNT(*) AS count, COALESCE(SUM(total), 0) AS total FROM orders GROUP BY status');
+    const [daily] = await pool.query(
+      `SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS day, COUNT(*) AS orders, COALESCE(SUM(total), 0) AS revenue
+       FROM orders WHERE ${valid} AND created_at >= CURDATE() - INTERVAL 29 DAY
+       GROUP BY day ORDER BY day`
+    );
+    const [topProducts] = await pool.query(
+      `SELECT oi.product_id AS productId, MAX(oi.name) AS name, SUM(oi.quantity) AS quantity, SUM(oi.quantity * oi.price) AS revenue
+       FROM order_items oi JOIN orders o ON o.id = oi.order_id
+       WHERE o.${valid} GROUP BY oi.product_id ORDER BY revenue DESC LIMIT 5`
+    );
+    const [byGovernorate] = await pool.query(
+      `SELECT customer_governorate AS governorate, COUNT(*) AS orders, COALESCE(SUM(total), 0) AS revenue
+       FROM orders WHERE ${valid} GROUP BY customer_governorate ORDER BY revenue DESC LIMIT 6`
+    );
+    const [[leads]] = await pool.query("SELECT COUNT(*) AS total, SUM(status = 'new') AS fresh FROM leads");
+    const [[lowStock]] = await pool.query('SELECT COUNT(*) AS count FROM products WHERE stock <= 10');
 
+    // Série continue sur 30 jours (jours sans commande à 0)
+    const series = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const row = daily.find((r) => r.day === key);
+      series.push({ day: key, orders: row ? Number(row.orders) : 0, revenue: row ? parseFloat(row.revenue) : 0 });
+    }
+
+    const num = (v) => parseFloat(v) || 0;
     res.json({
-      revenue: parseFloat(rev[0].totalRevenue) || 0,
-      totalOrders: rev[0].totalOrders || 0,
-      pendingOrders: pendingOrders[0].count || 0,
-      totalLeads: leads[0].count || 0,
-      newLeads: newLeads[0].count || 0,
-      lowStockProducts: lowStock[0].count || 0,
+      revenue: num(rev.revenue),
+      totalOrders: Number(all.count) || 0,
+      validOrders: Number(rev.orders) || 0,
+      avgBasket: num(rev.avgBasket),
+      monthRevenue: num(month.revenue),
+      monthOrders: Number(month.orders) || 0,
+      prevMonthRevenue: num(prevMonth.revenue),
+      prevMonthOrders: Number(prevMonth.orders) || 0,
+      toCollect: num(toCollect.amount),
+      toCollectCount: Number(toCollect.count) || 0,
+      pendingOrders: Number(byStatus.find((r) => r.status === 'pending')?.count) || 0,
+      byStatus: byStatus.map((r) => ({ status: r.status, count: Number(r.count), total: num(r.total) })),
+      daily: series,
+      topProducts: topProducts.map((r) => ({ ...r, quantity: Number(r.quantity), revenue: num(r.revenue) })),
+      byGovernorate: byGovernorate.map((r) => ({ ...r, orders: Number(r.orders), revenue: num(r.revenue) })),
+      totalLeads: Number(leads.total) || 0,
+      newLeads: Number(leads.fresh) || 0,
+      lowStockProducts: Number(lowStock.count) || 0,
     });
   } catch (error) {
     console.error('Stats error:', error);
