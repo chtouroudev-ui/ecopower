@@ -23,11 +23,15 @@ class CertificateController extends Controller
             'issueDate' => Format::date($order->created_at),
             'customerName' => $order->customer_name,
             'customerPhone' => $order->customer_phone,
-            'customerAddress' => ($order->customer_address ?: '').', '.($order->customer_city ?: '').' ('.($order->customer_governorate ?: '').')',
+            'customerAddress' => ($order->delivery_method ?? '') === 'pickup' && ! $order->customer_address
+                ? 'Retrait au local : '.config('ecopower.pickup_address')
+                : ($order->customer_address ?: '').', '.($order->customer_city ?: '').' ('.($order->customer_governorate ?: '').')',
             'warrantyDuration' => '3 ANS (Eco-Sac garanti À VIE)',
             'standardConformity' => 'Normes Européennes ISO 9001 / ACS Attestation de Conformité Sanitaire / Delrin-Hostaform',
             'subtotal' => (float) $order->subtotal,
             'deliveryFee' => $order->delivery_fee !== null ? (float) $order->delivery_fee : 8.0,
+            'deliveryMethod' => $order->delivery_method ?? 'delivery',
+            'discount' => (float) ($order->discount ?? 0),
             'total' => (float) $order->total,
             'items' => $items->map(fn ($i) => [
                 'id' => (int) $i->id,
@@ -40,7 +44,7 @@ class CertificateController extends Controller
             'issuer' => [
                 'company' => 'ECOPOWER TUNISIE / ECOGAM SARL',
                 'technicalManager' => 'Pascal FABRE & Service Qualité',
-                'phone' => '+216 98 000 000 / eceau-lo@orange.fr',
+                'phone' => '+216 97 644 988 / eceau-lo@orange.fr',
                 'officialStamp' => 'CERTIFIÉ CONFORME AUX NORMES HYDRO-ÉCONOMIE',
             ],
         ]);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, Truck } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, Truck, Store } from 'lucide-react';
 
 export const CartDrawer = () => {
   const {
@@ -12,8 +12,14 @@ export const CartDrawer = () => {
     subtotal,
     deliveryFee,
     total,
+    canPickup,
+    isPickup,
+    pickupDiscount,
+    discount,
+    setDeliveryMethod,
     setIsCheckoutOpen,
-    language
+    language,
+    isPickupProduct
   } = useCart();
 
   if (!isCartOpen) return null;
@@ -23,7 +29,7 @@ export const CartDrawer = () => {
   const freeDeliveryPercent = Math.min(100, Math.round((subtotal / freeDeliveryThreshold) * 100));
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-[60] overflow-hidden">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
@@ -46,6 +52,7 @@ export const CartDrawer = () => {
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
+              aria-label="Fermer le panier"
               className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/60 transition"
             >
               <X className="w-5 h-5" />
@@ -54,7 +61,12 @@ export const CartDrawer = () => {
 
           {/* Free delivery progress */}
           <div className="px-5 py-3 bg-blue-50/70 border-b border-blue-100 text-xs">
-            {remainingForFreeDelivery > 0 ? (
+            {isPickup ? (
+              <p className="text-blue-800 font-bold flex items-center gap-1.5">
+                <Store className="w-4 h-4 text-blue-600" />
+                Retrait au local : livraison gratuite et -10% sur les produits éligibles
+              </p>
+            ) : remainingForFreeDelivery > 0 ? (
               <div>
                 <p className="text-blue-900 font-semibold mb-1.5 flex items-center gap-1.5">
                   <Truck className="w-4 h-4 text-blue-600" />
@@ -107,6 +119,9 @@ export const CartDrawer = () => {
                     </h4>
                     <p className="text-xs text-blue-700 font-bold mt-0.5">
                       {item.product.price.toFixed(2)} DT
+                      {isPickupProduct(item.product.id) && (
+                        <span className="ms-1.5 px-1.5 py-0.5 rounded bg-blue-100 text-[10px] text-blue-800">-10% en retrait au local</span>
+                      )}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
@@ -146,15 +161,38 @@ export const CartDrawer = () => {
           {/* Footer with totals */}
           {cart.length > 0 && (
             <div className="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
+              {canPickup && (
+                <label className="flex items-start gap-2.5 p-3 rounded-xl border border-blue-200 bg-white cursor-pointer text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isPickup}
+                    onChange={(e) => setDeliveryMethod(e.target.checked ? 'pickup' : 'delivery')}
+                    className="mt-0.5 accent-blue-600"
+                  />
+                  <span className="text-slate-700">
+                    <strong className="text-slate-900">Je récupère ma commande au local</strong>
+                    <br />
+                    Pas de frais de livraison et -10% sur les produits éligibles (-{pickupDiscount.toFixed(2)} DT).
+                  </span>
+                </label>
+              )}
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-slate-600">
                   <span>Sous-total articles :</span>
                   <span className="font-semibold text-slate-800">{subtotal.toFixed(2)} DT</span>
                 </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-slate-600">
+                    <span>Remise retrait au local (-10%) :</span>
+                    <span className="font-semibold text-blue-700">-{discount.toFixed(2)} DT</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600">
-                  <span>Frais de livraison (Tunisie) :</span>
+                  <span>{isPickup ? 'Livraison :' : 'Frais de livraison (Tunisie) :'}</span>
                   <span className="font-semibold">
-                    {deliveryFee === 0 ? (
+                    {isPickup ? (
+                      <span className="text-blue-600 font-bold">Retrait au local</span>
+                    ) : deliveryFee === 0 ? (
                       <span className="text-blue-600 font-bold">Gratuit</span>
                     ) : (
                       `${deliveryFee.toFixed(2)} DT`
@@ -174,7 +212,7 @@ export const CartDrawer = () => {
                 }}
                 className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01]"
               >
-                <span>Valider la Commande (Paiement à la livraison)</span>
+                <span>{isPickup ? 'Valider la Commande (Paiement au retrait)' : 'Valider la Commande (Paiement à la livraison)'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

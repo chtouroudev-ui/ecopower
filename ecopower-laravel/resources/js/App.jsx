@@ -33,7 +33,14 @@ function WhatsAppLabel() {
 
 function AppContent() {
   const [currentTab, setCurrentTabState] = useState(getTabFromUrl);
-  const [trackingQuery, setTrackingQuery] = useState('');
+  // Retour de la page de paiement Konnect : /tracking?commande=ECO-xxxx&paiement=retour
+  const [trackingQuery, setTrackingQuery] = useState(() => {
+    try {
+      return new URLSearchParams(window.location.search).get('commande') || '';
+    } catch {
+      return '';
+    }
+  });
 
   const setCurrentTab = (tab) => {
     setCurrentTabState(tab);
@@ -107,7 +114,7 @@ function AppContent() {
 
       {/* Floating WhatsApp Action Button - Pure Blue and White */}
       <a
-        href="https://wa.me/21698000000?text=Bonjour%20EcoPower%20Tunisie%2C%20je%20souhaite%20des%20informations%20sur%20vos%20produits%20hydro-%C3%A9conomes."
+        href="https://wa.me/21697644988?text=Bonjour%20EcoPower%20Tunisie%2C%20je%20souhaite%20des%20informations%20sur%20vos%20produits%20hydro-%C3%A9conomes."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contacter EcoPower sur WhatsApp"

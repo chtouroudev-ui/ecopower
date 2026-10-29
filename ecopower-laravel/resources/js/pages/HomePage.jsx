@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { ReferencesCarousel } from '../components/ReferencesCarousel';
 import { SavingsCalculator } from '../components/SavingsCalculator';
@@ -33,6 +33,7 @@ const TXT = {
     trustYears: '3 Ans',
     trustWarranty: 'Garantie & Certificat',
     cardOffer: 'Offre Spéciale -15%',
+    cardOfferPct: (pct) => `Offre Spéciale -${pct}%`,
     cardKicker: 'Solution N°1 en Tunisie',
     cardTitle: 'Pack Appartement Éco 4L',
     cardSub: '2 Mousseurs Robinets + 1 Régulateur Douche + 1 Eco-Sac WC 3L',
@@ -57,6 +58,7 @@ const TXT = {
     packsKicker: 'Les Meilleures Ventes',
     packsTitle: 'Choisissez votre Pack Éco-Énergie',
     seeShop: 'Voir toute la boutique au détail',
+    homeBadge: 'Recommandé',
     packs: {
       'pack-appartement-4l': {
         name: 'Pack Appartement 4L',
@@ -114,6 +116,7 @@ const TXT = {
     trustYears: '3 سنين',
     trustWarranty: 'ضمان وشهادة',
     cardOffer: 'عرض خاص -15%',
+    cardOfferPct: (pct) => `عرض خاص -${pct}%`,
     cardKicker: 'الحل رقم 1 في تونس',
     cardTitle: 'باك الشقة إيكو 4L',
     cardSub: '2 مخفّضات للروبيني + 1 منظّم للدوش + 1 إيكو-ساك للتواليت 3L',
@@ -138,6 +141,7 @@ const TXT = {
     packsKicker: 'الأكثر مبيعًا',
     packsTitle: 'اختار الباك متاعك',
     seeShop: 'شوف المتجر الكل',
+    homeBadge: 'ننصحوك بيه',
     packs: {
       'pack-appartement-4l': {
         name: 'باك الشقة 4L',
@@ -190,8 +194,9 @@ export const HomePage = ({ setCurrentTab }) => {
   const [openFaq, setOpenFaq] = useState(null);
   const t = TXT[language] || TXT.fr;
 
-  // Quick packs for showcase
-  const featuredPacks = [
+  // Produits cochés « Afficher sur la page d'accueil » dans l'admin.
+  // La liste ci-dessous ne sert qu'en attendant la réponse du serveur.
+  const [featuredPacks, setFeaturedPacks] = useState(() => [
     {
       id: 'pack-appartement-4l',
       name: 'Pack Appartement 4L',
@@ -206,7 +211,48 @@ export const HomePage = ({ setCurrentTab }) => {
       oldPrice: 159.0,
       image: '/products/pack_maison_4l.webp',
     }
-  ];
+  ]);
+
+  // Grande carte en haut à droite : le produit coché « Produit vedette » dans l'admin.
+  const [hero, setHero] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((list) => {
+        if (!Array.isArray(list)) return;
+        setFeaturedPacks(list.filter((p) => p.showOnHome));
+        setHero(list.find((p) => p.isHero) || null);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Textes de la carte vedette : ceux rédigés pour le Pack Appartement 4L, sinon ceux de la fiche produit.
+  const heroCard = hero && hero.id !== 'pack-appartement-4l'
+    ? {
+        id: hero.id,
+        name: hero.name,
+        title: (language === 'ar' && hero.nameAr) || hero.name,
+        sub: hero.description || '',
+        image: hero.image,
+        isPack: hero.category === 'packs',
+        price: hero.price,
+        oldPrice: hero.oldPrice,
+        offer: hero.oldPrice > hero.price ? t.cardOfferPct(Math.round((1 - hero.price / hero.oldPrice) * 100)) : null,
+      }
+    : {
+        id: 'pack-appartement-4l',
+        name: hero?.name || 'Pack Appartement 4 Litres',
+        title: t.cardTitle,
+        sub: t.cardSub,
+        image: hero?.image || '/products/pack_appartement_4l.webp',
+        isPack: true,
+        price: hero?.price ?? 78.0,
+        oldPrice: hero ? hero.oldPrice : 99.0,
+        offer: !hero || hero.oldPrice > hero.price
+          ? t.cardOfferPct(Math.round((1 - (hero?.price ?? 78) / (hero?.oldPrice ?? 99)) * 100))
+          : null,
+      };
 
   // Clip diagram zones (from Pascal's email RETOUCHES CLIP)
   const clipZones = [
@@ -280,50 +326,56 @@ export const HomePage = ({ setCurrentTab }) => {
             {/* Right Column: Hero Visual Product Card */}
             <div className="lg:col-span-5 relative">
               <div className="relative mx-auto max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200/90 overflow-hidden">
-                <div className="absolute top-4 end-4 bg-energy-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-xs">
-                  {t.cardOffer}
-                </div>
+                {heroCard.offer && (
+                  <div className="absolute top-4 end-4 bg-energy-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-xs">
+                    {heroCard.offer}
+                  </div>
+                )}
 
                 <div className="text-xs font-bold text-brand-700 uppercase tracking-wider mb-2">
                   {t.cardKicker}
                 </div>
                 <h3 className="text-2xl font-black text-slate-900 font-serif">
-                  {t.cardTitle}
+                  {heroCard.title}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">
-                  {t.cardSub}
+                <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                  {heroCard.sub}
                 </p>
 
                 <div className="my-5 rounded-2xl bg-slate-50 p-4 border border-slate-100 flex items-center justify-center">
                   <img
-                    src="/products/pack_appartement_4l.webp"
-                    alt="Pack EcoPower"
+                    src={heroCard.image}
+                    alt={heroCard.title}
                     className="h-52 object-contain drop-shadow-md hover:scale-105 transition-transform"
                   />
                 </div>
 
                 <div className="flex items-baseline justify-between mb-4">
                   <div>
-                    <span className="text-xs text-slate-400 line-through me-2">99.000 {t.cur}</span>
-                    <span className="text-3xl font-black text-brand-900">78.000 {t.cur}</span>
+                    {heroCard.oldPrice > heroCard.price && (
+                      <span className="text-xs text-slate-400 line-through me-2">{heroCard.oldPrice.toFixed(3)} {t.cur}</span>
+                    )}
+                    <span className="text-3xl font-black text-brand-900 whitespace-nowrap">{heroCard.price.toFixed(3)} {t.cur}</span>
                     <span className="text-xs text-slate-500 ms-1">{t.ttc}</span>
                   </div>
+                  {heroCard.isPack && (
                   <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md">
                     {t.giftMeter}
                   </span>
+                  )}
                 </div>
 
                 <button
                   onClick={() => addToCart({
-                    id: 'pack-appartement-4l',
-                    name: 'Pack Appartement 4 Litres',
-                    price: 78.0,
-                    image: '/products/pack_appartement_4l.webp'
+                    id: heroCard.id,
+                    name: heroCard.name,
+                    price: heroCard.price,
+                    image: heroCard.image
                   })}
                   className="w-full bg-brand-700 hover:bg-brand-800 text-white font-black py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md shadow-brand-700/20 transition-all hover:scale-[1.02]"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>{t.addToCart(78)}</span>
+                  <span>{t.addToCart(heroCard.price.toFixed(3))}</span>
                 </button>
 
                 <p className="text-center text-[11px] text-slate-600 mt-3 flex items-center justify-center gap-1.5">
@@ -416,7 +468,8 @@ export const HomePage = ({ setCurrentTab }) => {
         }} />
       </section>
 
-      {/* 4. PACKS VEDETTES DU SITE */}
+      {/* 4. PACKS VEDETTES DU SITE (choisis dans l'admin) */}
+      {featuredPacks.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
           <div>
@@ -438,7 +491,12 @@ export const HomePage = ({ setCurrentTab }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {featuredPacks.map((pack) => {
-            const tp = t.packs[pack.id];
+            const tp = t.packs[pack.id] || {
+              name: (language === 'ar' && pack.nameAr) || pack.name,
+              badge: t.homeBadge,
+              desc: pack.description || '',
+              features: (pack.features || []).slice(0, 4),
+            };
             return (
             <div
               key={pack.id}
@@ -467,7 +525,9 @@ export const HomePage = ({ setCurrentTab }) => {
                     <h3 className="text-xl font-black text-slate-900 font-serif">{tp.name}</h3>
                     <p className="text-xs text-slate-600 mt-1 leading-relaxed">{tp.desc}</p>
                     <div className="mt-3">
-                      <span className="text-xs text-slate-400 line-through me-2">{pack.oldPrice.toFixed(3)} {t.cur}</span>
+                      {pack.oldPrice ? (
+                        <span className="text-xs text-slate-400 line-through me-2">{pack.oldPrice.toFixed(3)} {t.cur}</span>
+                      ) : null}
                       <span className="text-2xl font-black text-brand-800">{pack.price.toFixed(3)} {t.cur}</span>
                     </div>
                   </div>
@@ -500,6 +560,7 @@ export const HomePage = ({ setCurrentTab }) => {
           })}
         </div>
       </section>
+      )}
 
       {/* 5. CARROUSEL DES RÉFÉRENCES (Hotels, Cliniques, etc.) */}
       <ReferencesCarousel />

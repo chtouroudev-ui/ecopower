@@ -9,8 +9,10 @@ export function printCertificateDirectly(certificate) {
   const itemsCount = certificate.items?.length || 1;
   const defaultItemPrice = rawSubtotal > 0 ? (rawSubtotal / itemsCount) : 78.0;
   const deliveryFee = certificate.deliveryFee !== undefined ? parseFloat(certificate.deliveryFee) : 8.0;
+  const discount = parseFloat(certificate.discount) || 0;
+  const isPickup = certificate.deliveryMethod === 'pickup';
   const subtotal = rawSubtotal > 0 ? rawSubtotal : (defaultItemPrice * itemsCount);
-  const total = certificate.total ? parseFloat(certificate.total) : (subtotal + deliveryFee);
+  const total = certificate.total ? parseFloat(certificate.total) : (subtotal - discount + deliveryFee);
   const certNumber = certificate.certificateSerial || `CERT-2026-${certificate.orderId}`;
   const issueDate = certificate.issueDate ? new Date(certificate.issueDate).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR');
 
@@ -263,8 +265,12 @@ export function printCertificateDirectly(certificate) {
       </thead>
       <tbody>
         ${itemsRows}
+        ${discount > 0 ? `<tr style="background: #f8fafc;">
+          <td colspan="3" style="padding: 6px 10px; color: #1d4ed8; font-weight: 500;">Remise retrait au local (-10%)</td>
+          <td style="padding: 6px 10px; text-align: right; font-family: monospace; font-weight: 700; color: #1d4ed8;">-${discount.toFixed(2)} DT</td>
+        </tr>` : ''}
         <tr style="background: #f8fafc;">
-          <td colspan="3" style="padding: 6px 10px; color: #64748b; font-weight: 500;">Frais de livraison express à domicile partout en Tunisie</td>
+          <td colspan="3" style="padding: 6px 10px; color: #64748b; font-weight: 500;">${isPickup ? 'Retrait au local (sans frais de livraison)' : 'Frais de livraison express à domicile partout en Tunisie'}</td>
           <td style="padding: 6px 10px; text-align: right; font-family: monospace; font-weight: 700;">${deliveryFee.toFixed(2)} DT</td>
         </tr>
         <tr class="total-row">
@@ -305,7 +311,7 @@ export function printCertificateDirectly(certificate) {
       <div>
         <div style="font-weight: 800; color: #0f172a;">ECOGAM SARL / ECOPOWER TUNISIE</div>
         <div>Direction Technique & Service Qualité Pascal FABRE</div>
-        <div>Support Client : +216 71 000 000 • eceau-lo@orange.fr • www.ecopower.tn</div>
+        <div>Support Client : +216 97 644 988 • eceau-lo@orange.fr • www.ecopower.tn</div>
       </div>
 
       <div class="stamp-box">
@@ -409,8 +415,10 @@ export const WarrantyCertificateModal = ({ certificate: initialCert, orderId, on
   const defaultItemPrice = rawSubtotal > 0 ? (rawSubtotal / itemsCount) : 78.0;
 
   const deliveryFee = certificate?.deliveryFee !== undefined ? parseFloat(certificate.deliveryFee) : 8.0;
+  const discount = parseFloat(certificate?.discount) || 0;
+  const isPickup = certificate?.deliveryMethod === 'pickup';
   const subtotal = rawSubtotal > 0 ? rawSubtotal : (defaultItemPrice * itemsCount);
-  const total = certificate?.total ? parseFloat(certificate.total) : (subtotal + deliveryFee);
+  const total = certificate?.total ? parseFloat(certificate.total) : (subtotal - discount + deliveryFee);
 
   return (
     <div 
@@ -552,9 +560,19 @@ export const WarrantyCertificateModal = ({ certificate: initialCert, orderId, on
                         </tr>
                       );
                     })}
+                    {discount > 0 && (
+                      <tr className="bg-slate-50 border-t border-slate-200">
+                        <td className="p-2 sm:p-2.5 text-blue-700 font-medium" colSpan="3">
+                          Remise retrait au local (-10%)
+                        </td>
+                        <td className="p-2 sm:p-2.5 text-right font-mono font-bold text-blue-700">
+                          -{discount.toFixed(2)} DT
+                        </td>
+                      </tr>
+                    )}
                     <tr className="bg-slate-50 border-t border-slate-200">
                       <td className="p-2 sm:p-2.5 text-slate-600 font-medium" colSpan="3">
-                        Frais de livraison rapide à domicile (Tunisie)
+                        {isPickup ? 'Retrait au local (sans frais de livraison)' : 'Frais de livraison rapide à domicile (Tunisie)'}
                       </td>
                       <td className="p-2 sm:p-2.5 text-right font-mono font-bold text-slate-700">
                         {deliveryFee.toFixed(2)} DT
@@ -638,7 +656,7 @@ export const WarrantyCertificateModal = ({ certificate: initialCert, orderId, on
               <div className="text-[10px] text-slate-500 space-y-0.5">
                 <p><strong>ECOGAM SARL / ECOPOWER TUNISIE</strong></p>
                 <p>Direction Technique & Service Qualité Pascal FABRE</p>
-                <p>Contact : eceau-lo@orange.fr / +216 98 000 000</p>
+                <p>Contact : eceau-lo@orange.fr / +216 97 644 988</p>
               </div>
 
               <div className="text-center p-2.5 border-2 border-dashed border-blue-600/40 rounded-2xl bg-white w-44 shadow-xs">

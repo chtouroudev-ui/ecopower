@@ -45,9 +45,9 @@ export const Navbar = ({ currentTab, setCurrentTab }) => {
             </span>
           </div>
           <div className="hidden md:flex items-center gap-3 text-blue-200 shrink-0">
-            <a href="tel:+21671000000" className="hover:text-white flex items-center gap-1 transition">
+            <a href="tel:+21697644988" className="hover:text-white flex items-center gap-1 transition">
               <PhoneCall className="w-3.5 h-3.5 text-blue-400" />
-              <span>{language === 'ar' ? 'خدمة الحرفاء:' : 'Service Client:'} <span dir="ltr">+216 71 000 000</span></span>
+              <span>{language === 'ar' ? 'خدمة الحرفاء:' : 'Service Client:'} <span dir="ltr">+216 97 644 988</span></span>
             </a>
             {isAdmin && (
               <>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { pickupDiscountFor, DEFAULT_PICKUP_INFO } from '../lib/pickup';
 
 const CartContext = createContext();
 
@@ -14,6 +15,18 @@ export const CartProvider = ({ children }) => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  // 'delivery' (livraison à domicile) ou 'pickup' (retrait au local, packs éligibles uniquement)
+  const [deliveryMethod, setDeliveryMethod] = useState('delivery');
+  // 'cod' (espèces) ou 'card' (carte bancaire via Konnect, si activé côté serveur)
+  const [paymentMethod, setPaymentMethod] = useState('cod');
+  const [shopInfo, setShopInfo] = useState({ card: false, pickup: DEFAULT_PICKUP_INFO });
+
+  useEffect(() => {
+    fetch('/api/payments/methods')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => data && setShopInfo({ card: !!data.card, pickup: { ...DEFAULT_PICKUP_INFO, ...data.pickup } }))
+      .catch(() => {});
+  }, []);
   const [language, setLanguage] = useState(() => {
     return localStorage.getItem('ecopower_lang') || 'fr';
   });
@@ -69,9 +82,16 @@ export const CartProvider = ({ children }) => {
     cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0) * 100
   ) / 100;
 
-  const deliveryFee = cart.length === 0 ? 0 : subtotal >= 120 ? 0 : 8.0;
+  const pickupIds = shopInfo.pickup.productIds || [];
+  const isPickupProduct = (productId) => pickupIds.includes(productId);
+  const canPickup = cart.some((item) => isPickupProduct(item.product.id));
+  const isPickup = canPickup && deliveryMethod === 'pickup';
+  const pickupDiscount = pickupDiscountFor(cart, pickupIds);
+  const discount = isPickup ? pickupDiscount : 0;
 
-  const total = Math.round((subtotal + deliveryFee) * 100) / 100;
+  const deliveryFee = cart.length === 0 || isPickup ? 0 : subtotal >= 120 ? 0 : 8.0;
+
+  const total = Math.round((subtotal - discount + deliveryFee) * 100) / 100;
 
   return (
     <CartContext.Provider
@@ -85,6 +105,17 @@ export const CartProvider = ({ children }) => {
         subtotal,
         deliveryFee,
         total,
+        canPickup,
+        isPickupProduct,
+        isPickup,
+        pickupDiscount,
+        discount,
+        deliveryMethod: isPickup ? 'pickup' : 'delivery',
+        setDeliveryMethod,
+        paymentMethod: shopInfo.card ? paymentMethod : 'cod',
+        setPaymentMethod,
+        cardEnabled: shopInfo.card,
+        pickupInfo: shopInfo.pickup,
         isCartOpen,
         setIsCartOpen,
         isCheckoutOpen,

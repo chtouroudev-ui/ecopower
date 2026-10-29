@@ -157,7 +157,7 @@ export const Footer = ({ setCurrentTab }) => {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-blue-400 shrink-0" />
-                <a href="tel:+21671000000" className="hover:text-white transition" dir="ltr">+216 71 000 000 / +216 98 000 000</a>
+                <a href="tel:+21697644988" className="hover:text-white transition" dir="ltr">+216 97 644 988</a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-blue-400 shrink-0" />
