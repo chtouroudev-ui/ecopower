@@ -1,0 +1,193 @@
+Received: from DBAP191MB1339.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:1b5::17)
+ by PR3P191MB0889.EURP191.PROD.OUTLOOK.COM with HTTPS; Fri, 25 Sep 2026
+ 09:21:03 +0000
+Received: from PR1P264CA0188.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:34d::8)
+ by DBAP191MB1339.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:1b5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.18; Fri, 25 Sep
+ 2026 09:21:02 +0000
+Received: from ZR1PEPF0000E6B9.eurprd07.prod.outlook.com
+ (2603:10a6:102:34d:cafe::90) by PR1P264CA0188.outlook.office365.com
+ (2603:10a6:102:34d::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.451.18 via Frontend Transport; Fri,
+ 25 Sep 2026 09:21:02 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 80.12.242.81) smtp.mailfrom=orange.fr; dkim=pass (signature was verified)
+ header.d=orange.fr;dmarc=pass action=none header.from=orange.fr;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of orange.fr designates
+ 80.12.242.81 as permitted sender) receiver=protection.outlook.com;
+ client-ip=80.12.242.81; helo=smtp.smtpout.orange.fr; pr=C
+Received: from smtp.smtpout.orange.fr (80.12.242.81) by
+ ZR1PEPF0000E6B9.mail.protection.outlook.com (10.167.241.72) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.451.8
+ via Frontend Transport; Fri, 25 Sep 2026 09:21:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+	s=t20230301; t=1790328059;
+	bh=Q4rc+m9Mzwug/DVp4Q4C1Kx8Vgb4oc+1KGMn3OiPlZU=;
+	h=Date:From:To:Message-ID:Subject:MIME-Version;
+	b=rQs5om/v0vWgF0ZmXpEQYcbyEDQJ3rYtRI9nTHsYuU2qmr2SuQM3jck2j3Q8tLyT7
+	 vc3Vkaz6lAnTqUk1cYtgk+95HxvJ8aaEgABM38dwjD38LMfsbJHKe9ky4BafJKOjjz
+	 LSdxifEHVCqLzsPu5bySn473naxOtlmRwqEhwrBbjVv+LC/AOrKxyBohWD89kyuFGF
+	 5rtp5bOiSJhZFFb/gc/Dt7VKFFkYGyBwMuHBioNDnpvRpKrO91HnQ7/6uTLYYo4rq/
+	 VTxHy8tH2a+NvPrTnJ7Ad5sV6JTzkfhKxzEpZZ5Y8j9pUtO2Bm0q9Rx7lQocO1E7Mg
+	 xUK5XP0yY012A==
+X-ME-Helo: opme11oxa69aub.op.aub.pom.fr.intraorange
+X-ME-Auth: ZWNlYXUtbG9Ab3JhbmdlLmZy
+X-ME-Date: Fri, 25 Sep 2026 11:20:59 +0200
+X-ME-IP: 10.110.82.156
+Date: Fri, 25 Sep 2026 11:20:59 +0200 (CEST)
+From: eceau-lo <eceau-lo@orange.fr>
+To: saif chtourou  <saif.chtourou@esprit.tn>
+Message-ID: <1780310697.57247.1790328059541@opme11oxa69aub.op.aub.pom.fr.intraorange>
+Subject: ECOPOWER ECOGAM : DESIGNATION ARTICLES ET PRIX
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Disposition-Notification-To: eceau-lo <eceau-lo@orange.fr>
+X-Originating-IP: 196.179.204.90
+Return-Path: eceau-lo@orange.fr
+X-MS-Exchange-Organization-ExpirationStartTime: 25 Sep 2026 09:21:02.0233
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: aa11abff-0529-4b60-6423-08df1ae65164
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 604f1a96-cbe8-43f8-abbf-f8eaf5d85730:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZR1PEPF0000E6B9:EE_|DBAP191MB1339:EE_|PR3P191MB0889:EE_
+X-MS-Exchange-Organization-AuthSource: ZR1PEPF0000E6B9.eurprd07.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: aa11abff-0529-4b60-6423-08df1ae65164
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;ARA:13230040|704161211799003|260918224100599003|260918215300599003|7093399015|19002099009|10067099003|56012099006|5063699009|8096899003|16102099003|18002099003;
+X-Forefront-Antispam-Report: CIP:80.12.242.81;CTRY:FR;LANG:fr;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtp.smtpout.orange.fr;PTR:smtp-81.smtpout.orange.fr;CAT:NONE;SFS:(13230040)(704161211799003)(260918224100599003)(260918215300599003)(7093399015)(19002099009)(10067099003)(56012099006)(5063699009)(8096899003)(16102099003)(18002099003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2026 09:21:01.9475
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa11abff-0529-4b60-6423-08df1ae65164
+X-MS-Exchange-CrossTenant-Id: 604f1a96-cbe8-43f8-abbf-f8eaf5d85730
+X-MS-Exchange-CrossTenant-AuthSource: ZR1PEPF0000E6B9.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP191MB1339
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.3560454
+X-MS-Exchange-Processed-By-BccFoldering: 15.21.0451.014
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910005)(944506478)(944626604)(920097)(930201)(20251009189)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cVFSczdqQ3pFWmxpT1lPaWhjT3p6ZEh5R1ExUEtOczgvZHJkU3AvcXZFNDRK?=
+ =?utf-8?B?NFplSFhCdmYvL20zRENWcSs0M0pqSjVuV0hOZEt1K0hScjgrdHBZWnBLOHdH?=
+ =?utf-8?B?bVQvUkFVeG9scTNuSVRxK3VnRFRzb3pEQ1lMS3JKSDI1Nm5jS0VmSmlJTW5W?=
+ =?utf-8?B?QkFBeUhyME1ZNUlUVnVpQi9RcW5PT3lGcEQ0b1ZnNk5xQ1NvY2xObkRhcWw2?=
+ =?utf-8?B?YWFVSjVRTTBxSDJhY0VBbElvZjRQdURPYk9BYkE1VGFScGN4SmRtaXo5K21T?=
+ =?utf-8?B?OCtRT2ZXbkZNQmg5NUhMZzQ4S0IybWlWRGM2Z3F0eldOejY5ditwMGhNNEpZ?=
+ =?utf-8?B?bjVEbzh3eitsbzdXcGhXNUdTL29OYVFOaGJoSk5wVmJNcUVLeVJXTll2b1Jh?=
+ =?utf-8?B?cTNFNWNMbmZ4c01NVHNyWU05Zmt0b0plU0d0c21vUjUzNWNrMENjUFNrRG81?=
+ =?utf-8?B?SjVCUDVVaVUxekMvcng4M0tRREJaRTVkS0RvZjRVYUdWRXNwQnNzUDV2Y1c0?=
+ =?utf-8?B?SGIwVkpnY1pHSkpzSlA5d3J4LzhSQzlOTGY0MHUreW1WcHZ2cEpnVnhSd28y?=
+ =?utf-8?B?VnNvR21XcjZOakdydUxNWkRTZ1ZDdzRxdzk0YjJXRVEvNnZDRUYwODNlUTNq?=
+ =?utf-8?B?VFNIOEV0WXA4MkVnNFlVakhXUG9hb0NNbjNXakZHcFJ1c2dOWk1VQy9ZN0lS?=
+ =?utf-8?B?OE1uQ1AwVm9OaXdqaGlzUGR2KzNSTjAra05VVlJDNTdHNFVrQ29ISjNkOFd3?=
+ =?utf-8?B?M1MxOVN3Y1FITTR0a3JoL2pCd2RXVVE4N1Y3Q2t1U1p3RXNmOW1wWGpvR3Fo?=
+ =?utf-8?B?a2hWZTdBaENrejQ3U3RnT2IxZ0o0Z1ZKKzBQK2ZkSUxHYjRGV1BQT0Z2OW5s?=
+ =?utf-8?B?ald0WVBaZWY3ZldyYUFDTC80eW1FM2hKUWIvVGV4NHplR2g4bVVzOVpPMG5u?=
+ =?utf-8?B?bjA2emRNaFc0eEdNazMzaDFJSGE1ZTBmeUYwS0x5MzBJMkVleWl3UVh2TExy?=
+ =?utf-8?B?MFVMcVp5d3E3MXRxOUxlTjBqQi93U0ljQWg5NG1mYUE0TDBtaXZlTDBwejBo?=
+ =?utf-8?B?NURJS3JvUUJaZTRFV01iSStsaUxPY2FYL3o5anJSRlYyeENOdjJMQlJoRmtk?=
+ =?utf-8?B?cGNmdHJwSGV1TE9DZlFPNzZvbG9Kb2JXUGdGazJ2UUpGUWd3RzhqelU2ZFY0?=
+ =?utf-8?B?TGR2M2VTV2NwWXBsc1g1alFYakdMcnB6cldzOUlsMnBROVdnLzZ2QTlhbFY4?=
+ =?utf-8?B?MnF5YVdVVWNuTVpVZlpub09CMmJQS1dTcjRSUEpmNDUvYzNidktnWkpVaENI?=
+ =?utf-8?B?K0V5blRxNVFGVE45OEx4UmowYmtCOW16TTFvY3pWYmU1NlNEOFhaL0hGZHRv?=
+ =?utf-8?B?WGJrRm9iMmNBcldyMVZpbTh1TVNjWWpkNGo4MnRYMmNqZUhNSjZtL1pENG5p?=
+ =?utf-8?B?eitFZCsvZjNjZzNHZktNdWRjWVIzZWxsVi9mWEpHMElpbDdPY2NYMUpJWGNX?=
+ =?utf-8?B?UUl1WHhQZ3hMZ3BzaVlPcDBMOXYvMzVlYkVBVXBvOHFQelhwZ3NXdVcwYnRN?=
+ =?utf-8?B?aFp3dEROVmphWGVwYVpzQ3N1RDl5R1AveEpSREpKN0c3b0FWaWlsNFB5K2lP?=
+ =?utf-8?B?M3NtZmd4bk1oUDgzMHZXeU9ubVA1OWRqSUR6Vk1XYXFtQzJqdWtuTXpJbS9J?=
+ =?utf-8?B?UmpGaGhwNEFGS0ZtYUtnS3UyZy9ieWlTamtYZlFBUTNaRk95RG5PeTB3MU9B?=
+ =?utf-8?B?Tkg3UzNUWGNPWWRWc0FjaXNHOTZTdmpscDRPcVhKQm1zMnJIeERBSUgrS000?=
+ =?utf-8?B?bVlENHE1TkJ2QVFISEJjTTRwZnE4R0RiNXV0QlRNUzk1bFFSendTTkdtb0Fh?=
+ =?utf-8?B?U1V6YmpBVnptN0xiK25tVEVpdjgxSGtlWGNKaGU0a2t4VGJOUDI3bVBvbzdO?=
+ =?utf-8?B?RjVaNkNKaWFQT3VnaFlnT2NCSkNWTHFib2c2cHlqSFVQd2lTbnRTUDdtclJH?=
+ =?utf-8?B?cGUyNzVwRmJXMkJha2RsL0tSbVNjbklWbG9XWlZFVlZldTVpTkY3djJUb3JC?=
+ =?utf-8?B?MjlQYk1QREpFYyt5ZU1WNElYOENwa3prL2crSEIzTUxqaXNaTDBkZzNOaWcv?=
+ =?utf-8?B?RC9FdkNaOGlra1lrd0pubHl2OVRLYzFIRzZWL2xneUdQdW9kbSt5b0YyVzZm?=
+ =?utf-8?B?dFU4QndyRU9kWWpiMUlBSVZDdzVDRzV1S2tpamZTQmc5K01FMHR4L0lqQ0ha?=
+ =?utf-8?B?bXRlY2hlOGt4ZDVMU1o4K2VVM05nd3Z2VzRha0JjQkFDeFFyMXFWUTRmNmtN?=
+ =?utf-8?B?NGp2amZCNXd4NitzSU9SbktUZ1NMYmN4UktPR3FsU05rcmVCNHh0cHFReS9m?=
+ =?utf-8?B?ek1FY2RVMkdxUjlkUFgyY2NmNnZYVVZkcm1WWmNqbUJGWFdLSjEzKzFFZzdr?=
+ =?utf-8?B?NjNTS2tLZWNMc0c3Qi9zcG1WSTVma3k5elpKODN1RXRJSmhXclBYK0hrb24v?=
+ =?utf-8?B?ejNkMk5KZ3ZQMEE2M2FFd2JvTjBLLyt1eHRRUlg2VU5VRnhxRkdsZE9TTlZm?=
+ =?utf-8?B?WlV0cC9Pa3lyVDRseXlKSjVhL1QxZW1WTjlIdW9IQkhmWkxob0d6K2lWeFpS?=
+ =?utf-8?B?Qk1WeGVvdUw4K1pPUmJKWWpqY1ZBVTFrS1BqeEtuNjdoTlQya2RoeVoxcXV2?=
+ =?utf-8?B?UmhDa2NQNjJ3VW51SHBqTGRpWldnRkNiQTdzcDg0U0FvS2FvNU1xWDcyd2ky?=
+ =?utf-8?B?WlFZZXhsWmM5QitwbXdGb3J1L2hDMDF6QXpMS1RpaG9BYmdOQTFUVWdvdjd6?=
+ =?utf-8?B?dDUxN0tkUzFsMFNsQXlKbUl2RWhnejU5VW1VOEc5cHpqbm5SdjNleHZKRUcx?=
+ =?utf-8?B?bWovR2FtYXlkelRZRUMyOHJxOEZkUU15eEFoYmdHMkZhenpId0pTRWEvbWtz?=
+ =?utf-8?B?TkFjYjY3ZlhIbS9LWHU3bXJpcmJzTXEyRFdjd1dySzlzVUducWZrYUVLTTlX?=
+ =?utf-8?B?R1ExYjRyTHpJYW4yaHJRT095c3hYbXJPYllodDBOWW5lVTNMekIyZUJWc3Bz?=
+ =?utf-8?B?N0dOOGF6SStITDhCdURNc29wUFFkZEg1L0FkczVVZVhWK0JtMTZxTXJwZER1?=
+ =?utf-8?B?NEIvUnE2SnBaNmgzNTM2dGNxQ1d3ZmptWnlOZEl2b2tIdDZUVjV3bVd0TW00?=
+ =?utf-8?B?THRoRHdJbmZDVWJudDRWTmUxU3BzUk5JVVVCT09CQWNpQllUNzM0dU1jV2V6?=
+ =?utf-8?B?UFI5cDVmWXpFQm1oeTJEWjBueXRHbzhwWHZwY094R214dnBVQmx0WWpNZnBy?=
+ =?utf-8?B?K25Ha2s3Q3dFMDFYUlQydGlpblI3L3Z3T2JCZlpla2UxeS9lQklqWmordHpv?=
+ =?utf-8?Q?=3D?=
+MIME-Version: 1.0
+
+<!doctype html><html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+ </head>
+ <body>
+  MON CHER SAIF,
+  <div>
+   <br>
+   <div>J'esp=C3=A8re que tu vas bien trouves la d=C3=A9signation et leur p=
+rix :</div>
+  </div>
+  <div>
+   <br>
+  </div>
+  <div>BAGUE INOX MALE + JOINT 5.900 DT HT</div>
+  <div>BAGUE INOX FEMELLE + JOINT 5.900 DT HT</div>
+  <div>HYDRO-ECONOME 2L/MN JETS AIGUILLES GARANTIE 3 ANS 18.200 DT HT</div>
+  <div>HYDRO-ECONOME 3L/MN GARANTIE 3 ANS 17.900 DT HT</div>
+  <div>HYDRO-ECONOME 4L/MN GARANTIE&nbsp; 3 ANS 17.500 DT HT</div>
+  <div>HYDRO-ECONOME 5L/MN GARANTIE 3 ANS 16.900 DT HT</div>
+  <div>REGULATEUR INOX DOUCHE OU FLEXIBLE TOILETTE 5L/MN GARANTIE 3 ANS 19.=
+900 DT HT</div>
+  <div>
+   <!--StartFragment-->
+   <div>REGULATEUR INOX DOUCHE OU FLEXIBLE TOILETTE 7L/MN GARANTIE 3 ANS 19=
+.900 DT HT</div>
+   <div>POMME DE DOUCHE BLANCHE HYDRO-ECONOME ANTICALCAIRE 6.3L/MN 24.900 D=
+T HT</div>
+   <div>POMME DE DOUCHE CHROMEE HYDRO ECONOME JETS MASSANTS 6L/MN 29.750 DT=
+ HT</div>
+   <div>ECOSAC WC 3LITRES EN PLASTIQUE IMPUTRESCIBLE GARANTIE A VIE 22.900 =
+DT HT</div>
+   <div>AMPOULE LED DETECTEUR DE MOUVEMENT IP20 2.5W 26.200 DT HT.</div>
+   <div>
+    <br>
+   </div>
+   <div>A te voir bient=C3=B4t.</div>
+   <div>
+    <br>
+   </div>
+   <div>PASCAL</div>
+   <div>
+    <br style=3D"color: rgb(0, 0, 0); font-family: Arial; font-size: small;=
+ font-style: normal; font-variant-ligatures: normal; font-variant-caps: nor=
+mal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left=
+; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -we=
+bkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255=
+, 255, 255); text-decoration-thickness: initial; text-decoration-style: ini=
+tial; text-decoration-color: initial;">
+    <!--EndFragment-->
+   </div>
+   <br>
+  </div>
+  <div>
+   <br>
+  </div>
+ </body>
+</html>
