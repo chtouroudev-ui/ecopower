@@ -1,0 +1,37 @@
+# Construit le zip cPanel (public_html) à chaque modification du site Laravel sur main,
+# ou à la demande (onglet Actions > "Zip cPanel" > Run workflow).
+# Le résultat se télécharge en bas de la page du run, section "Artifacts".
+name: Zip cPanel
+
+on:
+  push:
+    branches: [main]
+    paths: ['ecopower-laravel/**']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Construire public_html
+        working-directory: ecopower-laravel
+        run: BUILD_DIR="$RUNNER_TEMP/cpanel" bash deploy/build-cpanel.sh "$RUNNER_TEMP/ecopower-cpanel-public_html.zip"
+
+      # Téléchargé depuis GitHub, l'artifact est un zip qui contient directement public_html/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ecopower-cpanel-public_html-${{ github.run_number }}
+          path: ${{ runner.temp }}/cpanel
+          include-hidden-files: true
+          retention-days: 30

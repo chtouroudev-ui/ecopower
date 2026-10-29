@@ -24,7 +24,7 @@ class StatsController extends Controller
                AND created_at < DATE_FORMAT(CURDATE(), '%Y-%m-01')"
         );
         $toCollect = DB::selectOne(
-            "SELECT COALESCE(SUM(total), 0) AS amount, COUNT(*) AS count FROM orders WHERE status IN ('pending', 'confirmed', 'shipped')"
+            "SELECT COALESCE(SUM(total), 0) AS amount, COUNT(*) AS count FROM orders WHERE status IN ('pending', 'confirmed', 'shipped') AND payment_status <> 'paid'"
         );
         $byStatus = DB::select('SELECT status, COUNT(*) AS count, COALESCE(SUM(total), 0) AS total FROM orders GROUP BY status');
         $daily = collect(DB::select(

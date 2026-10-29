@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Support\Format;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ProductController extends Controller
@@ -53,7 +54,13 @@ class ProductController extends Controller
                 'features' => json_encode($p['features'] ?? [], JSON_UNESCAPED_UNICODE),
                 'stock' => array_key_exists('stock', $p) ? $p['stock'] : 50,
                 'is_featured' => ! empty($p['isFeatured']) ? 1 : 0,
+                'show_on_home' => ! empty($p['showOnHome']) ? 1 : 0,
+                'pickup_discount' => ! empty($p['pickupDiscount']) ? 1 : 0,
+                'is_hero' => ! empty($p['isHero']) ? 1 : 0,
             ]);
+            if (! empty($p['isHero'])) {
+                DB::table('products')->where('id', '!=', $id)->update(['is_hero' => 0]);
+            }
         } catch (Throwable $e) {
             report($e);
 
@@ -81,8 +88,10 @@ class ProductController extends Controller
         if (array_key_exists('features', $input)) {
             $fields['features'] = json_encode($input['features'], JSON_UNESCAPED_UNICODE);
         }
-        if (array_key_exists('isFeatured', $input)) {
-            $fields['is_featured'] = $input['isFeatured'] ? 1 : 0;
+        foreach (['isFeatured' => 'is_featured', 'showOnHome' => 'show_on_home', 'pickupDiscount' => 'pickup_discount', 'isHero' => 'is_hero'] as $key => $column) {
+            if (array_key_exists($key, $input)) {
+                $fields[$column] = $input[$key] ? 1 : 0;
+            }
         }
 
         if (! $fields) {
@@ -94,6 +103,10 @@ class ProductController extends Controller
                 return response()->json(['error' => 'Produit non trouvé'], 404);
             }
             DB::table('products')->where('id', $id)->update($fields);
+            // Un seul produit vedette à la fois.
+            if (! empty($fields['is_hero'])) {
+                DB::table('products')->where('id', '!=', $id)->update(['is_hero' => 0]);
+            }
         } catch (Throwable $e) {
             report($e);
 
@@ -101,6 +114,32 @@ class ProductController extends Controller
         }
 
         return response()->json(Format::row(DB::table('products')->where('id', $id)->first()));
+    }
+
+    /** Envoi d'une photo produit depuis l'admin : enregistrée dans public/products/uploads. */
+    public function uploadImage(Request $request)
+    {
+        // Type vérifié sur le contenu du fichier, extension choisie par le serveur.
+        $types = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+        $file = $request->file('image');
+        if (! $file || ! $file->isValid() || ! isset($types[$file->getMimeType()]) || $file->getSize() > 5 * 1024 * 1024) {
+            return response()->json(['error' => 'Image invalide : JPG, PNG ou WEBP, 5 Mo maximum.'], 422);
+        }
+        $name = date('Ymd-His').'-'.Str::lower(Str::random(6)).'.'.$types[$file->getMimeType()];
+        $dir = public_path('products/uploads');
+        if (! is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+
+        try {
+            $file->move($dir, $name);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json(['error' => 'Impossible d\'enregistrer l\'image sur le serveur.'], 500);
+        }
+
+        return response()->json(['url' => '/products/uploads/'.$name], 201);
     }
 
     public function destroy(string $id)

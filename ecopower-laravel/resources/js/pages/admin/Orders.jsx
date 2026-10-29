@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Search, Download, X, Phone, MessageCircle, MapPin, Award, Printer, Inbox, ChevronRight, Save, XCircle, RotateCcw } from 'lucide-react';
+import { Search, Download, X, Phone, MessageCircle, MapPin, Award, Printer, Inbox, ChevronRight, Save, XCircle, RotateCcw, Store, CreditCard } from 'lucide-react';
 import {
   ORDER_STATUS,
   NEXT_ACTION,
@@ -16,6 +16,12 @@ import {
 } from './ui';
 
 const STEPS = ['pending', 'confirmed', 'shipped', 'delivered'];
+
+const paymentLabel = (o) =>
+  o.paymentMethod !== 'card'
+    ? o.deliveryMethod === 'pickup' ? 'espèces au retrait' : 'espèces à la livraison'
+    : o.paymentStatus === 'paid' ? 'payée par carte (Konnect)'
+      : o.paymentStatus === 'failed' ? 'carte : paiement échoué' : 'carte : paiement en attente';
 
 function OrderDrawer({ order, onClose, onStatus, onNotes, onCertificate, onPrint }) {
   const [notes, setNotes] = useState(order.notes || '');
@@ -48,7 +54,9 @@ function OrderDrawer({ order, onClose, onStatus, onNotes, onCertificate, onPrint
               <h2 className="text-lg font-black text-slate-900 font-mono">{order.id}</h2>
               <OrderBadge status={order.status} />
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">Passée le {dateTime(order.date)} · paiement à la livraison</p>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Passée le {dateTime(order.date)} · {order.deliveryMethod === 'pickup' ? 'retrait au local' : 'livraison'} · {paymentLabel(order)}
+            </p>
           </div>
           <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100" aria-label="Fermer">
             <X className="w-5 h-5 text-slate-500" />
@@ -91,14 +99,21 @@ function OrderDrawer({ order, onClose, onStatus, onNotes, onCertificate, onPrint
                 </a>
               </div>
             </div>
-            <div className="flex items-start gap-2 text-sm text-slate-600">
-              <MapPin className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-              <span>
-                {order.customer?.address}
-                <br />
-                {[...new Set([order.customer?.city, order.customer?.governorate].filter(Boolean))].join(', ')}
-              </span>
-            </div>
+            {order.deliveryMethod === 'pickup' ? (
+              <div className="flex items-start gap-2 text-sm font-semibold text-blue-800 bg-blue-50 rounded-lg px-3 py-2">
+                <Store className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>Retrait au local : pas de livraison, le client vient chercher sa commande ({order.customer?.governorate}).</span>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2 text-sm text-slate-600">
+                <MapPin className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                <span>
+                  {order.customer?.address}
+                  <br />
+                  {[...new Set([order.customer?.city, order.customer?.governorate].filter(Boolean))].join(', ')}
+                </span>
+              </div>
+            )}
           </section>
 
           <section className="rounded-xl border border-slate-200 overflow-hidden">
@@ -116,13 +131,21 @@ function OrderDrawer({ order, onClose, onStatus, onNotes, onCertificate, onPrint
                 ))}
               </tbody>
               <tfoot className="bg-slate-50 text-sm">
+                {order.discount > 0 && (
+                  <tr>
+                    <td colSpan={2} className="px-4 py-1.5 text-blue-700">Remise retrait au local (-10%)</td>
+                    <td className="px-4 py-1.5 text-right tabular-nums text-blue-700">-{dt(order.discount, 2)}</td>
+                  </tr>
+                )}
                 <tr>
                   <td colSpan={2} className="px-4 py-1.5 text-slate-500">Livraison</td>
-                  <td className="px-4 py-1.5 text-right tabular-nums">{order.deliveryFee ? dt(order.deliveryFee, 2) : 'Offerte'}</td>
+                  <td className="px-4 py-1.5 text-right tabular-nums">
+                    {order.deliveryMethod === 'pickup' ? 'Retrait au local' : order.deliveryFee ? dt(order.deliveryFee, 2) : 'Offerte'}
+                  </td>
                 </tr>
                 <tr className="font-black text-slate-900">
-                  <td colSpan={2} className="px-4 py-2">À encaisser</td>
-                  <td className="px-4 py-2 text-right tabular-nums">{dt(order.total, 2)}</td>
+                  <td colSpan={2} className="px-4 py-2">{order.paymentStatus === 'paid' ? 'Déjà payé par carte' : 'À encaisser'}</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{order.paymentStatus === 'paid' ? dt(0, 2) : dt(order.total, 2)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -229,7 +252,7 @@ export function Orders({ orders, filter, setFilter, openId, setOpenId, onStatus,
 
   const exportCsv = () => {
     downloadCsv(`commandes-ecopower-${new Date().toISOString().slice(0, 10)}.csv`, [
-      ['Référence', 'Date', 'Client', 'Téléphone', 'Gouvernorat', 'Ville', 'Adresse', 'Articles', 'Livraison', 'Total', 'Statut', 'Note'],
+      ['Référence', 'Date', 'Client', 'Téléphone', 'Gouvernorat', 'Ville', 'Adresse', 'Articles', 'Mode', 'Paiement', 'Remise', 'Livraison', 'Total', 'Statut', 'Note'],
       ...filtered.map((o) => [
         o.id,
         shortDate(o.date),
@@ -239,6 +262,9 @@ export function Orders({ orders, filter, setFilter, openId, setOpenId, onStatus,
         o.customer?.city,
         o.customer?.address,
         o.items?.map((i) => `${i.quantity}x ${i.name}`).join(' | '),
+        o.deliveryMethod === 'pickup' ? 'Retrait au local' : 'Livraison',
+        paymentLabel(o),
+        o.discount || 0,
         o.deliveryFee,
         o.total,
         ORDER_STATUS[o.status]?.label || o.status,
@@ -317,9 +343,25 @@ export function Orders({ orders, filter, setFilter, openId, setOpenId, onStatus,
                         <div className="font-semibold text-slate-900">{o.customer?.fullName}</div>
                         <div className="text-xs text-slate-400 font-mono">{o.customer?.phone}</div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-slate-600">{[...new Set([o.customer?.city, o.customer?.governorate].filter(Boolean))].join(', ')}</td>
+                      <td className="px-4 py-3 text-xs text-slate-600">
+                        {o.deliveryMethod === 'pickup' ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-blue-700"><Store className="w-3.5 h-3.5" /> Retrait au local</span>
+                        ) : (
+                          [...new Set([o.customer?.city, o.customer?.governorate].filter(Boolean))].join(', ')
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-xs text-slate-500 whitespace-nowrap">{dateTime(o.date)}</td>
-                      <td className="px-4 py-3 text-right font-bold tabular-nums whitespace-nowrap">{dt(o.total, 2)}</td>
+                      <td className="px-4 py-3 text-right font-bold tabular-nums whitespace-nowrap">
+                        {dt(o.total, 2)}
+                        {o.paymentMethod === 'card' && (
+                          <span
+                            title={paymentLabel(o)}
+                            className={`ms-1.5 inline-flex align-middle ${o.paymentStatus === 'paid' ? 'text-blue-600' : 'text-amber-500'}`}
+                          >
+                            <CreditCard className="w-3.5 h-3.5" />
+                          </span>
+                        )}
+                      </td>
                       <td className="px-4 py-3"><OrderBadge status={o.status} /></td>
                       <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                         {next ? (

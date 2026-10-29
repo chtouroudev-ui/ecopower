@@ -196,15 +196,31 @@ export const AdminDashboard = ({ onExit }) => {
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, notes } : o)));
   }, 'Note enregistrée');
 
+  // Un seul produit vedette : le serveur retire le drapeau des autres, on fait pareil ici.
+  const withHero = (list, id, data) => (data.isHero ? list.map((p) => (p.id === id ? p : { ...p, isHero: false })) : list);
+
   const createProduct = guard(async (data) => {
     const created = await api('POST', '/api/products', data);
-    setProducts((prev) => [...prev, { ...data, ...created }]);
+    setProducts((prev) => [...withHero(prev, created.id, data), { ...data, ...created }]);
   }, 'Produit ajouté');
 
   const updateProduct = guard(async (id, data) => {
     await api('PUT', `/api/products/${id}`, data);
-    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...data } : p)));
+    setProducts((prev) => withHero(prev, id, data).map((p) => (p.id === id ? { ...p, ...data } : p)));
   }, 'Produit mis à jour');
+
+  // Envoi d'une photo produit (multipart) : renvoie l'URL publique de l'image.
+  const uploadProductImage = async (file) => {
+    const form = new FormData();
+    form.append('image', file);
+    const res = await fetch('/api/products/image', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      notify(data.error || "L'image n'a pas pu être envoyée.", 'error');
+      return null;
+    }
+    return data.url;
+  };
 
   const deleteProduct = guard(async (id) => {
     await api('DELETE', `/api/products/${id}`);
@@ -295,8 +311,9 @@ export const AdminDashboard = ({ onExit }) => {
   );
 
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans">
-      <aside className="w-60 shrink-0 bg-slate-950 hidden lg:flex flex-col sticky top-0 h-screen">
+    // Hauteur fixe à l'écran : seul le contenu défile, le menu reste en place.
+    <div className="flex h-screen h-[100dvh] overflow-hidden bg-slate-50 font-sans">
+      <aside className="w-60 shrink-0 bg-slate-950 hidden lg:flex flex-col h-full overflow-y-auto">
         {brand}
         {nav}
         {sidebarFooter}
@@ -318,7 +335,7 @@ export const AdminDashboard = ({ onExit }) => {
         </div>
       )}
 
-      <main className="flex-1 min-w-0 flex flex-col">
+      <main className="flex-1 min-w-0 flex flex-col overflow-y-auto">
         <header className="bg-white/90 backdrop-blur border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3">
             <button onClick={() => setNavOpen(true)} className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100" aria-label="Menu">
@@ -382,6 +399,7 @@ export const AdminDashboard = ({ onExit }) => {
                   onCreate={createProduct}
                   onUpdate={updateProduct}
                   onDelete={deleteProduct}
+                  onUpload={uploadProductImage}
                 />
               )}
               {tab === 'leads' && (

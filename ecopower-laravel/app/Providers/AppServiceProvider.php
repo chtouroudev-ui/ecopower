@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\AutoMigrate;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,5 +25,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('login', $limit(15, 20, 'Trop de tentatives de connexion. Veuillez patienter 15 minutes.'));
         RateLimiter::for('orders', $limit(10, 20, 'Trop de requêtes de commande. Veuillez patienter quelques minutes.'));
         RateLimiter::for('tracking', $limit(5, 40, 'Trop de recherches de commande. Veuillez patienter.'));
+
+        if (! $this->app->runningInConsole()) {
+            AutoMigrate::run();
+        }
     }
 }

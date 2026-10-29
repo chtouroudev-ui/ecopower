@@ -47,6 +47,9 @@ class Format
             'features' => self::json($p->features),
             'stock' => (int) $p->stock,
             'isFeatured' => (bool) $p->is_featured,
+            'showOnHome' => (bool) ($p->show_on_home ?? false),
+            'pickupDiscount' => (bool) ($p->pickup_discount ?? false),
+            'isHero' => (bool) ($p->is_hero ?? false),
         ];
     }
 

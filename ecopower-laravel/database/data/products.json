@@ -1,5 +1,57 @@
 [
   {
+    "id": "pack-base",
+    "name": "Pack de Base",
+    "nameAr": "الباك الأساسي",
+    "category": "packs",
+    "price": 39.9,
+    "oldPrice": null,
+    "rating": 5,
+    "reviewsCount": 0,
+    "warranty": "3 ans",
+    "debit": "5 L/min",
+    "image": "/products/pack_appartement_5l.webp",
+    "description": "L'essentiel pour commencer à économiser : 1 hydro-économe 5L/min pour la cuisine et 1 régulateur de douche, avec le sac débit-mètre offert. -10% et sans frais de livraison en retrait au local.",
+    "features": [
+      "1x Hydro-économe 5L/min pour robinet de cuisine",
+      "1x Régulateur douche 5L/min",
+      "1x Sac Débit-mètre offert",
+      "Retrait au local : -10% et sans frais de livraison",
+      "Garantie 3 ans"
+    ],
+    "stock": 100,
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": true
+  },
+  {
+    "id": "pack-totale",
+    "name": "Pack Total",
+    "nameAr": "الباك الكامل",
+    "category": "packs",
+    "price": 79.1,
+    "oldPrice": null,
+    "rating": 5,
+    "reviewsCount": 0,
+    "warranty": "3 ans (Eco-Sac à vie)",
+    "debit": "5 L/min",
+    "image": "/products/pack_maison_5l.webp",
+    "description": "Toute la maison équipée : cuisine, lavabo de salle de bain, douche et toilettes, plus l'Eco-Sac WC et le sac débit-mètre offert. -10% et sans frais de livraison en retrait au local.",
+    "features": [
+      "1x Hydro-économe 5L/min pour robinet de cuisine",
+      "1x Hydro-économe 5L/min pour lavabo de salle de bain",
+      "1x Régulateur douche 5L/min",
+      "1x Régulateur toilette 5L/min",
+      "1x Eco-Sac WC (garanti à vie)",
+      "1x Sac Débit-mètre offert",
+      "Retrait au local : -10% et sans frais de livraison"
+    ],
+    "stock": 100,
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": true
+  },
+  {
     "id": "pack-appartement-4l",
     "name": "Pack Appartement 4 Litres",
     "nameAr": "باك الشقة 4 لتر",
@@ -21,7 +73,9 @@
       "Garantie 3 ans & Satisfait ou Remboursé 14 jours"
     ],
     "stock": 49,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": true,
+    "pickupDiscount": false
   },
   {
     "id": "pack-appartement-5l",
@@ -45,7 +99,9 @@
       "Garantie 3 ans"
     ],
     "stock": 45,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "pack-maison-4l",
@@ -69,7 +125,9 @@
       "Garantie 3 ans"
     ],
     "stock": 35,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": true,
+    "pickupDiscount": false
   },
   {
     "id": "pack-maison-5l",
@@ -92,7 +150,9 @@
       "Garantie 3 ans"
     ],
     "stock": 40,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "hydro-econome-2l",
@@ -114,7 +174,9 @@
       "Garantie 3 ans"
     ],
     "stock": 80,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "hydro-econome-3l",
@@ -136,7 +198,9 @@
       "Garantie 3 ans"
     ],
     "stock": 90,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "hydro-econome-4l",
@@ -158,7 +222,9 @@
       "Garantie 3 ans"
     ],
     "stock": 120,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "hydro-econome-5l",
@@ -180,7 +246,9 @@
       "Garantie 3 ans"
     ],
     "stock": 200,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "pomme-douche-chromee",
@@ -203,7 +271,9 @@
       "Garantie 3 ans"
     ],
     "stock": 65,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "pomme-douche-blanche",
@@ -225,7 +295,9 @@
       "Garantie 3 ans"
     ],
     "stock": 75,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "regulateur-douche-5l",
@@ -247,7 +319,9 @@
       "Garantie 3 ans"
     ],
     "stock": 100,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "regulateur-douche-7l",
@@ -268,7 +342,9 @@
       "Garantie 3 ans"
     ],
     "stock": 110,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "ecosac-wc-3l",
@@ -290,7 +366,9 @@
       "Garantie à vie"
     ],
     "stock": 136,
-    "isFeatured": true
+    "isFeatured": true,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "bague-inox-male",
@@ -311,7 +389,9 @@
       "Joint en caoutchouc résistant aux températures élevées"
     ],
     "stock": 150,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "bague-inox-femelle",
@@ -332,7 +412,9 @@
       "Joint d'étanchéité haute résistance"
     ],
     "stock": 150,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   },
   {
     "id": "ampoule-led-detecteur",
@@ -354,6 +436,8 @@
       "Culot à vis standard E27"
     ],
     "stock": 90,
-    "isFeatured": false
+    "isFeatured": false,
+    "showOnHome": false,
+    "pickupDiscount": false
   }
 ]

@@ -22,6 +22,12 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store'])->middleware('throttle:orders');
 Route::get('/orders/track/{query}', [OrderController::class, 'track'])->middleware('throttle:tracking');
 
+// 3 bis. Paiement par carte (Konnect)
+Route::get('/payments/methods', [OrderController::class, 'paymentMethods']);
+Route::get('/payments/konnect/webhook', [OrderController::class, 'konnectWebhook'])->middleware('throttle:tracking');
+Route::post('/orders/{id}/payment/check', [OrderController::class, 'checkPayment'])->middleware('throttle:tracking');
+Route::post('/orders/{id}/payment/retry', [OrderController::class, 'retryPayment'])->middleware('throttle:orders');
+
 // 4. Certificat de garantie
 Route::get('/certificate/{orderId}', [CertificateController::class, 'show']);
 
@@ -31,6 +37,7 @@ Route::post('/leads', [LeadController::class, 'store'])->middleware('throttle:or
 // Administration
 Route::middleware('jwt:admin')->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
+    Route::post('/products/image', [ProductController::class, 'uploadImage']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 

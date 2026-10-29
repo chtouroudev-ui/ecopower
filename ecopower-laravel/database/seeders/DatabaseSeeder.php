@@ -20,13 +20,14 @@ class DatabaseSeeder extends Seeder
                 'email' => strtolower(config('ecopower.admin_email')),
                 'password' => password_hash(config('ecopower.admin_password'), PASSWORD_BCRYPT, ['cost' => 10]),
                 'role' => 'admin',
-                'phone' => '+216 98 000 000',
+                'phone' => '+216 97 644 988',
             ]);
         }
 
-        if (! DB::table('products')->exists()) {
+        // Complète les produits manquants (la migration du 13/10 insère déjà les deux packs).
+        if (DB::table('products')->count() < 3) {
             foreach ($this->load('products') as $p) {
-                DB::table('products')->insert([
+                DB::table('products')->insertOrIgnore([
                     'id' => $p['id'],
                     'name' => $p['name'],
                     'name_ar' => $p['nameAr'] ?? null,
@@ -42,6 +43,8 @@ class DatabaseSeeder extends Seeder
                     'features' => json_encode($p['features'] ?? [], JSON_UNESCAPED_UNICODE),
                     'stock' => $p['stock'] ?? 100,
                     'is_featured' => ! empty($p['isFeatured']),
+                    'show_on_home' => ! empty($p['showOnHome']),
+                    'pickup_discount' => ! empty($p['pickupDiscount']),
                 ]);
             }
         }

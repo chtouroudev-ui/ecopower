@@ -10,11 +10,12 @@ import {
   Eye, 
   X, 
   Truck,
-  Sparkles
+  Sparkles,
+  Store
 } from 'lucide-react';
 
 export const ShopPage = () => {
-  const { addToCart, language } = useCart();
+  const { addToCart, language, isPickupProduct } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -210,6 +211,12 @@ export const ShopPage = () => {
                     {product.stock > 0 ? `En Stock (${product.stock})` : 'Sur Commande'}
                   </span>
                 </div>
+
+                {isPickupProduct(product.id) && (
+                  <div className="mb-3 px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-800 text-[11px] font-bold flex items-center gap-1.5">
+                    <Store className="w-3.5 h-3.5 shrink-0" /> Retrait au local : -10% et sans frais de livraison
+                  </div>
+                )}
 
                 <button
                   onClick={() => addToCart(product)}

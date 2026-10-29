@@ -40,3 +40,47 @@ php artisan view:cache
 ## Option : domaine pointé sur `public/`
 Si ton cPanel permet de choisir la racine du domaine (Domaines > Gérer), mets le projet dans `/home/USER/ecopower`
 et pointe le domaine vers `/home/USER/ecopower/public`. Le `.htaccess` racine devient alors inutile.
+
+## Mise à jour du 13/10/2026 : Pack de Base, Pack Total et retrait au local
+Si le site est **déjà en ligne** avec une base importée avant cette date :
+1. Téléverser le nouveau zip dans `public_html` et l'extraire en remplaçant les fichiers (garder ton `.env` actuel : ne pas écraser celui du serveur, ou recopier tes valeurs `DB_*`, `APP_KEY`, `JWT_SECRET` dedans).
+2. phpMyAdmin > ta base > **Importer** `database/mise-a-jour-2026-10-13-packs-retrait.sql`, **une seule fois**
+   (ou, avec le Terminal : `php artisan migrate --force`).
+3. Si tu as lancé `php artisan config:cache`, le relancer.
+
+Nouvelle installation : importer simplement `database/ecopower.sql`, il contient déjà tout.
+
+Réglages (dans `config/ecopower.php`) : `pickup_packs` (packs éligibles au retrait) et `pickup_discount_rate` (0.10 = -10 %).
+Si tu changes la liste, changer aussi `resources/js/lib/pickup.js` puis refaire `npm run build`.
+
+## Mise à jour du 15/10/2026 : paiement par carte (Konnect) et adresse du local
+1. Extraire le nouveau zip comme ci-dessus (en gardant ton `.env`).
+2. phpMyAdmin > **Importer** `database/mise-a-jour-2026-10-15-paiement-carte.sql`, **une seule fois**
+   (après celui du 13/10 si tu ne l'avais pas encore importé). Avec le Terminal : `php artisan migrate --force`.
+3. Créer un compte marchand sur https://konnect.network, puis dans ton `.env` ajouter :
+   ```
+   KONNECT_API_KEY=ta_cle_api
+   KONNECT_WALLET_ID=ton_wallet_id
+   KONNECT_SANDBOX=true      # mettre false une fois les tests faits, pour encaisser pour de vrai
+   ```
+   `APP_URL` doit être l'adresse exacte du site (https://...) : Konnect y renvoie le client et y confirme les paiements.
+   Tant que la clé et le wallet sont vides, le site ne propose que le paiement en espèces.
+4. Si tu as lancé `php artisan config:cache`, le relancer.
+
+Adresse et horaires du retrait au local : `pickup_address`, `pickup_hours`, `pickup_map_url` dans `config/ecopower.php`.
+
+### Sécurité de la connexion admin
+Après 5 mots de passe faux depuis la même adresse IP, la connexion admin est bloquée 24 h pour cette adresse.
+Si tu te bloques toi-même : Terminal `php artisan cache:clear`, ou supprimer le contenu de `storage/framework/cache/data` dans le Gestionnaire de fichiers.
+
+## Mise à jour du 18/10/2026 : page d'accueil et remise retrait choisies dans l'admin
+
+1. Extraire le zip dans le Gestionnaire de fichiers, à côté de `public_html`, puis remplacer les fichiers de `public_html` (le zip ne contient **pas** de `.env` : celui du serveur est conservé).
+2. Rien à importer : au premier chargement du site, les nouvelles colonnes de la base sont ajoutées automatiquement (app/Support/AutoMigrate.php). Le fichier `database/mise-a-jour-2026-10-18-accueil-retrait.sql` reste disponible si besoin.
+3. Admin → **Produits & stock** : colonnes « Page d'accueil » et « -10% retrait » (clic sur Oui/Non). Au départ : Pack Appartement 4L et Pack Maison 4L sur l'accueil, Pack de Base et Pack Total remisés au retrait.
+
+Corrigé aussi : le menu de l'admin reste en place au défilement, la fenêtre de commande se ferme en cliquant à côté (ou Échap) et n'est plus coupée en haut.
+
+Ajouté ensuite le même jour :
+- **Produit vedette** : colonne « Vedette » (un seul produit) = la grande carte en haut à droite de l'accueil, avec son nom, sa description, sa photo et son prix.
+- **Photos** : dans la fiche produit (clic sur le produit ou le crayon), bouton « Changer la photo » (JPG, PNG, WEBP, 5 Mo max), enregistrée dans `public/products/uploads`.

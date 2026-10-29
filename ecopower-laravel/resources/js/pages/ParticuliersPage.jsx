@@ -11,7 +11,8 @@ import {
   ArrowRight,
   Gift,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  Store
 } from 'lucide-react';
 
 // Textes de la page Particuliers : français et darija tunisienne
@@ -38,7 +39,29 @@ const TXT = {
     unitTitle: 'Vous préférez acheter vos régulateurs ou accessoires à l’unité ?',
     unitText: 'Retrouvez nos bagues inox, nos cartouches hydro-économes de 2L à 5L/min, nos pommes de douche massantes et nos ampoules LED à détection dans notre boutique complète.',
     unitCta: 'Accéder à la Boutique au Détail',
+    pickupBadge: 'Retrait au local : -10% et sans frais de livraison',
     packs: {
+      'pack-base': {
+        name: 'Pack de Base',
+        idealFor: 'Pour commencer : la cuisine et la douche',
+        composition: [
+          '1x Hydro-économe 5L/min pour robinet de cuisine',
+          '1x Régulateur douche 5L/min',
+          '1x Sac Débit-Mètre gradué offert gratuitement'
+        ]
+      },
+      'pack-totale': {
+        name: 'Pack Total',
+        idealFor: 'Toute la maison : cuisine, salle de bain, douche et toilettes',
+        composition: [
+          '1x Hydro-économe 5L/min pour robinet de cuisine',
+          '1x Hydro-économe 5L/min pour lavabo de salle de bain',
+          '1x Régulateur douche 5L/min',
+          '1x Régulateur toilette 5L/min',
+          '1x Eco-Sac WC imputrescible (garanti à vie)',
+          '1x Sac Débit-Mètre gradué offert gratuitement'
+        ]
+      },
       'pack-appartement-4l': {
         name: 'Pack Appartement 4 Litres',
         idealFor: 'Appartement S+1, S+2 ou S+3 (1 Salle de Bain)',
@@ -103,7 +126,29 @@ const TXT = {
     unitTitle: 'تحب تشري المنظّمات ولا الأكسسوارات بالواحد؟',
     unitText: 'تلقى الحلقات الإينوكس، الخراطيش الموفّرة من 2L لـ 5L/min، رؤوس الدوش اللي تعمل ماساج، ولمبات LED بالكابتور في المتجر متاعنا.',
     unitCta: 'ادخل للمتجر',
+    pickupBadge: 'كان تجي تاخذو من المحل: -10% وبلاش مصاريف توصيل',
     packs: {
+      'pack-base': {
+        name: 'الباك الأساسي',
+        idealFor: 'باش تبدا: الكوجينة والدوش',
+        composition: [
+          '1x موفّر 5L/min لروبيني الكوجينة',
+          '1x منظّم دوش 5L/min',
+          '1x كيس مدرّج لقيس الصبيب هدية'
+        ]
+      },
+      'pack-totale': {
+        name: 'الباك الكامل',
+        idealFor: 'الدار الكل: الكوجينة، بيت البانو، الدوش والتواليت',
+        composition: [
+          '1x موفّر 5L/min لروبيني الكوجينة',
+          '1x موفّر 5L/min للافابو متاع بيت البانو',
+          '1x منظّم دوش 5L/min',
+          '1x منظّم تواليت 5L/min',
+          '1x إيكو-ساك للتواليت ما يتحلّش (مضمون مدى الحياة)',
+          '1x كيس مدرّج لقيس الصبيب هدية'
+        ]
+      },
       'pack-appartement-4l': {
         name: 'باك الشقة 4 لتر',
         idealFor: 'شقة S+1، S+2 ولا S+3 (بيت بانو وحدة)',
@@ -149,11 +194,13 @@ const TXT = {
 };
 
 export const ParticuliersPage = ({ setCurrentTab }) => {
-  const { addToCart, language } = useCart();
+  const { addToCart, language, isPickupProduct } = useCart();
   const t = TXT[language] || TXT.fr;
 
   // Les noms français restent ceux envoyés au panier et aux commandes
   const packs = [
+    { id: 'pack-base', price: 39.9, oldPrice: null, image: '/products/pack_appartement_5l.webp' },
+    { id: 'pack-totale', price: 79.1, oldPrice: null, image: '/products/pack_maison_5l.webp' },
     { id: 'pack-appartement-4l', price: 78.0, oldPrice: 99.0, image: '/products/pack_appartement_4l.webp' },
     { id: 'pack-appartement-5l', price: 78.0, oldPrice: 99.0, image: '/products/pack_appartement_5l.webp' },
     { id: 'pack-maison-4l', price: 129.0, oldPrice: 159.0, image: '/products/pack_maison_4l.webp' },
@@ -266,7 +313,9 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
                 <div className="flex justify-between items-baseline mb-4">
                   <h3 className="font-extrabold text-xl text-slate-900 font-serif">{pack.name}</h3>
                   <div className="text-end">
-                    <span className="text-xs text-slate-400 line-through me-1.5">{pack.oldPrice.toFixed(3)} {t.cur}</span>
+                    {pack.oldPrice && (
+                      <span className="text-xs text-slate-400 line-through me-1.5">{pack.oldPrice.toFixed(3)} {t.cur}</span>
+                    )}
                     <span className="text-2xl font-black text-brand-800">{pack.price.toFixed(3)} {t.cur}</span>
                   </div>
                 </div>
@@ -282,6 +331,13 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
                 <div className="p-3 bg-brand-50/60 rounded-xl text-xs font-semibold text-brand-900 mb-4">
                   📍 {pack.idealFor}
                 </div>
+
+                {isPickupProduct(pack.id) && (
+                  <div className="p-3 bg-blue-600 text-white rounded-xl text-xs font-bold mb-4 flex items-center gap-2">
+                    <Store className="w-4 h-4 shrink-0" />
+                    {t.pickupBadge}
+                  </div>
+                )}
 
                 <div className="space-y-2 mb-6">
                   <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">

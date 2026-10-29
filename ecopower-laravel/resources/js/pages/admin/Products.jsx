@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Plus, Search, Edit3, Trash2, X, Package, Star } from 'lucide-react';
+import React, { useMemo, useRef, useState } from 'react';
+import { Plus, Search, Edit3, Trash2, X, Package, Star, Home, Store, Upload, Loader2, Sparkles } from 'lucide-react';
 import { Badge, FilterChips, SearchInput, EmptyState, dt } from './ui';
 
 export const CATEGORIES = {
@@ -21,11 +21,12 @@ const IMAGES = [
 const EMPTY = {
   name: '', nameAr: '', category: 'robinets', price: '', oldPrice: '', stock: '50',
   debit: '', warranty: '3 ans', description: '', image: IMAGES[4], isFeatured: false,
+  showOnHome: false, pickupDiscount: false, isHero: false,
 };
 
 const inputCls = 'w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
 
-function ProductModal({ initial, onClose, onSave }) {
+function ProductModal({ initial, onClose, onSave, onUpload }) {
   const [p, setP] = useState(() => ({
     ...EMPTY,
     ...initial,
@@ -34,6 +35,20 @@ function ProductModal({ initial, onClose, onSave }) {
     stock: initial?.stock ?? '50',
   }));
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef(null);
+  const pickFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await onUpload(file);
+      if (url) setP((s) => ({ ...s, image: url }));
+    } finally {
+      setUploading(false);
+    }
+  };
   const set = (k) => (e) => setP((s) => ({ ...s, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
   const submit = async (e) => {
@@ -52,6 +67,9 @@ function ProductModal({ initial, onClose, onSave }) {
         description: p.description,
         image: p.image,
         isFeatured: p.isFeatured,
+        showOnHome: p.showOnHome,
+        pickupDiscount: p.pickupDiscount,
+        isHero: p.isHero,
       });
       if (ok !== false) onClose();
     } finally {
@@ -73,11 +91,22 @@ function ProductModal({ initial, onClose, onSave }) {
             <div className="aspect-square rounded-xl bg-slate-50 border border-slate-200 overflow-hidden">
               <img src={p.image} alt="" className="w-full h-full object-contain" />
             </div>
-            <select value={p.image} onChange={set('image')} className={`${inputCls} text-xs`}>
+            <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={pickFile} className="hidden" />
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold disabled:opacity-60"
+            >
+              {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+              {uploading ? 'Envoi…' : 'Changer la photo'}
+            </button>
+            <select value={p.image} onChange={set('image')} className={`${inputCls} text-xs`} aria-label="Photo existante">
               {[...new Set([p.image, ...IMAGES])].map((img) => (
                 <option key={img} value={img}>{img.replace('/products/', '')}</option>
               ))}
             </select>
+            <p className="text-[10px] text-slate-400 leading-snug">JPG, PNG ou WEBP, 5 Mo max. Ou choisissez une photo déjà en ligne.</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
@@ -122,6 +151,18 @@ function ProductModal({ initial, onClose, onSave }) {
               <input type="checkbox" checked={!!p.isFeatured} onChange={set('isFeatured')} className="accent-blue-600 w-4 h-4" />
               Mettre en avant dans la boutique
             </label>
+            <label className="col-span-2 flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" checked={!!p.showOnHome} onChange={set('showOnHome')} className="accent-blue-600 w-4 h-4" />
+              Afficher sur la page d'accueil
+            </label>
+            <label className="col-span-2 flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" checked={!!p.pickupDiscount} onChange={set('pickupDiscount')} className="accent-blue-600 w-4 h-4" />
+              Remise de 10% en retrait au local (sans frais de livraison)
+            </label>
+            <label className="col-span-2 flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" checked={!!p.isHero} onChange={set('isHero')} className="accent-blue-600 w-4 h-4" />
+              Produit vedette : grande carte en haut de la page d'accueil (un seul produit)
+            </label>
           </div>
         </div>
         <div className="px-5 py-4 border-t border-slate-100 flex justify-end gap-2">
@@ -134,6 +175,22 @@ function ProductModal({ initial, onClose, onSave }) {
         </div>
       </form>
     </div>
+  );
+}
+
+function FlagToggle({ on, onChange, icon: Icon, label }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!on)}
+      aria-pressed={on}
+      title={label}
+      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border transition ${
+        on ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-400 hover:border-blue-300 hover:text-blue-600'
+      }`}
+    >
+      <Icon className="w-3.5 h-3.5" /> {on ? 'Oui' : 'Non'}
+    </button>
   );
 }
 
@@ -161,19 +218,26 @@ function StockCell({ product, onSave }) {
   );
 }
 
-export function Products({ products, filter, setFilter, onCreate, onUpdate, onDelete }) {
+export function Products({ products, filter, setFilter, onCreate, onUpdate, onDelete, onUpload }) {
   const [query, setQuery] = useState('');
   const [editing, setEditing] = useState(null);
 
   const counts = useMemo(() => {
-    const c = { all: products.length, low: products.filter((p) => p.stock <= 10).length };
+    const c = {
+      all: products.length,
+      low: products.filter((p) => p.stock <= 10).length,
+      home: products.filter((p) => p.showOnHome).length,
+      pickup: products.filter((p) => p.pickupDiscount).length,
+    };
     products.forEach((p) => (c[p.category] = (c[p.category] || 0) + 1));
     return c;
   }, [products]);
 
   const filtered = products.filter((p) => {
     if (filter === 'low' && p.stock > 10) return false;
-    if (filter !== 'all' && filter !== 'low' && p.category !== filter) return false;
+    if (filter === 'home' && !p.showOnHome) return false;
+    if (filter === 'pickup' && !p.pickupDiscount) return false;
+    if (!['all', 'low', 'home', 'pickup'].includes(filter) && p.category !== filter) return false;
     const q = query.trim().toLowerCase();
     return !q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
   });
@@ -187,6 +251,8 @@ export function Products({ products, filter, setFilter, onCreate, onUpdate, onDe
           options={[
             { value: 'all', label: 'Tous', count: counts.all },
             { value: 'low', label: 'Stock faible', count: counts.low },
+            { value: 'home', label: "Page d'accueil", count: counts.home },
+            { value: 'pickup', label: 'Remise retrait', count: counts.pickup },
             ...Object.entries(CATEGORIES)
               .filter(([v]) => counts[v])
               .map(([v, l]) => ({ value: v, label: l, count: counts[v] })),
@@ -205,20 +271,23 @@ export function Products({ products, filter, setFilter, onCreate, onUpdate, onDe
           <EmptyState icon={Package} title="Aucun produit" />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
+            <table className="w-full text-sm min-w-[920px]">
               <thead>
                 <tr className="bg-slate-50 text-[11px] uppercase font-bold text-slate-500 border-b border-slate-200">
                   <th className="px-4 py-3 text-left">Produit</th>
                   <th className="px-4 py-3 text-left">Catégorie</th>
                   <th className="px-4 py-3 text-right">Prix</th>
                   <th className="px-4 py-3 text-center">Stock</th>
+                  <th className="px-4 py-3 text-center">Page d'accueil</th>
+                  <th className="px-4 py-3 text-center">-10% retrait</th>
+                  <th className="px-4 py-3 text-center">Vedette</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-2.5">
+                    <td className="px-4 py-2.5 cursor-pointer" onClick={() => setEditing(p)} title="Modifier photo, prix, description…">
                       <div className="flex items-center gap-3">
                         <img src={p.image} alt="" className="w-10 h-10 rounded-lg object-cover bg-slate-100 shrink-0" />
                         <div className="min-w-0">
@@ -237,6 +306,15 @@ export function Products({ products, filter, setFilter, onCreate, onUpdate, onDe
                     </td>
                     <td className="px-4 py-2.5">
                       <StockCell key={`${p.id}-${p.stock}`} product={p} onSave={(stock) => onUpdate(p.id, { stock })} />
+                    </td>
+                    <td className="px-4 py-2.5 text-center">
+                      <FlagToggle on={!!p.showOnHome} icon={Home} label="Afficher sur la page d'accueil" onChange={(v) => onUpdate(p.id, { showOnHome: v })} />
+                    </td>
+                    <td className="px-4 py-2.5 text-center">
+                      <FlagToggle on={!!p.pickupDiscount} icon={Store} label="Remise de 10% en retrait au local" onChange={(v) => onUpdate(p.id, { pickupDiscount: v })} />
+                    </td>
+                    <td className="px-4 py-2.5 text-center">
+                      <FlagToggle on={!!p.isHero} icon={Sparkles} label="Produit vedette en haut de la page d'accueil" onChange={(v) => onUpdate(p.id, { isHero: v })} />
                     </td>
                     <td className="px-4 py-2.5 text-right whitespace-nowrap">
                       <button onClick={() => setEditing(p)} className="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg" title="Modifier">
@@ -263,6 +341,7 @@ export function Products({ products, filter, setFilter, onCreate, onUpdate, onDe
           initial={editing}
           onClose={() => setEditing(null)}
           onSave={(data) => (editing.id ? onUpdate(editing.id, data) : onCreate(data))}
+          onUpload={onUpload}
         />
       )}
     </div>

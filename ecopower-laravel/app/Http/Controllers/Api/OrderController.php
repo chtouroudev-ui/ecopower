@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Support\Format;
+use App\Support\Konnect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Support\PublicError;
@@ -40,8 +41,11 @@ class OrderController extends Controller
             ])->values(),
             'subtotal' => (float) $o->subtotal,
             'deliveryFee' => (float) $o->delivery_fee,
+            'deliveryMethod' => $o->delivery_method ?? 'delivery',
+            'discount' => (float) ($o->discount ?? 0),
             'total' => (float) $o->total,
             'paymentMethod' => $o->payment_method,
+            'paymentStatus' => $o->payment_status ?? 'unpaid',
             'status' => $o->status,
             'certificateGenerated' => (bool) $o->certificate_serial,
             'certificateSerial' => $o->certificate_serial,
@@ -85,33 +89,40 @@ class OrderController extends Controller
             ])->values(),
             'total' => (float) $o->total,
             'deliveryFee' => (float) $o->delivery_fee,
+            'deliveryMethod' => $o->delivery_method ?? 'delivery',
+            'discount' => (float) ($o->discount ?? 0),
             'status' => $o->status,
             'paymentMethod' => $o->payment_method,
+            'paymentStatus' => $o->payment_status ?? 'unpaid',
             'certificateSerial' => $o->certificate_serial,
         ])->values());
     }
 
-    /** Commande publique sans compte, paiement à la livraison uniquement. */
+    /** Commande publique sans compte : espèces (livraison / retrait) ou carte bancaire via Konnect. */
     public function store(Request $request)
     {
         $customer = $request->input('customer');
         $items = $request->input('items');
         $notes = $request->input('notes', '');
         $customer = is_array($customer) ? $customer : [];
+        $deliveryMethod = $request->input('deliveryMethod') === 'pickup' ? 'pickup' : 'delivery';
 
         $phone = preg_replace('/^216/', '', preg_replace('/[^0-9]/', '', (string) ($customer['phone'] ?? '')));
-        if (trim((string) ($customer['fullName'] ?? '')) === '' || trim((string) ($customer['address'] ?? '')) === ''
-            || ! is_array($items) || ! $items) {
+        if (trim((string) ($customer['fullName'] ?? '')) === '' || ! is_array($items) || ! $items
+            || ($deliveryMethod === 'delivery' && trim((string) ($customer['address'] ?? '')) === '')) {
             return response()->json(['error' => 'Veuillez renseigner votre nom, votre adresse et au moins un article.'], 400);
         }
         if (! preg_match('/^[2-9][0-9]{7}$/', $phone)) {
             return response()->json(['error' => 'Numéro de téléphone invalide (8 chiffres attendus).'], 400);
         }
         $customer['phone'] = $phone;
-        $paymentMethod = 'cod';
+        $paymentMethod = $request->input('paymentMethod') === 'card' ? 'card' : 'cod';
+        if ($paymentMethod === 'card' && ! Konnect::enabled()) {
+            return response()->json(['error' => 'Le paiement par carte n\'est pas disponible pour le moment.'], 400);
+        }
 
         try {
-            $order = DB::transaction(function () use ($customer, $items, $notes, $paymentMethod) {
+            $order = DB::transaction(function () use ($customer, $items, $notes, $paymentMethod, $deliveryMethod) {
                 $last = DB::selectOne(
                     "SELECT MAX(CAST(SUBSTRING(id, 5) AS UNSIGNED)) AS lastNum FROM orders WHERE id LIKE 'ECO-%' FOR UPDATE"
                 );
@@ -119,6 +130,7 @@ class OrderController extends Controller
                 $certSerial = 'CERT-'.date('Y').'-'.$orderId;
 
                 $subtotal = 0.0;
+                $pickupPacksTotal = 0.0;
                 $enriched = [];
 
                 foreach ($items as $item) {
@@ -131,6 +143,9 @@ class OrderController extends Controller
                     $price = (float) $prod->price;
                     $qty = min(99, max(1, (int) ($item['quantity'] ?? 1) ?: 1));
                     $subtotal += $price * $qty;
+                    if (! empty($prod->pickup_discount)) {
+                        $pickupPacksTotal += $price * $qty;
+                    }
 
                     $serials = [];
                     for ($i = 0; $i < $qty; $i++) {
@@ -148,8 +163,17 @@ class OrderController extends Controller
                     DB::update('UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?', [$qty, $productId]);
                 }
 
-                $deliveryFee = $subtotal >= config('ecopower.free_delivery_from') ? 0 : config('ecopower.delivery_fee');
-                $total = $subtotal + $deliveryFee;
+                // Retrait au local : réservé aux commandes avec un pack éligible,
+                // sans frais de livraison et avec une remise sur ces packs seulement.
+                if ($deliveryMethod === 'pickup' && $pickupPacksTotal <= 0) {
+                    throw new PublicError('Le retrait au local n\'est pas disponible pour les produits de votre panier.');
+                }
+                $discount = $deliveryMethod === 'pickup'
+                    ? round($pickupPacksTotal * config('ecopower.pickup_discount_rate'), 2)
+                    : 0.0;
+                $deliveryFee = $deliveryMethod === 'pickup' || $subtotal >= config('ecopower.free_delivery_from')
+                    ? 0 : config('ecopower.delivery_fee');
+                $total = $subtotal - $discount + $deliveryFee;
 
                 DB::table('orders')->insert([
                     'id' => $orderId,
@@ -162,8 +186,11 @@ class OrderController extends Controller
                     'customer_governorate' => ($customer['governorate'] ?? null) ?: 'Tunis',
                     'subtotal' => $subtotal,
                     'delivery_fee' => $deliveryFee,
+                    'delivery_method' => $deliveryMethod,
+                    'discount' => $discount,
                     'total' => $total,
                     'payment_method' => $paymentMethod,
+                    'payment_status' => $paymentMethod === 'card' ? 'pending' : 'unpaid',
                     'status' => 'pending',
                     'certificate_serial' => $certSerial,
                     'notes' => mb_substr((string) ($notes ?: ''), 0, 1000),
@@ -185,8 +212,11 @@ class OrderController extends Controller
                     'items' => $enriched,
                     'subtotal' => round($subtotal, 2),
                     'deliveryFee' => $deliveryFee,
+                    'deliveryMethod' => $deliveryMethod,
+                    'discount' => $discount,
                     'total' => round($total, 2),
                     'paymentMethod' => $paymentMethod,
+                    'paymentStatus' => $paymentMethod === 'card' ? 'pending' : 'unpaid',
                     'status' => 'pending',
                     'certificateGenerated' => true,
                     'certificateSerial' => $certSerial,
@@ -201,7 +231,124 @@ class OrderController extends Controller
             return response()->json(['error' => 'Erreur lors de la validation de la commande'], 500);
         }
 
+        if ($paymentMethod === 'card') {
+            try {
+                $order['payUrl'] = $this->startPayment($order['id']);
+            } catch (Throwable $e) {
+                report($e);
+                $this->discard($order['id']);
+
+                return response()->json(['error' => 'Le paiement par carte est momentanément indisponible. Réessayez ou choisissez le paiement en espèces.'], 502);
+            }
+        }
+
         return response()->json($order, 201);
+    }
+
+    /** Moyens de paiement disponibles et infos de retrait au local, pour le front. */
+    public function paymentMethods()
+    {
+        return response()->json([
+            'card' => Konnect::enabled(),
+            'pickup' => [
+                'address' => config('ecopower.pickup_address'),
+                'hours' => config('ecopower.pickup_hours'),
+                'mapUrl' => config('ecopower.pickup_map_url'),
+                'productIds' => DB::table('products')->where('pickup_discount', 1)->pluck('id'),
+            ],
+        ]);
+    }
+
+    /** Konnect appelle cette URL (GET ?payment_ref=...) quand un paiement change d'état. */
+    public function konnectWebhook(Request $request)
+    {
+        $ref = (string) $request->query('payment_ref', '');
+        $order = $ref !== '' ? DB::table('orders')->where('payment_ref', $ref)->first() : null;
+        if ($order) {
+            $this->syncPayment($order);
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
+    /** Retour du client après la page Konnect : on redemande l'état du paiement à Konnect. */
+    public function checkPayment(string $id)
+    {
+        $order = DB::table('orders')->where('id', $id)->where('payment_method', 'card')->first();
+        if (! $order) {
+            return response()->json(['error' => 'Commande non trouvée'], 404);
+        }
+
+        return response()->json(['id' => $id, 'paymentStatus' => $this->syncPayment($order), 'total' => (float) $order->total]);
+    }
+
+    /** Nouveau lien de paiement si le premier essai a échoué ou a expiré. */
+    public function retryPayment(string $id)
+    {
+        $order = DB::table('orders')->where('id', $id)->where('payment_method', 'card')->first();
+        if (! $order || $order->status === 'cancelled') {
+            return response()->json(['error' => 'Commande non trouvée'], 404);
+        }
+        if ($this->syncPayment($order) === 'paid') {
+            return response()->json(['error' => 'Cette commande est déjà payée.'], 400);
+        }
+
+        try {
+            return response()->json(['payUrl' => $this->startPayment($id)]);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json(['error' => 'Le paiement par carte est momentanément indisponible. Réessayez plus tard.'], 502);
+        }
+    }
+
+    private function startPayment(string $orderId): string
+    {
+        $order = DB::table('orders')->where('id', $orderId)->first();
+        $payment = Konnect::initPayment($order);
+        DB::table('orders')->where('id', $orderId)->update(['payment_ref' => $payment['paymentRef'], 'payment_status' => 'pending']);
+
+        return $payment['payUrl'];
+    }
+
+    /** Met la commande à jour d'après Konnect (seule source fiable) et renvoie le statut de paiement. */
+    private function syncPayment(object $order): string
+    {
+        if (($order->payment_status ?? '') === 'paid' || ! $order->payment_ref) {
+            return $order->payment_status ?? 'unpaid';
+        }
+
+        try {
+            $payment = Konnect::payment($order->payment_ref);
+        } catch (Throwable $e) {
+            report($e);
+
+            return $order->payment_status;
+        }
+
+        $paid = ($payment['status'] ?? '') === 'completed'
+            && (int) ($payment['amount'] ?? 0) >= (int) round($order->total * 1000);
+        $status = $paid ? 'paid' : (in_array($payment['status'] ?? '', ['failed', 'expired', 'canceled', 'cancelled'], true) ? 'failed' : 'pending');
+
+        $fields = ['payment_status' => $status];
+        if ($paid && $order->status === 'pending') {
+            $fields['status'] = 'confirmed';
+        }
+        DB::table('orders')->where('id', $order->id)->update($fields);
+
+        return $status;
+    }
+
+    /** Annule une commande carte dont le paiement n'a pas pu démarrer (remise en stock). */
+    private function discard(string $orderId): void
+    {
+        DB::transaction(function () use ($orderId) {
+            foreach (DB::table('order_items')->where('order_id', $orderId)->get(['product_id', 'quantity']) as $item) {
+                DB::update('UPDATE products SET stock = stock + ? WHERE id = ?', [$item->quantity, $item->product_id]);
+            }
+            DB::table('order_items')->where('order_id', $orderId)->delete();
+            DB::table('orders')->where('id', $orderId)->delete();
+        });
     }
 
     /** Statut et/ou notes (admin), avec remise en stock à l'annulation. */

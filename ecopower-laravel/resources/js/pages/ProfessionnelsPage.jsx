@@ -75,7 +75,7 @@ export const ProfessionnelsPage = () => {
       }
       setSubmitted(true);
     } catch {
-      setSubmitError("Votre demande n'a pas pu être envoyée. Réessayez ou appelez-nous au +216 71 000 000.");
+      setSubmitError("Votre demande n'a pas pu être envoyée. Réessayez ou appelez-nous au +216 97 644 988.");
     } finally {
       setIsSubmitting(false);
     }

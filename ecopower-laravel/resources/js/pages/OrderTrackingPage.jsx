@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, ArrowRight, CreditCard, Store, Loader2 } from 'lucide-react';
 import { WarrantyCertificateModal } from '../components/WarrantyCertificateModal';
+import { useCart } from '../context/CartContext';
 
 export function OrderTrackingPage({ initialQuery = '' }) {
+  const { pickupInfo } = useCart();
   const [searchQuery, setSearchQuery] = useState(() => {
     if (initialQuery) return initialQuery;
     try {
@@ -37,9 +39,36 @@ export function OrderTrackingPage({ initialQuery = '' }) {
     }
   };
 
-  // Recherche automatique juste après une commande
+  // Paiement par carte : vérifier auprès de Konnect, ou relancer un paiement échoué
+  const [paying, setPaying] = useState(null);
+  const checkPayment = async (orderId) => {
+    try {
+      await fetch(`/api/orders/${encodeURIComponent(orderId)}/payment/check`, { method: 'POST' });
+    } catch {
+      /* la recherche affichera l'état connu */
+    }
+  };
+  const retryPayment = async (orderId) => {
+    setPaying(orderId);
+    setError(null);
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/payment/retry`, { method: 'POST' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.payUrl) throw new Error(data.error || 'Le paiement par carte est momentanément indisponible.');
+      window.location.assign(data.payUrl);
+    } catch (err) {
+      setError(err instanceof TypeError ? 'Connexion impossible, réessayez dans un instant.' : err.message);
+      setPaying(null);
+    }
+  };
+
+  // Recherche automatique juste après une commande (et au retour de la page de paiement)
   useEffect(() => {
-    if (initialQuery) runSearch(initialQuery);
+    const fromPayment = new URLSearchParams(window.location.search).get('paiement') === 'retour';
+    if (initialQuery && fromPayment) {
+      checkPayment(initialQuery).then(() => runSearch(initialQuery));
+      window.history.replaceState(null, '', window.location.pathname);
+    } else if (initialQuery) runSearch(initialQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
@@ -169,6 +198,11 @@ export function OrderTrackingPage({ initialQuery = '' }) {
                     <span className="text-xl font-extrabold text-slate-900 font-mono">
                       {order.total.toFixed(2)} DT
                     </span>
+                    {order.deliveryMethod === 'pickup' && (
+                      <span className="text-xs font-semibold text-blue-700">
+                        Retrait au local{order.discount > 0 ? ` · remise -${order.discount.toFixed(2)} DT` : ''}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -219,6 +253,43 @@ export function OrderTrackingPage({ initialQuery = '' }) {
                     </div>
                   </div>
                 </div>
+
+                {order.deliveryMethod === 'pickup' && (
+                  <div className="flex items-start gap-2 p-3 rounded-xl bg-blue-50 text-sm text-blue-950">
+                    <Store className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                    <span>
+                      Retrait au local : <strong>{pickupInfo.address}</strong>, {pickupInfo.hours}.{' '}
+                      <a href={pickupInfo.mapUrl} target="_blank" rel="noopener noreferrer" className="underline font-semibold">
+                        Voir sur la carte
+                      </a>
+                    </span>
+                  </div>
+                )}
+
+                {order.paymentMethod === 'card' && (
+                  <div className={`flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl text-sm ${
+                    order.paymentStatus === 'paid' ? 'bg-blue-50 text-blue-900' : 'bg-amber-50 text-amber-900'
+                  }`}>
+                    <span className="flex items-center gap-2 font-semibold">
+                      <CreditCard className="w-4 h-4 shrink-0" />
+                      {order.paymentStatus === 'paid'
+                        ? 'Payée par carte bancaire. Rien à payer à la réception.'
+                        : order.paymentStatus === 'failed'
+                          ? "Le paiement par carte n'a pas abouti."
+                          : 'Paiement par carte en attente.'}
+                    </span>
+                    {order.paymentStatus !== 'paid' && order.status !== 'cancelled' && (
+                      <button
+                        onClick={() => retryPayment(order.id)}
+                        disabled={paying === order.id}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg disabled:opacity-60"
+                      >
+                        {paying === order.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
+                        Payer {order.total.toFixed(2)} DT par carte
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 {/* Items & Serials */}
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
