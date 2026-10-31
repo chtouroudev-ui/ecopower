@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { SEO } from '../components/SEO';
 import { 
   ShoppingBag, 
   Search, 
@@ -54,7 +55,11 @@ export const ShopPage = () => {
 
   return (
     <div className="py-10 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
+   <SEO
+  title="Boutique hydro-économes pour réduire sa facture SONEDE | EcoPower"
+  description="Pommes de douche, éco-robinets et packs hydro-économes pour réduire votre facture SONEDE. Livraison 24-48h partout en Tunisie, paiement à la livraison."
+  path="/shop"
+/>
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-skywater-700 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
@@ -142,33 +147,43 @@ export const ShopPage = () => {
             >
               <div>
                 {/* Image Box */}
-                <div className="h-52 bg-slate-50 relative p-4 flex items-center justify-center border-b border-slate-100 overflow-hidden">
-                  {product.category === 'packs' && (
-                    <span className="absolute top-3 left-3 bg-energy-500 text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-xs z-10">
-                      Pack Éco
-                    </span>
-                  )}
-                  {product.warranty && (
-                    <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-xs text-brand-800 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs z-10">
-                      Garantie {product.warranty}
-                    </span>
-                  )}
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <button
-                    onClick={() => setActiveModalProduct(product)}
-                    className="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white gap-2 font-bold text-xs"
-                  >
-                    <div className="bg-white text-slate-900 px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 hover:scale-105 transition">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Détails &amp; Fiche</span>
-                    </div>
-                  </button>
-                </div>
+            
+<div className="h-52 bg-slate-50 relative p-4 flex items-center justify-center border-b border-slate-100 overflow-hidden">
+
+  {/* Badge Pack Éco */}
+  {product.category === 'packs' && (
+    <span className="absolute top-2 left-2 bg-energy-500 text-white text-[9px] font-black uppercase px-2 py-1 rounded-full shadow-sm z-10">
+      Pack Éco
+    </span>
+  )}
+
+  {/* Badge Garantie */}
+  {product.warranty && (
+    <span className="absolute top-2 right-2 bg-white/95 text-brand-800 text-[9px] font-bold px-2 py-1 rounded-md border border-slate-200 shadow-sm z-10">
+      Garantie {product.warranty}
+    </span>
+  )}
+
+  <img
+    src={product.image}
+    alt={product.name}
+    className="max-h-[85%] max-w-[85%] object-contain mt-5 group-hover:scale-105 transition-transform duration-300"
+    loading="lazy"
+  />
+
+  {/* Bouton Détails */}
+  <button
+    onClick={() => setActiveModalProduct(product)}
+    className="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white gap-2 font-bold text-xs"
+  >
+    <div className="bg-white text-slate-900 px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 hover:scale-105 transition">
+      <Eye className="w-3.5 h-3.5" />
+      <span>Détails &amp; Fiche</span>
+    </div>
+  </button>
+
+</div>
+
 
                 {/* Content */}
                 <div className="p-5">

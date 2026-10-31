@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { SEO } from '../components/SEO';
 import { ReferencesCarousel } from '../components/ReferencesCarousel';
 import { SavingsCalculator } from '../components/SavingsCalculator';
 import {
@@ -49,7 +50,7 @@ const TXT = {
     gasSaving: 'Économie Gaz',
     clipZones: [
       { zone: 'Évier Cuisine', flow: '4 ou 5 L/min', desc: 'Bague Inox + Cartouche Delrin anticalcaire.' },
-      { zone: 'Lavabo Salle de Bain', flow: '4 L/min', desc: 'Jet doux aéré, supprime les éclaboussures.' },
+      { zone: 'Lavabo Salle de Bain', flow: '4 ou 5 L/min', desc: 'Jet doux aéré, supprime les éclaboussures.' },
       { zone: 'Douche & Flexible', flow: '5 ou 7 L/min', desc: 'Régulateur Inox placé sous le flexible de douche.' },
       { zone: 'Toilettes & WC', flow: '3 Litres / chasse', desc: 'Eco-Sac 3L imputrescible suspendu dans le réservoir.' },
     ],
@@ -210,14 +211,45 @@ export const HomePage = ({ setCurrentTab }) => {
 
   // Clip diagram zones (from Pascal's email RETOUCHES CLIP)
   const clipZones = [
-    { waterSaved: '+60%', gasSaved: '+25%', img: '/products/bague_mousseur_complet.jpg' },
-    { waterSaved: '+60%', gasSaved: '+25%', img: '/products/cartouche_hydro_verte.jpg' },
-    { waterSaved: '+60%', gasSaved: '+25%', img: '/products/bague_mousseur_grille_bleue.jpg' },
+    {
+    waterSaved: '+60%',
+    gasSaved: '+25%',
+    imgs: [
+      { src: '/products/cartouche_hydro_verte_paire.jpg', flow: '4 L/min' },
+      { src: '/products/cartouche_hydro_verte.jpg', flow: '5 L/min' },
+    ],
+  },
+  {
+    waterSaved: '+60%',
+    gasSaved: '+25%',
+    imgs: [
+      { src: '/products/cartouche_hydro_verte.jpg', flow: '4 L/min' },
+      { src: '/products/cartouche_hydro_verte_paire.jpg', flow: '5 L/min' },
+    ],
+  },
+    {
+    waterSaved: '+60%',
+    gasSaved: '+25%',
+    imgs: [
+       {src: '/products/bague_mousseur_grille_bleue.jpg', flow: '5 L/min' },
+      { src: '/products/bague_mousseur_complet.jpg', flow: '7 L/min' },
+      
+    ],
+  },
     { waterSaved: '-30%', gasSaved: null, img: '/products/ecosac_wc_3l.jpg' },
   ].map((z, idx) => ({ ...z, ...t.clipZones[idx], gasSaved: z.gasSaved ?? t.gasNA }));
 
   return (
     <div className="space-y-16 sm:space-y-24">
+    <SEO
+  title={language === 'ar'
+    ? 'إيكوباور تونس | موفّرات الماء والطاقة'
+    : "EcoPower Tunisie | Dispositifs hydro-économes et économie d'eau"}
+  description={language === 'ar'
+    ? 'نقّص في فاتورة الصوناد والستاغ مع موفّرات الماء. توصيل لكامل تونس والخلاص عند الاستلام.'
+    : "Réduisez vos factures d'eau SONEDE et de gaz avec les dispositifs hydro-économes EcoPower. Packs particuliers et pros, livraison partout en Tunisie."}
+  path="/"
+/>
 
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 pb-16 sm:pt-16 sm:pb-24 bg-gradient-to-b from-brand-50/60 via-white to-slate-50">
@@ -359,13 +391,33 @@ export const HomePage = ({ setCurrentTab }) => {
               className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
             >
               <div>
-                <div className="h-44 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-3 mb-4 overflow-hidden">
-                  <img
-                    src={item.img}
-                    alt={item.zone}
-                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+                
+<div className="h-44 flex items-center justify-center gap-4 p-2">
+  {item.imgs ? (
+    item.imgs.map((image, imageIdx) => (
+      <div
+        key={imageIdx}
+        className="flex flex-col items-center justify-center w-1/2 h-full"
+      >
+        <img
+          src={image.src}
+          alt={`Économiseur évier cuisine ${image.flow}`}
+          className="max-h-[75%] max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+        />
+        <span className="mt-2 text-sm font-semibold">
+          {image.flow}
+        </span>
+      </div>
+    ))
+  ) : (
+    <img
+      src={item.img}
+      alt={item.zone}
+      className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+    />
+  )}
+</div>
+
 
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-700">

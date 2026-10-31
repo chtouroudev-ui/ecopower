@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, ArrowRight } from 'lucide-react';
+import { SEO } from '../components/SEO';
+
 import { WarrantyCertificateModal } from '../components/WarrantyCertificateModal';
 
 export function OrderTrackingPage({ initialQuery = '' }) {
@@ -90,6 +92,11 @@ export function OrderTrackingPage({ initialQuery = '' }) {
 
   return (
     <div className="py-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <SEO
+  title="Suivi de Commande & Certificat de Garantie | EcoPower Tunisie"
+  description="Vérifiez l'état d'expédition de votre commande EcoPower et téléchargez votre certificat de garantie officiel. Suivi en temps réel, livraison partout en Tunisie."
+  path="/tracking"
+/>
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold tracking-wide">

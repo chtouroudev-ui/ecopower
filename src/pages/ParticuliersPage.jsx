@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { SEO } from '../components/SEO';
 import { SavingsCalculator } from '../components/SavingsCalculator';
 import { FaucetComparison } from '../components/FaucetComparison';
 import {
@@ -156,12 +157,20 @@ export const ParticuliersPage = ({ setCurrentTab }) => {
   const packs = [
     { id: 'pack-appartement-4l', price: 78.0, oldPrice: 99.0, image: '/products/pack_appartement_4l.webp' },
     { id: 'pack-appartement-5l', price: 78.0, oldPrice: 99.0, image: '/products/pack_appartement_5l.webp' },
-    { id: 'pack-maison-4l', price: 129.0, oldPrice: 159.0, image: '/products/pack_maison_4l.webp' },
     { id: 'pack-maison-5l', price: 129.0, oldPrice: 159.0, image: '/products/pack_maison_5l.webp' },
   ].map((p) => ({ ...p, cartName: TXT.fr.packs[p.id].name, ...t.packs[p.id] }));
 
   return (
     <div className="py-10 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SEO
+  title={language === 'ar'
+    ? 'باكات توفير الماء والغاز للعايلات | إيكوباور تونس'
+    : 'Packs hydro-économes pour particuliers | EcoPower Tunisie'}
+  description={language === 'ar'
+    ? 'نقّص في فاتورة الصوناد والستاغ بباك جاهز للشقة ولا الفيلا. ضمان 3 سنين، توصيل لكامل تونس والخلاص عند الاستلام.'
+    : "Réduisez vos factures SONEDE et STEG avec nos packs pour appartement et villa. Garantie 3 ans, installation sans outils, livraison partout en Tunisie."}
+  path="/particuliers"
+/>
 
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-skywater-600 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
