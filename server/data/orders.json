@@ -1,0 +1,219 @@
+[
+  {
+    "id": "ECO-1006",
+    "date": "2026-10-02T20:51:33.082Z",
+    "customer": {
+      "fullName": "Ahmed Ben Salah",
+      "phone": "22334455",
+      "email": "ahmed@test.tn",
+      "address": "45 Rue de la Paix",
+      "city": "Sousse",
+      "governorate": "Sousse"
+    },
+    "items": [
+      {
+        "productId": "pack-appartement-4l",
+        "name": "Pack Appartement 4 Litres",
+        "price": 66,
+        "quantity": 1,
+        "serials": [
+          "SN-PACK-2026-5314"
+        ]
+      },
+      {
+        "productId": "ecosac-wc-3l",
+        "name": "Eco-Sac WC 3 Litres Imputrescible",
+        "price": 22.9,
+        "quantity": 2,
+        "serials": [
+          "SN-ECOS-2026-2451",
+          "SN-ECOS-2026-1863"
+        ]
+      }
+    ],
+    "subtotal": 111.8,
+    "deliveryFee": 8,
+    "total": 119.8,
+    "paymentMethod": "cod",
+    "status": "pending",
+    "certificateGenerated": true,
+    "certificateSerial": "CERT-2026-ECO-1006",
+    "notes": "Test commande complete"
+  },
+  {
+    "id": "ECO-1005",
+    "date": "2026-10-02T20:45:52.511Z",
+    "customer": {
+      "fullName": "Test Client",
+      "phone": "55123456",
+      "email": "test@test.tn",
+      "address": "12 Rue Test",
+      "city": "Tunis",
+      "governorate": "Tunis"
+    },
+    "items": [
+      {
+        "productId": "ecosac-wc-3l",
+        "name": "Eco-Sac WC 3 Litres Imputrescible",
+        "price": 22.9,
+        "quantity": 2,
+        "serials": [
+          "SN-ECOS-2026-2518",
+          "SN-ECOS-2026-9342"
+        ]
+      }
+    ],
+    "subtotal": 45.8,
+    "deliveryFee": 8,
+    "total": 53.8,
+    "paymentMethod": "cod",
+    "status": "pending",
+    "certificateGenerated": true,
+    "certificateSerial": "CERT-2026-ECO-1005",
+    "notes": "Test commande"
+  },
+  {
+    "id": "ECO-1001",
+    "date": "2026-10-01T14:32:00.000Z",
+    "customer": {
+      "fullName": "Mohamed Ben Ali",
+      "phone": "+216 98 123 456",
+      "email": "m.benali@gmail.com",
+      "address": "Résidence Les Jardins, Apt B12, Ennasr 2",
+      "city": "Ariana",
+      "governorate": "Ariana"
+    },
+    "items": [
+      {
+        "productId": "pack-appartement-4l",
+        "name": "Pack Appartement 4 Litres",
+        "price": 66,
+        "quantity": 1,
+        "serials": [
+          "SN-PA4-2026-0041"
+        ]
+      }
+    ],
+    "subtotal": 66,
+    "deliveryFee": 8,
+    "total": 74,
+    "paymentMethod": "cod",
+    "status": "delivered",
+    "certificateGenerated": true,
+    "certificateSerial": "CERT-2026-ECO-1001",
+    "notes": "Livré avec succès à Ennasr 2."
+  },
+  {
+    "id": "ECO-1002",
+    "date": "2026-10-02T09:15:00.000Z",
+    "customer": {
+      "fullName": "Sarra Trabelsi",
+      "phone": "+216 55 889 900",
+      "email": "sarra.trabelsi@yahoo.fr",
+      "address": "14 Rue Habib Bourguiba, Sahloul",
+      "city": "Sousse",
+      "governorate": "Sousse"
+    },
+    "items": [
+      {
+        "productId": "pack-maison-4l",
+        "name": "Pack Maison / Villa 4 Litres",
+        "price": 109,
+        "quantity": 1,
+        "serials": [
+          "SN-PM4-2026-0082"
+        ]
+      },
+      {
+        "productId": "pomme-douche-chromee",
+        "name": "Pomme de Douche Chromée Jets Massants 6L/min",
+        "price": 29.75,
+        "quantity": 1,
+        "serials": [
+          "SN-PDC-2026-0112"
+        ]
+      }
+    ],
+    "subtotal": 138.75,
+    "deliveryFee": 0,
+    "total": 138.75,
+    "paymentMethod": "cod",
+    "status": "shipped",
+    "certificateGenerated": true,
+    "certificateSerial": "CERT-2026-ECO-1002",
+    "notes": "Colis confié au transporteur express ce matin."
+  },
+  {
+    "id": "ECO-1003",
+    "date": "2026-10-02T16:45:00.000Z",
+    "customer": {
+      "fullName": "Hatem Dridi",
+      "phone": "+216 22 445 566",
+      "email": "hatem.dridi@topnet.tn",
+      "address": "Avenue Habib Thameur, Nabeul",
+      "city": "Nabeul",
+      "governorate": "Nabeul"
+    },
+    "items": [
+      {
+        "productId": "ecosac-wc-3l",
+        "name": "Eco-Sac WC 3 Litres Imputrescible",
+        "price": 22.9,
+        "quantity": 2,
+        "serials": [
+          "SN-EWC-2026-0301",
+          "SN-EWC-2026-0302"
+        ]
+      },
+      {
+        "productId": "hydro-econome-4l",
+        "name": "Hydro-Économe 4L/min",
+        "price": 17.5,
+        "quantity": 2,
+        "serials": [
+          "SN-HE4-2026-0410",
+          "SN-HE4-2026-0411"
+        ]
+      }
+    ],
+    "subtotal": 80.8,
+    "deliveryFee": 8,
+    "total": 88.8,
+    "paymentMethod": "cod",
+    "status": "confirmed",
+    "certificateGenerated": true,
+    "certificateSerial": "CERT-2026-ECO-1003",
+    "notes": "Client contacté par téléphone pour confirmation."
+  },
+  {
+    "id": "ECO-1004",
+    "date": "2026-10-02T19:20:00.000Z",
+    "customer": {
+      "fullName": "Ines Mansour",
+      "phone": "+216 99 778 811",
+      "email": "ines.mansour@gnet.tn",
+      "address": "Route de Téniour Km 2, Sfax",
+      "city": "Sfax",
+      "governorate": "Sfax"
+    },
+    "items": [
+      {
+        "productId": "pack-appartement-5l",
+        "name": "Pack Appartement 5 Litres",
+        "price": 66,
+        "quantity": 1,
+        "serials": [
+          "SN-PA5-2026-0095"
+        ]
+      }
+    ],
+    "subtotal": 66,
+    "deliveryFee": 8,
+    "total": 74,
+    "paymentMethod": "cod",
+    "status": "confirmed",
+    "certificateGenerated": false,
+    "certificateSerial": null,
+    "notes": "Nouvelle commande en attente de vérification."
+  }
+]

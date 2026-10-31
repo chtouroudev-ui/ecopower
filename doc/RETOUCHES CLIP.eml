@@ -1,0 +1,303 @@
+Received: from DU0P191MB2935.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:5a8::24)
+ by PR3P191MB0889.EURP191.PROD.OUTLOOK.COM with HTTPS; Fri, 13 Mar 2026
+ 06:51:37 +0000
+Received: from DUZP191CA0034.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:4f8::11)
+ by DU0P191MB2935.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:5a8::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Fri, 13 Mar
+ 2026 06:51:36 +0000
+Received: from DB1PEPF000509E5.eurprd03.prod.outlook.com
+ (2603:10a6:10:4f8:cafe::d4) by DUZP191CA0034.outlook.office365.com
+ (2603:10a6:10:4f8::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.29 via Frontend Transport; Fri,
+ 13 Mar 2026 06:51:32 +0000
+Authentication-Results: spf=pass (sender IP is 80.12.242.69)
+ smtp.mailfrom=orange.fr; dkim=pass (signature was verified)
+ header.d=orange.fr;dmarc=pass action=none header.from=orange.fr;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of orange.fr designates
+ 80.12.242.69 as permitted sender) receiver=protection.outlook.com;
+ client-ip=80.12.242.69; helo=smtp.smtpout.orange.fr; pr=C
+Received: from smtp.smtpout.orange.fr (80.12.242.69) by
+ DB1PEPF000509E5.mail.protection.outlook.com (10.167.242.55) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.17
+ via Frontend Transport; Fri, 13 Mar 2026 06:51:36 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+	s=t20230301; t=1773384695;
+	bh=jByJquhsrLMNV/sMvElT1kW2inOIWByHsDNGq50iWT8=;
+	h=Date:From:To:Message-ID:Subject:MIME-Version;
+	b=Ao99EqQYxchksuhk8WdmM1nRLipFbxGr4E4P+X1/N+Jj7Q+Dtv5CtltQdUPoR8+w2
+	 vyktEsW4XajFhohEfYM9sdylHVeXPt4qttTzAYOdhWDf9qD8aooDDFQnqOuu0URd7z
+	 5XdIcqEZRCzlMIEs6EZrKkUDy/3wY8FY0TIoMQAVwl/2dSuMbGnUvFe3ZnAaibDK5v
+	 Q7ZuiDTe9PAvD/fx2Cw1mpwv3tA4DaQgHxFYb8GZ7XLq1VaqSa1G46KVwsfdplGESh
+	 OqTvnjMorUqepvXudBjA7MOOgDFGTwTYX3h+iFzJkMCpj6TcNEB4dz+3LeAfxdlPBT
+	 FGcVLB9nzsKVQ==
+X-ME-Helo: opme11oxa04aub.op.aub.pom.fr.intraorange
+X-ME-Auth: ZWNlYXUtbG9Ab3JhbmdlLmZy
+X-ME-Date: Fri, 13 Mar 2026 07:51:35 +0100
+X-ME-IP: 10.110.82.100
+Date: Fri, 13 Mar 2026 07:51:35 +0100 (CET)
+From: eceau-lo <eceau-lo@orange.fr>
+To: saif.chtourou@esprit.tn
+Message-ID: <242585680.10009234.1773384695290.JavaMail.open-xchange@opme11oxa04aub.bagnolet.francetelecom.fr>
+Subject: RETOUCHES CLIP
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Disposition-Notification-To: eceau-lo <eceau-lo@orange.fr>
+X-Originating-IP: 196.179.204.90
+Return-Path: eceau-lo@orange.fr
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Mar 2026 06:51:36.1928
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: 6a61a9eb-a170-4ad4-3a97-08de80ccf860
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 604f1a96-cbe8-43f8-abbf-f8eaf5d85730:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509E5:EE_|DU0P191MB2935:EE_|PR3P191MB0889:EE_
+X-MS-Exchange-Organization-AuthSource: DB1PEPF000509E5.eurprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: 6a61a9eb-a170-4ad4-3a97-08de80ccf860
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7093399015|19002099003|18002099003|7053199007|16102099003|56012099003|14062099003|54012099003|8096899003;
+X-Forefront-Antispam-Report: CIP:80.12.242.69;CTRY:FR;LANG:fr;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtp.smtpout.orange.fr;PTR:smtp-69.smtpout.orange.fr;CAT:NONE;SFS:(13230040)(7093399015)(19002099003)(18002099003)(7053199007)(16102099003)(56012099003)(14062099003)(54012099003)(8096899003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2026 06:51:36.1189
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a61a9eb-a170-4ad4-3a97-08de80ccf860
+X-MS-Exchange-CrossTenant-Id: 604f1a96-cbe8-43f8-abbf-f8eaf5d85730
+X-MS-Exchange-CrossTenant-AuthSource: DB1PEPF000509E5.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P191MB2935
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:00.9828350
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.9700.017
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910005)(944506478)(944626604)(920097)(930201)(20251009189)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dDk0aWx2eXdVcDE1cTBKMEs3QUM5RHVGZzc4ejIvS00rVlhBbWFNS2FhZUtM?=
+ =?utf-8?B?NFpBdEhqVWp2NGk4YTU0Tk9MWmV5N01raGlCQ0JxeTJ0U29CVGZzTzFHYWpG?=
+ =?utf-8?B?Tjh0QldlbUlyb2huVzByZUw0RmpuaVl2ajhVakc1QVZKTDBCNjE2ZEd5b3g1?=
+ =?utf-8?B?VG5ja1RLUFpOdDd6bWloVmhtTGRESmFSZ3pYSERTNHZYUmFZcjBnYTgxZXNX?=
+ =?utf-8?B?SUdaeGRjNXZ5N1ptcVdLcDdhbzhYdmlmZnhFZXYzNEhqVVlXUVFYSUxiVEE4?=
+ =?utf-8?B?VG8wK1BHYlp0T2hoMjdaS1VDWTBDcVM3VUhNZk1HclFBak9aS0sxV01SQ2Qy?=
+ =?utf-8?B?NGlaWHNiR08rYnZkb3Q2K1dTNHd4VUN1M1YxTmY4dENldDI1aDZsdE5ya0Nm?=
+ =?utf-8?B?Z05XM3FMQmpwNWNqc0FXZE9jcWxKbFlvejdIWEhOZWRVTnMxSzNKeE1aMlN3?=
+ =?utf-8?B?UXFIbEZRQ1lGb2tuMFY3VExWanVHTW1zamllYTEzQVpwa1RRc0VMUDQ0S0xL?=
+ =?utf-8?B?SldVeDdUZ203TXZVQnJlZGoramRUM1V5YmgvR3drYTF5bzhFZytYekQvcFMz?=
+ =?utf-8?B?aUhvLzVtMGk3SFBFdVFqeTQ1dGkxU09BSExyUG52UkV5ZXFWK1hjKys1Qmxa?=
+ =?utf-8?B?U2sxbnJZLzNoNjZJMlRzSFdUeDdWRHpEOGRLYmZZVm5uQ0tnRk1oK3ljVkp2?=
+ =?utf-8?B?bzNzd0xKM0pTTkpUZGsvbTVGamlVZHY1Y0d2M2Mxa0JtZmZsempkT1NhYVNM?=
+ =?utf-8?B?c01lbjlyWjZpN2pQRDhmWVpSc0VEZjZ2T3Q2V2wzQmtqREpyVmRTVm9OTFNi?=
+ =?utf-8?B?c2J1TW1VUlRzR1RWZFcxc2QwMlVoZDk0VnZGdE82Zm5nRU9EQ2xHOEhyRWFl?=
+ =?utf-8?B?bDRLZlRUeVJiWjE1U1Y5TGg0YlJjSTcrYkpQKzZTbWJsYXpVaE42ZEJSK3hN?=
+ =?utf-8?B?aEx1UzJSaW9iV0dJUXlEWTdEeElEOVdXQVU1alpVZ2ZiSDlmUzdmbU1XNDJw?=
+ =?utf-8?B?blRpSVpRZnBIYkZhcmNJWFBkYWJqb1doSy9adElxRGlmL0dMVDNYOS81Q2F5?=
+ =?utf-8?B?QWJCZzJHYUxLTFUvaE9icS9tS3JiYVVmOHcyUWM4WjdUaUxOdTQ3aHFSQkpJ?=
+ =?utf-8?B?empFdXREK2hBVEJNQjg4K0RuV1R0WTNtRi96Z2tjWTRlaUIxb001ckZGNkFJ?=
+ =?utf-8?B?eUgvai9IMmdLWGNGbzZIZmJ1N1NhZFNtN3N4aHV1NkdpbGNGalpjL1JWR1Qz?=
+ =?utf-8?B?Tjd5MEFqMkxZU2VYelFtdFJXZmZvWWtaZEc1ZDhTSldHblR6Y3I0d3FnTW1J?=
+ =?utf-8?B?TFdCb0VGY0llQ3FVZHdLVzBlNzF1Y3d5UEdXYzdMMW41ZlBhZ1JONWN3L2tj?=
+ =?utf-8?B?M0N6MVVLRXpya002elRnMHd4SGUrbkNkRmxjV3B5dUJHZXR6SEFuVEpBcFdH?=
+ =?utf-8?B?K0wvSXZDQ2Vza3ZRd3d1TG5CcFVheGtGOTU0ZnZUNmQ5Z3RLK3hCR3RYWFhJ?=
+ =?utf-8?B?T2hzU0NEU2VTWVZZYjVRaHUyZ1ZXclhPbWg4M2FmSU1sQ3NMZWlnSHI5THZB?=
+ =?utf-8?B?ZWI2SWk2THFuc21HV0h1RUJ4dUJMdnA5NmIvbW00YW4zb1lHd3NTN09YYkov?=
+ =?utf-8?B?cWpXT3VrNUF3Y2ZWdHhzOEFYanpVcXYrZnpweHZ1QVZnd1hnWkdxRFF4Rkhs?=
+ =?utf-8?B?SWRGWEd4aElyQnh1cGE3SkxnUjY5UXUvVzlGVDF0a1gxbnJKL1pka09oTW9X?=
+ =?utf-8?B?c0NFenBTcmlBdTU5L1dOTTBDVW5mL096YnNtaG8zdkRjSFFsMnNCd1RKcDZL?=
+ =?utf-8?B?Q0FEbXNqYkwrOTdTa25RQXI2bWdqVDg1VTJVOEFUYmVFbWtnUVJJMk1HdU5h?=
+ =?utf-8?B?Q3IyeW1XNml1YTFMSFVTK0hydnpRTjl4RUhnZkJkMFBPd3lYMlZxWTZvYlh1?=
+ =?utf-8?B?aVhDdTZhRXR2Zi9SdnVrN1JTbWxHR3RKdktJRXlwQW41WGtzRDJ5QllCc1JN?=
+ =?utf-8?B?U2pwRjMybmo4SlpCbXhQS2JybEIvdGw1aDNEdmRYK1dRaXUzRHYzSFBhUGxE?=
+ =?utf-8?B?OXpKZVo4cW5GYmV4bXZheDczREVxNXhqOEVJWmVvWFRCT0tyQy8xY2lWQlFM?=
+ =?utf-8?B?bi8wQ2FzaU9xdHZjNFk2dGtTaUY2Z2JrVUtwSjNObU1rcmtpUzlVeW50SE1r?=
+ =?utf-8?B?YWN3SklFRTRxUlZHdW5qRFNyYkVxNGdobGFTUCtTSkl0Q3FmZDNGeG9FZmxY?=
+ =?utf-8?B?aElhb1dERWNoM2I1ZlhieTE0TzBMSC9ONE0zS21ta1VVR2xQMFJBZGU2V1dv?=
+ =?utf-8?B?cjBoWnlSaGtuWnBmV2xIRzZSSE5XcnM3QjF4ZEYwc0hCT0R1ZGwyTE9hdmV4?=
+ =?utf-8?B?M3NRRGloSFc2UDZnMVNSbmZlVU9WSGx6OUQvRE9ueGR1MDZYUzJjQWRML1Q2?=
+ =?utf-8?B?RGxtd2dyVmFhci9jZ3BscTRsQmR3NWFNRVVxcUZRdWNXYlZMbUNsZVFHeUZ5?=
+ =?utf-8?B?V3dtckNGc1dXVk90K0RsT0ttbnIyOWZ1Rys5RFFOSHh5TVR3ZXppcDNjQzh0?=
+ =?utf-8?B?dXdVVjNwL01GTENMUWpEbGR1Wkt6U0RWam1ZWmNMendJUVJHQWw0Tld2TFdX?=
+ =?utf-8?B?blIzcEVEZGdnaDc2MXI2Tm5kRi9WLzZITTUrSXhSMEp5bHB3ZUZ4Um85Y0k0?=
+ =?utf-8?B?SXJORXNZald4dm1vS1pGNis3bXJhQUZXK3FrNzA2VUYwVVZ5NTlhMXVXZGpP?=
+ =?utf-8?B?c3lhZFY2UC83dEpvNmEwSnhkYnkyZUo3WTZvOGFNcFU5NkhibGxuLzllVE1z?=
+ =?utf-8?B?TDIyaWdtUWE3cnpHaDU5dEpCWWl5MDVVSTFsTEdBbEs0UDY2Mkg0QnBMd1E3?=
+ =?utf-8?B?MnhFWnNwN2pqNWNWTUFmMzYxa3BkRXhuaUJxKzkyVFJXbkFhcEQyOHFxYUFv?=
+ =?utf-8?B?Q0NwNUF4STZFMy9lc3h4MDAxbWt2V3hQTHpMVzB5cjJEd2RsQ0FQTjBhWEZ1?=
+ =?utf-8?B?Y2IrNy9BdFpVWkJoajQ0V29Uc09WVzY1L3p3M2lPbFppbGhRWEVHSGJic0JX?=
+ =?utf-8?B?Qm5UZFhpRWZjTWd0SG54UVZZOUwyRGNGeWl0dG9nYnRhVEhOamFTZnltSVRX?=
+ =?utf-8?B?ZSs0TURCRE1QZTdFay95OWRzOU02aWZXemRwTkY5ZUZ5ZlhiNEJxZG1yYkN6?=
+ =?utf-8?B?M25sZWI3UndnbzVmdThYTU1XUWc1ODY5NG41eE53dmVqcDRrRlRzUU43bXAr?=
+ =?utf-8?B?c09rTlVvS0I4L1FWNDM4RTZNRGhDZkliWGowOUhIT2dtdXBBUUREdWcxdnl4?=
+ =?utf-8?B?bXB1OEpnUENDakJTOWF1ZE1MNTBmdGRrMzFONHhXUWJFTGpQZTJOMWZ4ZW1u?=
+ =?utf-8?B?dFZvZCsyZmp1WmZIeUt2L0JOU2xhS1paVEdOWjNZcGZxSGpKdmFQRDJSUWZn?=
+ =?utf-8?B?WGkyK1pPa2g3eDZjcFRWZlJhT1JRenVwaEJ4NXZZZlBNRG8zMFRUUng3bTU3?=
+ =?utf-8?B?bkkzenlOb2xxeGZzS0JIY3JXd0pwYzdncCtwT1VFSm5zSzRCUFdpNmpDNlI5?=
+ =?utf-8?B?T3FVME83TEZka2dEOXZ3NFJFUlpkUmxPR1R2UE5SZkZCNXBCUWpaU3RzRm5k?=
+ =?utf-8?B?RUZhVmZaTkc3VDJBQkdkRmZOdCs2UTdEbFd0dHB2KzZPTldVMWlZZE1oOW05?=
+ =?utf-8?B?Nm1nNzErTFNHQUZwQStkd01rckZuWElUMk5TbUhBVUFhOSt6NVF4WndIWENi?=
+ =?utf-8?B?QXdxM3FUdHgxUmZIaWFPUUY5NEpZMnhQOHZOY1NKRWFuaXhQSXZ5WE9xalR6?=
+ =?utf-8?B?YmhTOU91a093RHRGVW9Mak11ZkIralo3K01LdXVHUEh6RHk2ZjJoNmFtQUtZ?=
+ =?utf-8?B?YmNwOVUyQW9NTEkrS3dWWVpQMmJwTzcwc2F6dHA5cVp0bGpCa0FJMUhzYWxm?=
+ =?utf-8?B?M2NNNGVlc2RwbTQ2Tm9HVXVUaW1WTmJBdXBmWDFDYkFpc2ZzdEcwZE1maFRm?=
+ =?utf-8?B?eXFXN0FlYlB3SlJ0aFdBb1dBZ2FKZkNMQVJvZ043dElObUdvTDhrSVlrcXhH?=
+ =?utf-8?B?Y1U3aDdFalZiamUvV09IbVpzcmZMZURnM1lUUEpVRFFpNmFyMnJrd1lPSnRL?=
+ =?utf-8?B?QzZNVm9IbEN5TVNWVWhqaWkxK0dlRmt4WUV3aFdMTFFUVlF6YXVna292R1NE?=
+ =?utf-8?B?NHo5T2FXWUdHUUpzOFRYSE9OeDBZZVFJT1NCdDEvbC9tRnVNZnorakhsS3dL?=
+ =?utf-8?B?Z2JhbnlnMXllQnRwejNuQ2V2MEVYY0FGVkdNY1l0Qml6NXRhcmRxNWJydk9q?=
+ =?utf-8?B?NTB2QWxaTXpLT0ZUcTdURUdmRGhUUlYwV2ErbE1vL3pycmJjRjZidHJDMzNP?=
+ =?utf-8?B?R2tGbUl0UXQ0OUNmNEpGclJ6SWV0SWZhbFgzYTVxK25GcFp5NlNvSml3QVJQ?=
+ =?utf-8?B?NlI4Y0M4N2txYWQrWE5McitqWVQrM3JnMG8ySk96Ri90ci9MWTlSM0RxQm1h?=
+ =?utf-8?B?dEFKdWVYaE1CN3NaZ2NQQ3FBSHAwdDRJdlkzcCtDLzcwcVoxVzhCZDF6dFY1?=
+ =?utf-8?B?VzNvNkFCai93cVNqU0JJN0xaWG9mazdrdHlzdFpSMmV4ZGxPM1ZTbGRndEJM?=
+ =?utf-8?B?UDJQU0s1MGdEYUM1ZzhreHJDVnFLUzc4MitlYmFoaHJGQm5taVVVd3cyTkY2?=
+ =?utf-8?B?bnlZWDBtdGlFWjVNRTllWmhBcWRidms5VWtoK2xHc3JyU21ISEk0QVJUcnJV?=
+ =?utf-8?Q?MLCPSlDS/24i9jYw/1scO8dkUwcaPhJY94=3D?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+ </head><body><br>BJR MON CHER SAIF,<div><br></div><div>J'esp=C3=A9re que t=
+out le monde va bien suite =C3=A0 notre r=C3=A9union trouves les diff=C3=A9=
+rentes retouches a mettre sur le clip.</div><div><br></div><div>IMAGES :&nb=
+sp;</div><div><br></div><div>EVIER : Mettre une fl=C3=AAche pour mat=C3=A9r=
+ialiser la zone de changement avec en incruste la photo du 5l/mn avec menti=
+on + 60% =C3=A9conomies d'eau et +25 % =C3=A9conomies gaz eau chaude.</div>=
+<div><br></div><div><span style=3D"color: rgb(0, 0, 0); font-family: Arial;=
+ font-size: small; font-style: normal; font-variant-ligatures: normal; font=
+-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2=
+; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word=
+-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; backgro=
+und-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-dec=
+oration-style: initial; text-decoration-color: initial; display: inline !im=
+portant; float: none;">LAVABO : Mettre une fl=C3=AAche pour mat=C3=A9rialis=
+er la zone de changement avec en incruste la photo du 5l/mn avec mention + =
+60% =C3=A9conomies d'eau et +25 % =C3=A9conomies gaz eau chaude.</span></di=
+v><div><br></div><div><!--EndFragment--><!--StartFragment--><br class=3D"Ap=
+ple-interchange-newline_oo_editor_Editor_0_sandBox"><span style=3D"color: r=
+gb(0, 0, 0); font-family: Arial; font-size: small; font-style: normal; font=
+-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; le=
+tter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-=
+transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0=
+px; white-space: normal; background-color: rgb(255, 255, 255); text-decorat=
+ion-thickness: initial; text-decoration-style: initial; text-decoration-col=
+or: initial; display: inline !important; float: none;">DOUCHE : Mettre une =
+fl=C3=AAche pour mat=C3=A9rialiser la zone de changement avec en incruste l=
+a photo du R=C3=A9gulateur 5 ou 7l/mn (</span><span style=3D"color: rgb(0, =
+0, 0); font-family: Arial; font-size: small; font-variant-ligatures: normal=
+; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orph=
+ans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2=
+; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; b=
+ackground-color: rgb(255, 255, 255); text-decoration-thickness: initial; te=
+xt-decoration-style: initial; text-decoration-color: initial; float: none; =
+display: inline !important;"><i> fl=C3=AAche en dessous du flexible de douc=
+he )</i></span><span style=3D"color: rgb(0, 0, 0); font-family: Arial; font=
+-size: small; font-style: normal; font-variant-ligatures: normal; font-vari=
+ant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; tex=
+t-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spac=
+ing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-c=
+olor: rgb(255, 255, 255); text-decoration-thickness: initial; text-decorati=
+on-style: initial; text-decoration-color: initial; display: inline !importa=
+nt; float: none;"> avec mention + 60% =C3=A9conomies d'eau et +25 % =C3=A9c=
+onomies gaz eau chaude.</span></div><div><br></div><div><!--EndFragment--><=
+!--StartFragment--><br class=3D"Apple-interchange-newline_oo_editor_Editor_=
+0_sandBox" style=3D"color: rgb(0, 0, 0); font-family: Arial; font-size: sma=
+ll; font-style: normal; font-variant-ligatures: normal; font-variant-caps: =
+normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: l=
+eft; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(=
+255, 255, 255); text-decoration-thickness: initial; text-decoration-style: =
+initial; text-decoration-color: initial;"><span style=3D"color: rgb(0, 0, 0=
+); font-family: Arial; font-size: small; font-style: normal; font-variant-l=
+igatures: normal; font-variant-caps: normal; font-weight: 400; letter-spaci=
+ng: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform:=
+ none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-=
+space: normal; text-decoration-thickness: initial; text-decoration-style: i=
+nitial; text-decoration-color: initial; background-color: rgb(255, 255, 255=
+); float: none; display: inline !important;">TOILETTE : Mettre une fl=C3=AA=
+che pour mat=C3=A9rialiser la zone de changement avec en incruste la photo =
+du R=C3=A9gulateur 5 ou 7l/mn (</span><span style=3D"color: rgb(0, 0, 0); f=
+ont-family: Arial; font-size: small; font-style: normal; font-variant-ligat=
+ures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: non=
+e; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-spac=
+e: normal; text-decoration-thickness: initial; text-decoration-style: initi=
+al; text-decoration-color: initial; background-color: rgb(255, 255, 255); f=
+loat: none; display: inline !important;"><i><span>&nbsp;</span>fl=C3=AAche =
+en dessous du flexible de Toilette )</i></span><span style=3D"color: rgb(0,=
+ 0, 0); font-family: Arial; font-size: small; font-style: normal; font-vari=
+ant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-=
+spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-trans=
+form: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; w=
+hite-space: normal; text-decoration-thickness: initial; text-decoration-sty=
+le: initial; text-decoration-color: initial; background-color: rgb(255, 255=
+, 255); float: none; display: inline !important;"><span>&nbsp;</span>avec m=
+ention + 60% =C3=A9conomies d'eau et +25 % =C3=A9conomies gaz eau chaude.</=
+span></div><div><br></div><div><!--EndFragment-->Amiti=C3=A9s.</div><div><b=
+r></div><div>PASCAL<br><div><p style=3D"font-family: Arial;"><br></p><p sty=
+le=3D"font-family: Arial;"><br></p><p style=3D"font-family: Arial;"><br></p=
+><div align=3D"center"><font style=3D"font-family: Arial;" size=3D"3"><em><=
+font color=3D"#008000">&quot;La Terre n'est pas un don de nos parents, ce s=
+ont nos enfants qui nous la pr=C3=AAtent&quot; Antoine de St-Exup=C3=A9ry.<=
+br></font></em></font><div style=3D"font-family: Arial;" align=3D"left"><fo=
+nt size=3D"3"><span style=3D"color: green; font-size: 24pt;">P</span></font=
+><font size=3D"3"><span style=3D"font-size: 11pt;">&nbsp;  </span></font><f=
+ont color=3D"green" size=3D"3"><span style=3D"color: green; font-size: 10pt=
+;">Pensez ENVIRONNEMENT  : n'imprimez que si n=C3=A9cessaire...!!!</span></=
+font></div><br></div></div><br><br><blockquote style=3D"border-left:2px sol=
+id #f16e00; padding-left:15px; margin:20px 0 0 0;"> <b>Le :&nbsp;</b>11 f=
+=C3=A9vrier 2026 =C3=A0 09:17 (GMT +01:00)<br><b>De :&nbsp;</b><span dir=3D=
+"ltr">&quot;eceau-lo&quot;</span> <span dir=3D"lrt">&lt;eceau-lo@orange.fr&=
+gt;</span><br><b>=C3=80 :&nbsp;</b><span style=3D"white-space: nowrap; disp=
+lay: inline-block;"><span dir=3D"ltr">&quot;saif chtourou&quot;</span> <spa=
+n dir=3D"lrt">&lt;saif.chtourou@esprit.tn&gt;</span></span><br><b>Objet :&n=
+bsp;</b>DEMANDE DE PIECES<br><br><br><div>VOILA MON GRAND<br><p style=3D"fo=
+nt-family: Arial;"><br></p><p style=3D"font-family: Arial;"><br></p><div al=
+ign=3D"center"><font style=3D"font-family: Arial;" size=3D"3"><em><font col=
+or=3D"#008000">&quot;La Terre n'est pas un don de nos parents, ce sont nos =
+enfants qui nous la pr=C3=AAtent&quot; Antoine de St-Exup=C3=A9ry.<br></fon=
+t></em></font><div style=3D"font-family: Arial;" align=3D"left"><font size=
+=3D"3"><span style=3D"color: green; font-size: 24pt;">P</span></font><font =
+size=3D"3"><span style=3D"font-size: 11pt;">&nbsp;  </span></font><font col=
+or=3D"green" size=3D"3"><span style=3D"color: green; font-size: 10pt;">Pens=
+ez ENVIRONNEMENT  : n'imprimez que si n=C3=A9cessaire...!!!</span></font></=
+div><br></div></div><br><br><blockquote style=3D"border-left: 2px solid #f1=
+6e00; padding-left: 15px; margin: 20px 0 0 0;"> <b>Le :&nbsp;</b>09 f=C3=A9=
+vrier 2026 =C3=A0 10:52 (GMT +01:00)<br><b>De :&nbsp;</b><span>&quot;eceau-=
+lo&quot;</span> <span>&lt;eceau-lo@orange.fr&gt;</span><br><b>=C3=80 :&nbsp=
+;</b><span style=3D"white-space: nowrap; display: inline-block;"><span>&quo=
+t;saif chtourou&quot;</span> <span>&lt;saif.chtourou@esprit.tn&gt;</span></=
+span><br><b>Objet :&nbsp;</b>TR : DEMANDE DE PIECES<br><br><br><br><div><p =
+style=3D"font-family: Arial;"><font size=3D"3">VOILA MON GRAND<br>---------=
+---------</font></p><p style=3D"font-family: Arial;"><br></p><p style=3D"fo=
+nt-family: Arial;"><br></p><div align=3D"center"><font style=3D"font-family=
+: Arial;" size=3D"3"><em><font color=3D"#008000">&quot;La Terre n'est pas u=
+n don de nos parents, ce sont nos enfants qui nous la pr=C3=AAtent&quot; An=
+toine de St-Exup=C3=A9ry.<br></font></em></font><div style=3D"font-family: =
+Arial;" align=3D"left"><font size=3D"3"><span style=3D"color: green; font-s=
+ize: 24pt;">P</span></font><font size=3D"3"><span style=3D"font-size: 11pt;=
+">&nbsp;  </span></font><font color=3D"green" size=3D"3"><span style=3D"col=
+or: green; font-size: 10pt;">Pensez ENVIRONNEMENT  : n'imprimez que si n=C3=
+=A9cessaire...!!!</span></font></div><br></div></div><br><br><blockquote st=
+yle=3D"border-left: 2px solid #f16e00; padding-left: 15px; margin: 20px 0 0=
+ 0;"> <b>Le :&nbsp;</b>09 f=C3=A9vrier 2026 =C3=A0 10:35 (GMT +01:00)<br><b=
+>De :&nbsp;</b><span>&quot;eceau-lo&quot;</span> <span>&lt;eceau-lo@orange.=
+fr&gt;</span><br><b>=C3=80 :&nbsp;</b><span style=3D"white-space: nowrap; d=
+isplay: inline-block;"><span>&quot;saif chtourou&quot;</span> <span>&lt;sai=
+f.chtourou@esprit.tn&gt;</span></span><br><b>Objet :&nbsp;</b>DEMANDE DE PI=
+ECES<br><br><br><div class=3D"oo-writer-signature-872c59f4fd02b8557cd3b6050=
+b87b5692faa28f2_sandBox_oo_editor_Editor_2_sandBox_oo_editor_Editor_0_sandB=
+ox_oo_editor_Editor_0_sandBox"><br><p style=3D"font-family: Arial;"><br></p=
+><p style=3D"font-family: Arial;"><br></p><div align=3D"center"><font style=
+=3D"font-family: Arial;" size=3D"3"><em><font color=3D"#008000">&quot;La Te=
+rre n'est pas un don de nos parents, ce sont nos enfants qui nous la pr=C3=
+=AAtent&quot; Antoine de St-Exup=C3=A9ry.<br></font></em></font><div style=
+=3D"font-family: Arial;" align=3D"left"><font size=3D"3"><span style=3D"col=
+or: green; font-size: 24pt;">P</span></font><font size=3D"3"><span style=3D=
+"font-size: 11pt;">&nbsp;  </span></font><font color=3D"green" size=3D"3"><=
+span style=3D"color: green; font-size: 10pt;">Pensez ENVIRONNEMENT  : n'imp=
+rimez que si n=C3=A9cessaire...!!!</span></font></div><br></div></div></blo=
+ckquote></blockquote></blockquote></div></body></html>
